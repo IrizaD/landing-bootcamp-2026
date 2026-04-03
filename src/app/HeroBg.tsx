@@ -1,0 +1,162 @@
+export function HeroBg() {
+  return (
+    <div className="hero-bg" aria-hidden="true">
+      <svg
+        className="hero-bg-svg"
+        viewBox="0 0 1440 860"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="orb-r" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#eb2b1a" stopOpacity="0.45" />
+            <stop offset="60%" stopColor="#eb2b1a" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#eb2b1a" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="orb-b" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#188bf6" stopOpacity="0.28" />
+            <stop offset="60%" stopColor="#188bf6" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#188bf6" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="orb-r2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#eb2b1a" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#eb2b1a" stopOpacity="0" />
+          </radialGradient>
+          <filter id="glow-r" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-b" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        {/* ── ORBS ─────────────────────────────────────── */}
+        <ellipse className="orb-red"   cx="260"  cy="680" rx="560" ry="440" fill="url(#orb-r)"  />
+        <ellipse className="orb-blue"  cx="1260" cy="180" rx="480" ry="380" fill="url(#orb-b)"  />
+        <ellipse className="orb-red-2" cx="820"  cy="420" rx="300" ry="240" fill="url(#orb-r2)" />
+        {/* Orb azul bottom-right — visible en mobile */}
+        <ellipse className="orb-blue-m" cx="960" cy="720" rx="320" ry="260" fill="url(#orb-b)" />
+
+        {/* ── PLUS SIGNS ───────────────────────────────── */}
+
+        {/* Large + top-left */}
+        <g className="geo geo-plus-1" filter="url(#glow-r)">
+          <line x1="110" y1="155" x2="110" y2="225" stroke="#eb2b1a" strokeWidth="2.8" strokeLinecap="round" strokeOpacity="0.75" />
+          <line x1="75"  y1="190" x2="145" y2="190" stroke="#eb2b1a" strokeWidth="2.8" strokeLinecap="round" strokeOpacity="0.75" />
+        </g>
+
+        {/* Medium + top-right */}
+        <g className="geo geo-plus-2" filter="url(#glow-b)">
+          <line x1="1310" y1="95"  x2="1310" y2="149" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="1283" y1="122" x2="1337" y2="122" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+        </g>
+
+        {/* Small + center-right */}
+        <g className="geo geo-plus-3" filter="url(#glow-r)">
+          <line x1="1390" y1="360" x2="1390" y2="396" stroke="#eb2b1a" strokeWidth="2.2" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="1372" y1="378" x2="1408" y2="378" stroke="#eb2b1a" strokeWidth="2.2" strokeLinecap="round" strokeOpacity="0.6" />
+        </g>
+
+        {/* Tiny + scattered */}
+        <g className="geo geo-plus-4">
+          <line x1="560" y1="68" x2="560" y2="88" stroke="#188bf6" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="550" y1="78" x2="570" y2="78" stroke="#188bf6" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.6" />
+        </g>
+        <g className="geo geo-plus-5">
+          <line x1="1080" y1="700" x2="1080" y2="720" stroke="#eb2b1a" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="1070" y1="710" x2="1090" y2="710" stroke="#eb2b1a" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.55" />
+        </g>
+
+        {/* ── VENN — referencia sutil a 1+1=3 ─────────── */}
+        {/* Dos círculos solapados levemente = sinergia */}
+        <g className="geo geo-venn-1" filter="url(#glow-r)">
+          <circle cx="1200" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
+          <circle cx="1228" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
+        </g>
+
+        {/* Segundo Venn más pequeño, tonos azul */}
+        <g className="geo geo-venn-2" filter="url(#glow-b)">
+          <circle cx="55"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
+          <circle cx="76"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
+        </g>
+
+        {/* ── ARCOS FRAGMENTADOS ────────────────────────── */}
+        {/* Arc top-center */}
+        <path className="geo geo-arc-1"
+          d="M 760 30 A 60 60 0 0 1 880 30"
+          fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.55" strokeLinecap="round"
+        />
+        {/* Arc bottom-left */}
+        <path className="geo geo-arc-2"
+          d="M 300 810 A 70 70 0 0 0 440 810"
+          fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
+        />
+        {/* Arc mid-right */}
+        <path className="geo geo-arc-3"
+          d="M 1440 480 A 80 80 0 0 1 1360 580"
+          fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.5" strokeLinecap="round"
+        />
+
+        {/* ── ELEMENTOS VISIBLES EN MOBILE — esquina inferior-derecha ── */}
+
+        {/* + grande bottom-right */}
+        <g className="geo geo-plus-m1" filter="url(#glow-b)">
+          <line x1="880" y1="620" x2="880" y2="680" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="850" y1="650" x2="910" y2="650" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+        </g>
+
+        {/* Venn bottom-right */}
+        <g className="geo geo-venn-m" filter="url(#glow-r)">
+          <circle cx="820" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
+          <circle cx="848" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
+        </g>
+
+        {/* Arc bottom-right */}
+        <path className="geo geo-arc-m"
+          d="M 760 830 A 55 55 0 0 1 870 830"
+          fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
+        />
+
+        {/* + tiny mid-right */}
+        <g className="geo geo-plus-m2" filter="url(#glow-r)">
+          <line x1="940" y1="480" x2="940" y2="512" stroke="#eb2b1a" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="924" y1="496" x2="956" y2="496" stroke="#eb2b1a" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.55" />
+        </g>
+
+        {/* ── ENERGY STREAKS ────────────────────────────── */}
+        <line className="streak streak-1"
+          x1="-100" y1="300" x2="600" y2="60"
+          stroke="#eb2b1a" strokeWidth="1.8" strokeOpacity="0.28"
+          strokeDasharray="60 90" strokeLinecap="round"
+        />
+        <line className="streak streak-2"
+          x1="700" y1="860" x2="1540" y2="520"
+          stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.22"
+          strokeDasharray="80 120" strokeLinecap="round"
+        />
+        <line className="streak streak-3"
+          x1="400" y1="860" x2="1000" y2="600"
+          stroke="#eb2b1a" strokeWidth="1.4" strokeOpacity="0.2"
+          strokeDasharray="40 80" strokeLinecap="round"
+        />
+
+        {/* ── FLOATING PARTICLES ────────────────────────── */}
+        {[
+          { cx: 480,  cy: 700, r: 2.5, cls: "p1", col: "#eb2b1a", op: 0.55 },
+          { cx: 900,  cy: 780, r: 2,   cls: "p2", col: "#188bf6", op: 0.45 },
+          { cx: 1100, cy: 650, r: 2,   cls: "p3", col: "#eb2b1a", op: 0.4  },
+          { cx: 280,  cy: 600, r: 1.5, cls: "p4", col: "#188bf6", op: 0.5  },
+          { cx: 650,  cy: 720, r: 1.5, cls: "p5", col: "#eb2b1a", op: 0.35 },
+          { cx: 1250, cy: 560, r: 2,   cls: "p6", col: "#188bf6", op: 0.4  },
+          { cx: 760,  cy: 800, r: 1.5, cls: "p7", col: "#eb2b1a", op: 0.3  },
+          { cx: 1050, cy: 750, r: 2.5, cls: "p8", col: "#188bf6", op: 0.35 },
+        ].map((p) => (
+          <circle key={p.cls} className={`particle ${p.cls}`}
+            cx={p.cx} cy={p.cy} r={p.r} fill={p.col} fillOpacity={p.op} />
+        ))}
+      </svg>
+    </div>
+  );
+}
