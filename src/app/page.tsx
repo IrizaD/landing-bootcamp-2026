@@ -148,7 +148,7 @@ export default function Page() {
               <img src="/logo-bootcamp.webp" alt="Bootcamp de Aceleración de Emprendimiento" className="hero-logo" />
             </div>
             <h1>
-              {content.hero.h1_part1} <em>{content.hero.h1_em}</em>?
+              {content.hero.h1_part1}<br /><em>{content.hero.h1_em}</em>
             </h1>
             <p className="hero-sub">{content.hero.subhead}</p>
             <div className="hero-date">
