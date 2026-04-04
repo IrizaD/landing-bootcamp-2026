@@ -77,7 +77,7 @@ h2.section-title {
 .reveal {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .reveal.visible         { opacity: 1; transform: translateY(0); }
 .reveal-delay-1         { transition-delay: 0.1s; }
