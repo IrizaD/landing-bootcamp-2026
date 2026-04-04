@@ -143,7 +143,7 @@ export const content = {
     name_em:    "Serratos",
     bio:        "No es un nativo digital. Es abogado y empresario — construyó todo esto desde cero, igual que tú. Hoy lidera el movimiento sinergético más grande del mundo hispano y viene al Bootcamp a despertarte, no a motivarte.",
     stats: [
-      { number: "+3,500",  label: "emprendedores ayudados a convertir su conocimiento en un negocio digital rentable" },
+      { number: "+20,000", label: "emprendedores ayudados a convertir su conocimiento en un negocio digital rentable" },
       { number: "+$2M USD", label: "invertidos en capacitación con los mejores del mundo" },
       { number: "209M",    label: "personas de alcance · Podcast Sinergéticos #1 Negocios México · +100k calificaciones" },
     ],
