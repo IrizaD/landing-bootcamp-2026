@@ -72,27 +72,27 @@ export function HeroBg() {
 
         {/* ── VENN — referencia sutil a 1+1=3 ─────────── */}
         <g className="geo geo-venn-1" filter="url(#glow-r)">
-          <circle cx="1200" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
-          <circle cx="1228" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
+          <circle cx="1200" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.65" />
+          <circle cx="1228" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.65" />
         </g>
 
         <g className="geo geo-venn-2" filter="url(#glow-b)">
-          <circle cx="55"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
-          <circle cx="76"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
+          <circle cx="55"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="3" strokeOpacity="0.6" />
+          <circle cx="76"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="3" strokeOpacity="0.6" />
         </g>
 
         {/* ── ARCOS FRAGMENTADOS ────────────────────────── */}
         <path className="geo geo-arc-1"
           d="M 760 30 A 60 60 0 0 1 880 30"
-          fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.55" strokeLinecap="round"
+          fill="none" stroke="#188bf6" strokeWidth="3.5" strokeOpacity="0.55" strokeLinecap="round"
         />
         <path className="geo geo-arc-2"
           d="M 300 810 A 70 70 0 0 0 440 810"
-          fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
+          fill="none" stroke="#eb2b1a" strokeWidth="3.2" strokeOpacity="0.5" strokeLinecap="round"
         />
         <path className="geo geo-arc-3"
           d="M 1440 480 A 80 80 0 0 1 1360 580"
-          fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.5" strokeLinecap="round"
+          fill="none" stroke="#188bf6" strokeWidth="3.5" strokeOpacity="0.5" strokeLinecap="round"
         />
 
         {/* ── MOBILE — esquina inferior-derecha ── */}
@@ -104,13 +104,13 @@ export function HeroBg() {
         </g>
 
         <g className="geo geo-venn-m" filter="url(#glow-r)">
-          <circle cx="820" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
-          <circle cx="848" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
+          <circle cx="820" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.6" />
+          <circle cx="848" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.6" />
         </g>
 
         <path className="geo geo-arc-m"
           d="M 760 830 A 55 55 0 0 1 870 830"
-          fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
+          fill="none" stroke="#eb2b1a" strokeWidth="3.2" strokeOpacity="0.5" strokeLinecap="round"
         />
 
         {/* + tiny mid-right — center (940, 496) */}
@@ -122,17 +122,17 @@ export function HeroBg() {
         {/* ── ENERGY STREAKS ────────────────────────────── */}
         <line className="streak streak-1"
           x1="-100" y1="300" x2="600" y2="60"
-          stroke="#eb2b1a" strokeWidth="1.8" strokeOpacity="0.28"
+          stroke="#eb2b1a" strokeWidth="3" strokeOpacity="0.28"
           strokeDasharray="60 90" strokeLinecap="round"
         />
         <line className="streak streak-2"
           x1="700" y1="860" x2="1540" y2="520"
-          stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.22"
+          stroke="#188bf6" strokeWidth="3" strokeOpacity="0.22"
           strokeDasharray="80 120" strokeLinecap="round"
         />
         <line className="streak streak-3"
           x1="400" y1="860" x2="1000" y2="600"
-          stroke="#eb2b1a" strokeWidth="1.4" strokeOpacity="0.2"
+          stroke="#eb2b1a" strokeWidth="2.5" strokeOpacity="0.2"
           strokeDasharray="40 80" strokeLinecap="round"
         />
 
