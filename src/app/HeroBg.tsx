@@ -42,32 +42,32 @@ export function HeroBg() {
 
         {/* Large + top-left — center (110, 190) */}
         <g className="geo geo-plus-1" filter="url(#glow-r)">
-          <line x1="110" y1="170" x2="110" y2="210" stroke="#eb2b1a" strokeWidth="5.5" strokeLinecap="round" strokeOpacity="0.75" />
-          <line x1="90"  y1="190" x2="130" y2="190" stroke="#eb2b1a" strokeWidth="5.5" strokeLinecap="round" strokeOpacity="0.75" />
+          <line x1="110" y1="170" x2="110" y2="210" stroke="#eb2b1a" strokeWidth="9" strokeLinecap="round" strokeOpacity="0.75" />
+          <line x1="90"  y1="190" x2="130" y2="190" stroke="#eb2b1a" strokeWidth="9" strokeLinecap="round" strokeOpacity="0.75" />
         </g>
 
         {/* Medium + top-right — center (1310, 122) */}
         <g className="geo geo-plus-2" filter="url(#glow-b)">
-          <line x1="1310" y1="106" x2="1310" y2="138" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="1294" y1="122" x2="1326" y2="122" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="1310" y1="106" x2="1310" y2="138" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="1294" y1="122" x2="1326" y2="122" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
         </g>
 
         {/* Small + center-right — center (1390, 378) */}
         <g className="geo geo-plus-3" filter="url(#glow-r)">
-          <line x1="1390" y1="366" x2="1390" y2="390" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="1378" y1="378" x2="1402" y2="378" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="1390" y1="366" x2="1390" y2="390" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="1378" y1="378" x2="1402" y2="378" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.6" />
         </g>
 
         {/* Tiny + scattered — center (560, 78) */}
         <g className="geo geo-plus-4">
-          <line x1="560" y1="70" x2="560" y2="86" stroke="#188bf6" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="552" y1="78" x2="568" y2="78" stroke="#188bf6" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="560" y1="70" x2="560" y2="86" stroke="#188bf6" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="552" y1="78" x2="568" y2="78" stroke="#188bf6" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.6" />
         </g>
 
         {/* Tiny + — center (1080, 710) */}
         <g className="geo geo-plus-5">
-          <line x1="1080" y1="702" x2="1080" y2="718" stroke="#eb2b1a" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="1072" y1="710" x2="1088" y2="710" stroke="#eb2b1a" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="1080" y1="702" x2="1080" y2="718" stroke="#eb2b1a" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="1072" y1="710" x2="1088" y2="710" stroke="#eb2b1a" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.55" />
         </g>
 
         {/* ── VENN — referencia sutil a 1+1=3 ─────────── */}
@@ -99,8 +99,8 @@ export function HeroBg() {
 
         {/* + grande bottom-right — center (880, 650) */}
         <g className="geo geo-plus-m1" filter="url(#glow-b)">
-          <line x1="880" y1="630" x2="880" y2="670" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="860" y1="650" x2="900" y2="650" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="880" y1="630" x2="880" y2="670" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="860" y1="650" x2="900" y2="650" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
         </g>
 
         <g className="geo geo-venn-m" filter="url(#glow-r)">
@@ -115,8 +115,8 @@ export function HeroBg() {
 
         {/* + tiny mid-right — center (940, 496) */}
         <g className="geo geo-plus-m2" filter="url(#glow-r)">
-          <line x1="940" y1="484" x2="940" y2="508" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="928" y1="496" x2="952" y2="496" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="940" y1="484" x2="940" y2="508" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="928" y1="496" x2="952" y2="496" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.55" />
         </g>
 
         {/* ── ENERGY STREAKS ────────────────────────────── */}
