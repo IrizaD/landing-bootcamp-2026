@@ -341,7 +341,7 @@ h2.section-title {
   margin-bottom: 28px;
   animation: fadeUp 0.8s ease 0.2s both;
 }
-.hero h1 em { font-style: normal; color: var(--red); }
+.hero h1 em { font-style: normal; color: var(--red); white-space: nowrap; }
 .hero-sub {
   font-size: clamp(16px, 2vw, 20px);
   font-weight: 300;
