@@ -14,9 +14,9 @@ export const content = {
   // ─── HERO ─────────────────────────────────────────────────────────────────
   hero: {
     badge:    "Evento Gratuito · 100% en Vivo · 3 Días",
-    h1_part1: "¿Cuánto has dejado de ganar por no estar en el",
-    h1_em:    "lugar correcto",
-    subhead:  "Tres días en vivo con más de 20 speakers internacionales. Mentalidad, ventas y ejecución — sin teoría, sin rodeos, sin excusas.",
+    h1_part1: "Transforma tu negocio en solo",
+    h1_em:    "3 días",
+    subhead:  "¿Cuánto tiempo y dinero estás perdiendo por no ver la oportunidad — o peor, verla y no saber cómo hacerla tuya? Tres días en vivo con más de 20 speakers internacionales. Mentalidad, ventas y ejecución, sin teoría, sin rodeos, sin excusas.",
     date_nums:  "5, 6 y 7",
     date_month: "Junio 2026",
     date_tag:   "100% en línea · Gratuito",
