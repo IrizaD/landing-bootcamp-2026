@@ -138,14 +138,30 @@ export function HeroBg() {
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
         {[
-          { cx: 480,  cy: 700, r: 2.5, cls: "p1", col: "#eb2b1a", op: 0.55 },
-          { cx: 900,  cy: 780, r: 2,   cls: "p2", col: "#188bf6", op: 0.45 },
-          { cx: 1100, cy: 650, r: 2,   cls: "p3", col: "#eb2b1a", op: 0.4  },
-          { cx: 280,  cy: 600, r: 1.5, cls: "p4", col: "#188bf6", op: 0.5  },
-          { cx: 650,  cy: 720, r: 1.5, cls: "p5", col: "#eb2b1a", op: 0.35 },
-          { cx: 1250, cy: 560, r: 2,   cls: "p6", col: "#188bf6", op: 0.4  },
-          { cx: 760,  cy: 800, r: 1.5, cls: "p7", col: "#eb2b1a", op: 0.3  },
-          { cx: 1050, cy: 750, r: 2.5, cls: "p8", col: "#188bf6", op: 0.35 },
+          { cx: 480,  cy: 700, r: 2.5, cls: "p1",  col: "#eb2b1a", op: 0.55 },
+          { cx: 900,  cy: 780, r: 2,   cls: "p2",  col: "#188bf6", op: 0.45 },
+          { cx: 1100, cy: 650, r: 2,   cls: "p3",  col: "#eb2b1a", op: 0.4  },
+          { cx: 280,  cy: 600, r: 1.5, cls: "p4",  col: "#188bf6", op: 0.5  },
+          { cx: 650,  cy: 720, r: 1.5, cls: "p5",  col: "#eb2b1a", op: 0.35 },
+          { cx: 1250, cy: 560, r: 2,   cls: "p6",  col: "#188bf6", op: 0.4  },
+          { cx: 760,  cy: 800, r: 1.5, cls: "p7",  col: "#eb2b1a", op: 0.3  },
+          { cx: 1050, cy: 750, r: 2.5, cls: "p8",  col: "#188bf6", op: 0.35 },
+          { cx: 180,  cy: 200, r: 2,   cls: "p9",  col: "#eb2b1a", op: 0.4  },
+          { cx: 380,  cy: 120, r: 1.5, cls: "p10", col: "#188bf6", op: 0.45 },
+          { cx: 720,  cy: 160, r: 2,   cls: "p11", col: "#eb2b1a", op: 0.35 },
+          { cx: 1000, cy: 80,  r: 1.5, cls: "p12", col: "#188bf6", op: 0.5  },
+          { cx: 1350, cy: 300, r: 2.5, cls: "p13", col: "#eb2b1a", op: 0.4  },
+          { cx: 1420, cy: 600, r: 2,   cls: "p14", col: "#188bf6", op: 0.35 },
+          { cx: 60,   cy: 500, r: 1.5, cls: "p15", col: "#eb2b1a", op: 0.45 },
+          { cx: 200,  cy: 760, r: 2,   cls: "p16", col: "#188bf6", op: 0.3  },
+          { cx: 520,  cy: 420, r: 1.5, cls: "p17", col: "#eb2b1a", op: 0.3  },
+          { cx: 820,  cy: 340, r: 2,   cls: "p18", col: "#188bf6", op: 0.4  },
+          { cx: 1150, cy: 200, r: 1.5, cls: "p19", col: "#eb2b1a", op: 0.35 },
+          { cx: 960,  cy: 500, r: 2.5, cls: "p20", col: "#188bf6", op: 0.3  },
+          { cx: 340,  cy: 380, r: 2,   cls: "p21", col: "#eb2b1a", op: 0.35 },
+          { cx: 600,  cy: 560, r: 1.5, cls: "p22", col: "#188bf6", op: 0.45 },
+          { cx: 1300, cy: 720, r: 2,   cls: "p23", col: "#eb2b1a", op: 0.3  },
+          { cx: 140,  cy: 840, r: 1.5, cls: "p24", col: "#188bf6", op: 0.35 },
         ].map((p) => (
           <circle key={p.cls} className={`particle ${p.cls}`}
             cx={p.cx} cy={p.cy} r={p.r} fill={p.col} fillOpacity={p.op} />
