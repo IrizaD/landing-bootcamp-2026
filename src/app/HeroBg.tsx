@@ -36,93 +36,87 @@ export function HeroBg() {
         <ellipse className="orb-red"   cx="260"  cy="680" rx="560" ry="440" fill="url(#orb-r)"  />
         <ellipse className="orb-blue"  cx="1260" cy="180" rx="480" ry="380" fill="url(#orb-b)"  />
         <ellipse className="orb-red-2" cx="820"  cy="420" rx="300" ry="240" fill="url(#orb-r2)" />
-        {/* Orb azul bottom-right — visible en mobile */}
         <ellipse className="orb-blue-m" cx="960" cy="720" rx="320" ry="260" fill="url(#orb-b)" />
 
         {/* ── PLUS SIGNS ───────────────────────────────── */}
 
-        {/* Large + top-left */}
+        {/* Large + top-left — center (110, 190) */}
         <g className="geo geo-plus-1" filter="url(#glow-r)">
-          <line x1="110" y1="155" x2="110" y2="225" stroke="#eb2b1a" strokeWidth="2.8" strokeLinecap="round" strokeOpacity="0.75" />
-          <line x1="75"  y1="190" x2="145" y2="190" stroke="#eb2b1a" strokeWidth="2.8" strokeLinecap="round" strokeOpacity="0.75" />
+          <line x1="110" y1="170" x2="110" y2="210" stroke="#eb2b1a" strokeWidth="5.5" strokeLinecap="round" strokeOpacity="0.75" />
+          <line x1="90"  y1="190" x2="130" y2="190" stroke="#eb2b1a" strokeWidth="5.5" strokeLinecap="round" strokeOpacity="0.75" />
         </g>
 
-        {/* Medium + top-right */}
+        {/* Medium + top-right — center (1310, 122) */}
         <g className="geo geo-plus-2" filter="url(#glow-b)">
-          <line x1="1310" y1="95"  x2="1310" y2="149" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="1283" y1="122" x2="1337" y2="122" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="1310" y1="106" x2="1310" y2="138" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="1294" y1="122" x2="1326" y2="122" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
         </g>
 
-        {/* Small + center-right */}
+        {/* Small + center-right — center (1390, 378) */}
         <g className="geo geo-plus-3" filter="url(#glow-r)">
-          <line x1="1390" y1="360" x2="1390" y2="396" stroke="#eb2b1a" strokeWidth="2.2" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="1372" y1="378" x2="1408" y2="378" stroke="#eb2b1a" strokeWidth="2.2" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="1390" y1="366" x2="1390" y2="390" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="1378" y1="378" x2="1402" y2="378" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.6" />
         </g>
 
-        {/* Tiny + scattered */}
+        {/* Tiny + scattered — center (560, 78) */}
         <g className="geo geo-plus-4">
-          <line x1="560" y1="68" x2="560" y2="88" stroke="#188bf6" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="550" y1="78" x2="570" y2="78" stroke="#188bf6" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="560" y1="70" x2="560" y2="86" stroke="#188bf6" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.6" />
+          <line x1="552" y1="78" x2="568" y2="78" stroke="#188bf6" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.6" />
         </g>
+
+        {/* Tiny + — center (1080, 710) */}
         <g className="geo geo-plus-5">
-          <line x1="1080" y1="700" x2="1080" y2="720" stroke="#eb2b1a" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="1070" y1="710" x2="1090" y2="710" stroke="#eb2b1a" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="1080" y1="702" x2="1080" y2="718" stroke="#eb2b1a" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="1072" y1="710" x2="1088" y2="710" stroke="#eb2b1a" strokeWidth="3.5" strokeLinecap="round" strokeOpacity="0.55" />
         </g>
 
         {/* ── VENN — referencia sutil a 1+1=3 ─────────── */}
-        {/* Dos círculos solapados levemente = sinergia */}
         <g className="geo geo-venn-1" filter="url(#glow-r)">
           <circle cx="1200" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
           <circle cx="1228" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.65" />
         </g>
 
-        {/* Segundo Venn más pequeño, tonos azul */}
         <g className="geo geo-venn-2" filter="url(#glow-b)">
           <circle cx="55"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
           <circle cx="76"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="1.8" strokeOpacity="0.6" />
         </g>
 
         {/* ── ARCOS FRAGMENTADOS ────────────────────────── */}
-        {/* Arc top-center */}
         <path className="geo geo-arc-1"
           d="M 760 30 A 60 60 0 0 1 880 30"
           fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.55" strokeLinecap="round"
         />
-        {/* Arc bottom-left */}
         <path className="geo geo-arc-2"
           d="M 300 810 A 70 70 0 0 0 440 810"
           fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
         />
-        {/* Arc mid-right */}
         <path className="geo geo-arc-3"
           d="M 1440 480 A 80 80 0 0 1 1360 580"
           fill="none" stroke="#188bf6" strokeWidth="2.2" strokeOpacity="0.5" strokeLinecap="round"
         />
 
-        {/* ── ELEMENTOS VISIBLES EN MOBILE — esquina inferior-derecha ── */}
+        {/* ── MOBILE — esquina inferior-derecha ── */}
 
-        {/* + grande bottom-right */}
+        {/* + grande bottom-right — center (880, 650) */}
         <g className="geo geo-plus-m1" filter="url(#glow-b)">
-          <line x1="880" y1="620" x2="880" y2="680" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="850" y1="650" x2="910" y2="650" stroke="#188bf6" strokeWidth="2.4" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="880" y1="630" x2="880" y2="670" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
+          <line x1="860" y1="650" x2="900" y2="650" stroke="#188bf6" strokeWidth="4.5" strokeLinecap="round" strokeOpacity="0.7" />
         </g>
 
-        {/* Venn bottom-right */}
         <g className="geo geo-venn-m" filter="url(#glow-r)">
           <circle cx="820" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
           <circle cx="848" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.6" />
         </g>
 
-        {/* Arc bottom-right */}
         <path className="geo geo-arc-m"
           d="M 760 830 A 55 55 0 0 1 870 830"
           fill="none" stroke="#eb2b1a" strokeWidth="2" strokeOpacity="0.5" strokeLinecap="round"
         />
 
-        {/* + tiny mid-right */}
+        {/* + tiny mid-right — center (940, 496) */}
         <g className="geo geo-plus-m2" filter="url(#glow-r)">
-          <line x1="940" y1="480" x2="940" y2="512" stroke="#eb2b1a" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="924" y1="496" x2="956" y2="496" stroke="#eb2b1a" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="940" y1="484" x2="940" y2="508" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.55" />
+          <line x1="928" y1="496" x2="952" y2="496" stroke="#eb2b1a" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.55" />
         </g>
 
         {/* ── ENERGY STREAKS ────────────────────────────── */}
