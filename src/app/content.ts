@@ -16,11 +16,11 @@ export const content = {
     badge:    "Evento Gratuito · 100% en Vivo · 3 Días",
     h1_part1: "Transforma tu negocio",
     h1_em:    "en 3 días",
-    subhead:  "¿Cuánto tiempo y dinero estás perdiendo por no ver la oportunidad — o peor, verla y no saber cómo hacerla tuya? Tres días en vivo con más de 20 speakers internacionales. Mentalidad, ventas y ejecución, sin teoría, sin rodeos, sin excusas.",
+    subhead:  "¿Cuánto tiempo y dinero estás perdiendo por no ver la oportunidad? ¿O peor, verla y no saber cómo hacerla tuya? Tres días en vivo con más de 20 speakers internacionales. Mentalidad, ventas y ejecución, sin teoría, sin rodeos, sin excusas.",
     date_nums:  "5, 6 y 7",
     date_month: "Junio 2026",
     date_tag:   "100% en línea · Gratuito",
-    cta:        "Reserva tu lugar — es gratis",
+    cta:        "Reserva tu lugar gratis",
   },
 
   // ─── STATS (hero flotantes) ────────────────────────────────────────────────
@@ -35,11 +35,11 @@ export const content = {
     label:    "La brecha real",
     title_1:  "Ya sabes lo que debes hacer.",
     title_em: "¿Por qué no está pasando?",
-    body:     "No es falta de motivación ni de información. Hay un techo invisible que no se rompe solo — se rompe con el entorno correcto, las herramientas correctas y la decisión de dejar de postergar. Cada día que esperas, alguien con menos talento que tú se mueve primero.",
+    body:     "No es falta de motivación ni de información. Hay un techo invisible que no se rompe solo. Se rompe con el entorno correcto, las herramientas correctas y la decisión de dejar de postergar. Cada día que esperas, alguien con menos talento que tú se mueve primero.",
     bullets: [
       "Tienes conocimiento acumulado que aún no da los resultados que merece",
       "Tu negocio avanza, pero a un ritmo que ya no te satisface",
-      "Sientes que el siguiente salto requiere algo diferente — y aún no encontraste qué",
+      "Sientes que el siguiente salto requiere algo diferente y aún no encontraste qué",
     ],
     quote:           "Lo que hoy te limita, en 3 días puede dejar de existir.",
     callout_title:   "El Bootcamp es ese momento.",
@@ -55,7 +55,7 @@ export const content = {
       {
         n:     "01",
         title: "Romper los techos mentales",
-        body:  "Vas a identificar exactamente qué creencias frenan tu crecimiento — y las vas a reemplazar con la mentalidad del empresario que ya opera en el siguiente nivel.",
+        body:  "Vas a identificar exactamente qué creencias frenan tu crecimiento y las vas a reemplazar con la mentalidad del empresario que ya opera en el siguiente nivel.",
       },
       {
         n:     "02",
@@ -65,7 +65,7 @@ export const content = {
       {
         n:     "03",
         title: "El entorno que cambia todo",
-        body:  "Conectarás con personas que van en la misma dirección y comparten los mismos valores. Aquí el éxito del otro no es amenaza — es prueba de que también es posible para ti.",
+        body:  "Conectarás con personas que van en la misma dirección y comparten los mismos valores. Aquí el éxito del otro no es amenaza, es prueba de que también es posible para ti.",
       },
     ],
   },
@@ -81,7 +81,7 @@ export const content = {
       },
       {
         title: "+20 speakers internacionales",
-        body:  "Los referentes de negocios, mentalidad y ventas en español — todos en un mismo espacio, los mismos 3 días.",
+        body:  "Los referentes de negocios, mentalidad y ventas en español, todos en un mismo espacio, los mismos 3 días.",
       },
       {
         title: "Sorteos cada 3 horas",
@@ -120,13 +120,13 @@ export const content = {
       },
       {
         quote:  "Me mudé a EE.UU. sin clientes y sin permiso de trabajo. Digitalicé mi curso de nail art y generé $9,000 USD en mi primer mes.",
-        result: "$9,000 USD — primer mes",
+        result: "$9,000 USD en el primer mes",
         name:   "Janet",
         role:   "México → Estados Unidos",
       },
       {
         quote:  "Pasé de dar consultas a $200 USD a lanzar un programa de 8 semanas. 23 personas a $497 cada una.",
-        result: "$11,431 USD — 30 días",
+        result: "$11,431 USD en 30 días",
         name:   "Carlos",
         role:   "Asesor financiero · Finanzas Personales para Emprendedores",
       },
@@ -141,7 +141,7 @@ export const content = {
     host_badge: "Tu host en el Bootcamp",
     name_1:     "Jorge",
     name_em:    "Serratos",
-    bio:        "No es un nativo digital. Es abogado y empresario — construyó todo esto desde cero, igual que tú. Hoy lidera el movimiento sinergético más grande del mundo hispano y viene al Bootcamp a despertarte, no a motivarte.",
+    bio:        "No es un nativo digital. Es abogado y empresario que construyó todo esto desde cero, igual que tú. Hoy lidera el movimiento sinergético más grande del mundo hispano y viene al Bootcamp a despertarte, no a motivarte.",
     stats: [
       { number: "+20,000", label: "emprendedores ayudados a convertir su conocimiento en un negocio digital rentable" },
       { number: "+$2M USD", label: "invertidos en capacitación con los mejores del mundo" },
@@ -177,13 +177,13 @@ export const content = {
       whatsapp_placeholder: "+52 55 1234 5678",
       country_label:       "País",
       country_placeholder: "Selecciona tu país",
-      cta:         "Reserva mi lugar — es gratis",
+      cta:         "Reserva mi lugar gratis",
       cta_loading: "Registrando...",
       disclaimer:  "Al registrarte aceptas recibir información sobre el evento. Sin spam.",
     },
     success: {
       title:   "¡Ya tienes tu lugar!",
-      message: "Revisa tu correo — te enviamos los detalles del Bootcamp.\nNos vemos el 5 de Junio de 2026.",
+      message: "Revisa tu correo, te enviamos los detalles del Bootcamp.\nNos vemos el 5 de Junio de 2026.",
     },
   },
 
