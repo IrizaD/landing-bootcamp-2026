@@ -50,6 +50,20 @@ export function HeroBg() {
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+
+          {/* Particle blur variants */}
+          {/* Sólido — sin blur */}
+          <filter id="p-solid" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0" />
+          </filter>
+          {/* Suave — blur ligero */}
+          <filter id="p-soft" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" />
+          </filter>
+          {/* Difuso — blur fuerte, tipo halo */}
+          <filter id="p-diffuse" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
+          </filter>
         </defs>
 
         {/* ── AMBIENT SIDE GLOWS ────────────────────────── */}
@@ -77,36 +91,37 @@ export function HeroBg() {
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
         {[
-          { cx: 140,  cy: 660, r: 3.5, cls: "p1",  op: 0.90 },
-          { cx: 300,  cy: 520, r: 2.5, cls: "p2",  op: 0.80 },
-          { cx: 480,  cy: 715, r: 3,   cls: "p3",  op: 0.85 },
-          { cx: 1095, cy: 180, r: 3,   cls: "p4",  op: 0.85 },
-          { cx: 1250, cy: 340, r: 2.5, cls: "p5",  op: 0.80 },
-          { cx: 1385, cy: 145, r: 3.5, cls: "p6",  op: 0.90 },
-          { cx: 775,  cy: 785, r: 2.5, cls: "p7",  op: 0.75 },
-          { cx: 655,  cy: 70,  r: 2.5, cls: "p8",  op: 0.75 },
-          { cx: 210,  cy: 750, r: 2.5, cls: "p9",  op: 0.80 },
-          { cx: 390,  cy: 610, r: 3,   cls: "p10", op: 0.85 },
-          { cx: 560,  cy: 480, r: 2.5, cls: "p11", op: 0.80 },
-          { cx: 90,   cy: 390, r: 3,   cls: "p12", op: 0.75 },
-          { cx: 720,  cy: 830, r: 3,   cls: "p13", op: 0.75 },
-          { cx: 870,  cy: 700, r: 2.5, cls: "p14", op: 0.80 },
-          { cx: 1010, cy: 560, r: 3,   cls: "p15", op: 0.85 },
-          { cx: 1160, cy: 420, r: 2.5, cls: "p16", op: 0.80 },
-          { cx: 1320, cy: 260, r: 3.5, cls: "p17", op: 0.85 },
-          { cx: 1420, cy: 480, r: 2.5, cls: "p18", op: 0.75 },
-          { cx: 430,  cy: 150, r: 2.5, cls: "p19", op: 0.75 },
-          { cx: 580,  cy: 300, r: 3,   cls: "p20", op: 0.80 },
-          { cx: 820,  cy: 200, r: 2.5, cls: "p21", op: 0.75 },
-          { cx: 960,  cy: 80,  r: 3,   cls: "p22", op: 0.80 },
-          { cx: 1180, cy: 740, r: 2.5, cls: "p23", op: 0.75 },
-          { cx: 50,   cy: 180, r: 2.5, cls: "p24", op: 0.75 },
+          { cx: 140,  cy: 660, r: 3.5, cls: "p1",  op: 0.95, blur: "p-solid"   },
+          { cx: 300,  cy: 520, r: 5,   cls: "p2",  op: 0.70, blur: "p-diffuse" },
+          { cx: 480,  cy: 715, r: 3,   cls: "p3",  op: 0.90, blur: "p-solid"   },
+          { cx: 1095, cy: 180, r: 4,   cls: "p4",  op: 0.75, blur: "p-soft"    },
+          { cx: 1250, cy: 340, r: 6,   cls: "p5",  op: 0.60, blur: "p-diffuse" },
+          { cx: 1385, cy: 145, r: 3.5, cls: "p6",  op: 0.95, blur: "p-solid"   },
+          { cx: 775,  cy: 785, r: 4,   cls: "p7",  op: 0.75, blur: "p-soft"    },
+          { cx: 655,  cy: 70,  r: 3,   cls: "p8",  op: 0.90, blur: "p-solid"   },
+          { cx: 210,  cy: 750, r: 5,   cls: "p9",  op: 0.65, blur: "p-diffuse" },
+          { cx: 390,  cy: 610, r: 3.5, cls: "p10", op: 0.90, blur: "p-solid"   },
+          { cx: 560,  cy: 480, r: 4,   cls: "p11", op: 0.75, blur: "p-soft"    },
+          { cx: 90,   cy: 390, r: 6,   cls: "p12", op: 0.60, blur: "p-diffuse" },
+          { cx: 720,  cy: 830, r: 3,   cls: "p13", op: 0.90, blur: "p-solid"   },
+          { cx: 870,  cy: 700, r: 4.5, cls: "p14", op: 0.70, blur: "p-soft"    },
+          { cx: 1010, cy: 560, r: 3.5, cls: "p15", op: 0.90, blur: "p-solid"   },
+          { cx: 1160, cy: 420, r: 5,   cls: "p16", op: 0.65, blur: "p-diffuse" },
+          { cx: 1320, cy: 260, r: 3.5, cls: "p17", op: 0.90, blur: "p-solid"   },
+          { cx: 1420, cy: 480, r: 4,   cls: "p18", op: 0.75, blur: "p-soft"    },
+          { cx: 430,  cy: 150, r: 6,   cls: "p19", op: 0.60, blur: "p-diffuse" },
+          { cx: 580,  cy: 300, r: 3,   cls: "p20", op: 0.90, blur: "p-solid"   },
+          { cx: 820,  cy: 200, r: 4,   cls: "p21", op: 0.75, blur: "p-soft"    },
+          { cx: 960,  cy: 80,  r: 5,   cls: "p22", op: 0.65, blur: "p-diffuse" },
+          { cx: 1180, cy: 740, r: 3.5, cls: "p23", op: 0.90, blur: "p-solid"   },
+          { cx: 50,   cy: 180, r: 4,   cls: "p24", op: 0.75, blur: "p-soft"    },
         ].map((p) => (
           <circle
             key={p.cls}
             className={`particle ${p.cls}`}
             cx={p.cx} cy={p.cy} r={p.r}
             fill={GREEN} fillOpacity={p.op}
+            filter={`url(#${p.blur})`}
           />
         ))}
       </svg>
