@@ -233,14 +233,30 @@ h2.section-title {
 }
 
 /* Particles */
-.p1 { animation: float-up 9s  ease-in-out infinite;      }
-.p2 { animation: float-up 11s ease-in-out infinite 2s;   }
-.p3 { animation: float-up 8s  ease-in-out infinite 1s;   }
-.p4 { animation: float-up 13s ease-in-out infinite 4s;   }
-.p5 { animation: float-up 10s ease-in-out infinite 0.5s; }
-.p6 { animation: float-up 7s  ease-in-out infinite 3.5s; }
-.p7 { animation: float-up 12s ease-in-out infinite 1.5s; }
-.p8 { animation: float-up 15s ease-in-out infinite 5s;   }
+.p1  { animation: float-up  9s ease-in-out infinite 0s;   }
+.p2  { animation: float-up 11s ease-in-out infinite 2s;   }
+.p3  { animation: float-up  8s ease-in-out infinite 1s;   }
+.p4  { animation: float-up 13s ease-in-out infinite 4s;   }
+.p5  { animation: float-up 10s ease-in-out infinite 0.5s; }
+.p6  { animation: float-up  7s ease-in-out infinite 3.5s; }
+.p7  { animation: float-up 12s ease-in-out infinite 1.5s; }
+.p8  { animation: float-up 15s ease-in-out infinite 5s;   }
+.p9  { animation: float-up 10s ease-in-out infinite 0.8s; }
+.p10 { animation: float-up  8s ease-in-out infinite 3s;   }
+.p11 { animation: float-up 14s ease-in-out infinite 1.2s; }
+.p12 { animation: float-up  9s ease-in-out infinite 6s;   }
+.p13 { animation: float-up 11s ease-in-out infinite 2.5s; }
+.p14 { animation: float-up  7s ease-in-out infinite 4.5s; }
+.p15 { animation: float-up 13s ease-in-out infinite 0.3s; }
+.p16 { animation: float-up  9s ease-in-out infinite 5.5s; }
+.p17 { animation: float-up 12s ease-in-out infinite 1.8s; }
+.p18 { animation: float-up  8s ease-in-out infinite 3.8s; }
+.p19 { animation: float-up 15s ease-in-out infinite 2.2s; }
+.p20 { animation: float-up 10s ease-in-out infinite 7s;   }
+.p21 { animation: float-up  9s ease-in-out infinite 4.2s; }
+.p22 { animation: float-up 11s ease-in-out infinite 1.6s; }
+.p23 { animation: float-up 13s ease-in-out infinite 6.5s; }
+.p24 { animation: float-up  8s ease-in-out infinite 3.3s; }
 
 @keyframes float-up {
   0%          { transform: translateY(0)    scale(1);   opacity: 0;   }
