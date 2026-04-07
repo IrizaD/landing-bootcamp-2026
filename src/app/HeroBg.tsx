@@ -65,7 +65,7 @@ export function HeroBg() {
               r={r}
               fill="none"
               stroke={GREEN}
-              strokeWidth="0.9"
+              strokeWidth="1.4"
               strokeOpacity={op}
               className={`wave-el w${i}`}
             />
