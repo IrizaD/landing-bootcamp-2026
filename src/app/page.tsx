@@ -145,7 +145,7 @@ export default function Page() {
         <div className="container" style={{ width: "100%" }}>
           <div className="hero-content">
             <div className="hero-logo-wrap">
-              <img src="/logo-bootcamp.webp" alt="Bootcamp de Aceleración de Emprendimiento" className="hero-logo" />
+              <img src="/nuevoboot.png" alt="Bootcamp de Aceleración de Emprendimiento" className="hero-logo" />
             </div>
             <h1>
               {content.hero.h1_part1}<br /><em>{content.hero.h1_em}</em>
