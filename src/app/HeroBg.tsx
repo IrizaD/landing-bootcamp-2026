@@ -1,15 +1,15 @@
-// Focal points: upper-left and upper-right corners (off-screen)
-// Arcs radiate outward like the bootcamp banner reference
+// Focal points: left and right SIDES, vertically centered (off-screen)
+// ClipPaths prevent the two groups from crossing in the center
 const GREEN = "#00e040";
-const LEFT_FX  = -420;
-const LEFT_FY  = -80;
-const RIGHT_FX = 1860;
-const RIGHT_FY = -80;
-const NUM_WAVES = 24;
+const LEFT_FX  = -380;
+const LEFT_FY  = 430;
+const RIGHT_FX = 1820;
+const RIGHT_FY = 430;
+const NUM_WAVES = 22;
 
 const waves = Array.from({ length: NUM_WAVES }, (_, i) => ({
-  r:  620 + i * 64,                             // 620 → 2132
-  op: 0.08 + (i / (NUM_WAVES - 1)) * 0.34,      // 0.08 → 0.42
+  r:  460 + i * 52,                             // 460 → 1482
+  op: 0.07 + (i / (NUM_WAVES - 1)) * 0.36,      // 0.07 → 0.43
 }));
 
 export function HeroBg() {
@@ -22,30 +22,39 @@ export function HeroBg() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Ambient glow — left corner */}
-          <radialGradient id="orb-gl" cx="0%" cy="0%" r="100%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.20" />
+          {/* Clip left waves to left portion */}
+          <clipPath id="clip-l">
+            <rect x="0" y="0" width="790" height="860" />
+          </clipPath>
+          {/* Clip right waves to right portion */}
+          <clipPath id="clip-r">
+            <rect x="650" y="0" width="790" height="860" />
+          </clipPath>
+
+          {/* Ambient glow — left side */}
+          <radialGradient id="orb-gl" cx="0%" cy="50%" r="70%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.18" />
             <stop offset="60%"  stopColor={GREEN} stopOpacity="0.05" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Ambient glow — right corner */}
-          <radialGradient id="orb-gr" cx="100%" cy="0%" r="100%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.16" />
+          {/* Ambient glow — right side */}
+          <radialGradient id="orb-gr" cx="100%" cy="50%" r="70%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.15" />
             <stop offset="60%"  stopColor={GREEN} stopOpacity="0.04" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Center vignette */}
-          <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor="#000" stopOpacity="0.55" />
-            <stop offset="50%"  stopColor="#000" stopOpacity="0.08" />
+          {/* Center vignette — hides crossing seam */}
+          <radialGradient id="vignette" cx="50%" cy="50%" r="40%">
+            <stop offset="0%"   stopColor="#000" stopOpacity="0.72" />
+            <stop offset="60%"  stopColor="#000" stopOpacity="0.12" />
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
 
           {/* Glow filter */}
-          <filter id="wave-glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur" />
+          <filter id="wave-glow" x="-30%" y="-10%" width="160%" height="120%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -53,12 +62,15 @@ export function HeroBg() {
           </filter>
         </defs>
 
-        {/* ── AMBIENT CORNER GLOWS ──────────────────────── */}
-        <rect x="0" y="0" width="720" height="860" fill="url(#orb-gl)" />
-        <rect x="720" y="0" width="720" height="860" fill="url(#orb-gr)" />
+        {/* ── AMBIENT SIDE GLOWS ────────────────────────── */}
+        <rect x="0"   y="0" width="1440" height="860" fill="url(#orb-gl)" />
+        <rect x="0"   y="0" width="1440" height="860" fill="url(#orb-gr)" />
 
-        {/* ── LEFT WAVE ARCS (focal: upper-left) ────────── */}
-        <g className="wave-group wave-group-l" filter="url(#wave-glow)">
+        {/* ── LEFT WAVE ARCS ────────────────────────────── */}
+        {/* Circles from left-side focal, clipped to left half */}
+        <g className="wave-group wave-group-l"
+           filter="url(#wave-glow)"
+           clipPath="url(#clip-l)">
           {waves.map(({ r, op }, i) => (
             <circle
               key={`l${i}`}
@@ -66,15 +78,18 @@ export function HeroBg() {
               r={r}
               fill="none"
               stroke={GREEN}
-              strokeWidth="0.85"
+              strokeWidth="0.9"
               strokeOpacity={op}
               className={`wave-el wl${i}`}
             />
           ))}
         </g>
 
-        {/* ── RIGHT WAVE ARCS (focal: upper-right) ──────── */}
-        <g className="wave-group wave-group-r" filter="url(#wave-glow)">
+        {/* ── RIGHT WAVE ARCS ───────────────────────────── */}
+        {/* Mirror circles from right-side focal, clipped to right half */}
+        <g className="wave-group wave-group-r"
+           filter="url(#wave-glow)"
+           clipPath="url(#clip-r)">
           {waves.map(({ r, op }, i) => (
             <circle
               key={`r${i}`}
@@ -82,26 +97,26 @@ export function HeroBg() {
               r={r}
               fill="none"
               stroke={GREEN}
-              strokeWidth="0.85"
+              strokeWidth="0.9"
               strokeOpacity={op}
               className={`wave-el wr${i}`}
             />
           ))}
         </g>
 
-        {/* ── CENTER VIGNETTE ───────────────────────────── */}
+        {/* ── CENTER VIGNETTE (hides seam) ─────────────── */}
         <rect x="0" y="0" width="1440" height="860" fill="url(#vignette)" />
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
         {[
-          { cx: 155,  cy: 670, r: 2,   cls: "p1", op: 0.55 },
-          { cx: 310,  cy: 530, r: 1.5, cls: "p2", op: 0.40 },
-          { cx: 490,  cy: 720, r: 2,   cls: "p3", op: 0.45 },
-          { cx: 1100, cy: 185, r: 2,   cls: "p4", op: 0.45 },
-          { cx: 1255, cy: 345, r: 1.5, cls: "p5", op: 0.40 },
-          { cx: 1390, cy: 150, r: 2,   cls: "p6", op: 0.50 },
-          { cx: 780,  cy: 790, r: 1.5, cls: "p7", op: 0.25 },
-          { cx: 660,  cy: 72,  r: 1.5, cls: "p8", op: 0.30 },
+          { cx: 140,  cy: 660, r: 2,   cls: "p1", op: 0.55 },
+          { cx: 300,  cy: 520, r: 1.5, cls: "p2", op: 0.40 },
+          { cx: 480,  cy: 715, r: 2,   cls: "p3", op: 0.45 },
+          { cx: 1095, cy: 180, r: 2,   cls: "p4", op: 0.45 },
+          { cx: 1250, cy: 340, r: 1.5, cls: "p5", op: 0.40 },
+          { cx: 1385, cy: 145, r: 2,   cls: "p6", op: 0.50 },
+          { cx: 775,  cy: 785, r: 1.5, cls: "p7", op: 0.22 },
+          { cx: 655,  cy: 70,  r: 1.5, cls: "p8", op: 0.28 },
         ].map((p) => (
           <circle
             key={p.cls}
