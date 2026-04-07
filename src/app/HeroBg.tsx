@@ -1,13 +1,15 @@
+// Focal points: upper-left and upper-right corners (off-screen)
+// Arcs radiate outward like the bootcamp banner reference
 const GREEN = "#00e040";
-const LEFT_CX = -350;
-const RIGHT_CX = 1790;
-const FOCAL_CY = 430;
-const EL_RY = 720;
-const NUM_WAVES = 13;
+const LEFT_FX  = -420;
+const LEFT_FY  = -80;
+const RIGHT_FX = 1860;
+const RIGHT_FY = -80;
+const NUM_WAVES = 24;
 
 const waves = Array.from({ length: NUM_WAVES }, (_, i) => ({
-  ellRx: 460 + i * 68,               // 460 → 1276
-  op: 0.07 + (i / (NUM_WAVES - 1)) * 0.30,  // 0.07 → 0.37
+  r:  620 + i * 64,                             // 620 → 2132
+  op: 0.08 + (i / (NUM_WAVES - 1)) * 0.34,      // 0.08 → 0.42
 }));
 
 export function HeroBg() {
@@ -20,30 +22,30 @@ export function HeroBg() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Ambient glow orb — left */}
-          <radialGradient id="orb-gl" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.22" />
-            <stop offset="55%"  stopColor={GREEN} stopOpacity="0.06" />
+          {/* Ambient glow — left corner */}
+          <radialGradient id="orb-gl" cx="0%" cy="0%" r="100%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.20" />
+            <stop offset="60%"  stopColor={GREEN} stopOpacity="0.05" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Ambient glow orb — right */}
-          <radialGradient id="orb-gr" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.18" />
-            <stop offset="55%"  stopColor={GREEN} stopOpacity="0.05" />
+          {/* Ambient glow — right corner */}
+          <radialGradient id="orb-gr" cx="100%" cy="0%" r="100%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.16" />
+            <stop offset="60%"  stopColor={GREEN} stopOpacity="0.04" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Center vignette to keep hero text area clean */}
+          {/* Center vignette */}
           <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor="#000" stopOpacity="0.60" />
-            <stop offset="50%"  stopColor="#000" stopOpacity="0.10" />
+            <stop offset="0%"   stopColor="#000" stopOpacity="0.55" />
+            <stop offset="50%"  stopColor="#000" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
 
-          {/* Glow filter for wave lines */}
-          <filter id="wave-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur" />
+          {/* Glow filter */}
+          <filter id="wave-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -51,44 +53,36 @@ export function HeroBg() {
           </filter>
         </defs>
 
-        {/* ── AMBIENT ORBS ──────────────────────────────── */}
-        <ellipse
-          className="orb-wave-l"
-          cx="180" cy="470" rx="430" ry="330"
-          fill="url(#orb-gl)"
-        />
-        <ellipse
-          className="orb-wave-r"
-          cx="1260" cy="390" rx="430" ry="330"
-          fill="url(#orb-gr)"
-        />
+        {/* ── AMBIENT CORNER GLOWS ──────────────────────── */}
+        <rect x="0" y="0" width="720" height="860" fill="url(#orb-gl)" />
+        <rect x="720" y="0" width="720" height="860" fill="url(#orb-gr)" />
 
-        {/* ── LEFT WAVE LINES ───────────────────────────── */}
+        {/* ── LEFT WAVE ARCS (focal: upper-left) ────────── */}
         <g className="wave-group wave-group-l" filter="url(#wave-glow)">
-          {waves.map(({ ellRx, op }, i) => (
-            <ellipse
+          {waves.map(({ r, op }, i) => (
+            <circle
               key={`l${i}`}
-              cx={LEFT_CX} cy={FOCAL_CY}
-              rx={ellRx} ry={EL_RY}
+              cx={LEFT_FX} cy={LEFT_FY}
+              r={r}
               fill="none"
               stroke={GREEN}
-              strokeWidth="1"
+              strokeWidth="0.85"
               strokeOpacity={op}
               className={`wave-el wl${i}`}
             />
           ))}
         </g>
 
-        {/* ── RIGHT WAVE LINES ──────────────────────────── */}
+        {/* ── RIGHT WAVE ARCS (focal: upper-right) ──────── */}
         <g className="wave-group wave-group-r" filter="url(#wave-glow)">
-          {waves.map(({ ellRx, op }, i) => (
-            <ellipse
+          {waves.map(({ r, op }, i) => (
+            <circle
               key={`r${i}`}
-              cx={RIGHT_CX} cy={FOCAL_CY}
-              rx={ellRx} ry={EL_RY}
+              cx={RIGHT_FX} cy={RIGHT_FY}
+              r={r}
               fill="none"
               stroke={GREEN}
-              strokeWidth="1"
+              strokeWidth="0.85"
               strokeOpacity={op}
               className={`wave-el wr${i}`}
             />
@@ -100,14 +94,14 @@ export function HeroBg() {
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
         {[
-          { cx: 155,  cy: 670, r: 2,   cls: "p1", op: 0.60 },
-          { cx: 310,  cy: 530, r: 1.5, cls: "p2", op: 0.45 },
-          { cx: 495,  cy: 725, r: 2,   cls: "p3", op: 0.50 },
-          { cx: 1100, cy: 185, r: 2,   cls: "p4", op: 0.50 },
-          { cx: 1258, cy: 345, r: 1.5, cls: "p5", op: 0.45 },
-          { cx: 1392, cy: 155, r: 2,   cls: "p6", op: 0.55 },
-          { cx: 780,  cy: 795, r: 1.5, cls: "p7", op: 0.28 },
-          { cx: 665,  cy: 75,  r: 1.5, cls: "p8", op: 0.32 },
+          { cx: 155,  cy: 670, r: 2,   cls: "p1", op: 0.55 },
+          { cx: 310,  cy: 530, r: 1.5, cls: "p2", op: 0.40 },
+          { cx: 490,  cy: 720, r: 2,   cls: "p3", op: 0.45 },
+          { cx: 1100, cy: 185, r: 2,   cls: "p4", op: 0.45 },
+          { cx: 1255, cy: 345, r: 1.5, cls: "p5", op: 0.40 },
+          { cx: 1390, cy: 150, r: 2,   cls: "p6", op: 0.50 },
+          { cx: 780,  cy: 790, r: 1.5, cls: "p7", op: 0.25 },
+          { cx: 660,  cy: 72,  r: 1.5, cls: "p8", op: 0.30 },
         ].map((p) => (
           <circle
             key={p.cls}
