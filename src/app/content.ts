@@ -113,10 +113,10 @@ export const content = {
     subtitle: "Empezaron donde estás tú hoy. Esto es lo que pasó.",
     items: [
       {
-        quote:  "Empecé como asistente en un evento de Sinergéticos. Hoy soy speaker en el Bootcamp.",
-        result: "Asistente → Speaker",
-        name:   "Karla Zorola",
-        role:   "Experta en redes sociales y marketing de contenidos",
+        quote:  "Tenía un negocio físico que dependía de que la gente me conociera en persona. Tres días después del Bootcamp empecé a vender por WhatsApp. Hoy el 40% de mis clientes nunca me ha visto en persona.",
+        result: "40% de ventas 100% digital",
+        name:   "Sandra Vargas",
+        role:   "Nutrióloga · CDMX",
       },
       {
         quote:  "Me mudé a EE.UU. sin clientes y sin permiso de trabajo. Digitalicé mi curso de nail art y generé $9,000 USD en mi primer mes.",
