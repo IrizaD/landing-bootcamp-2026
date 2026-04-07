@@ -67,41 +67,40 @@ export function HeroBg() {
         <rect x="0"   y="0" width="1440" height="860" fill="url(#orb-gr)" />
 
         {/* ── LEFT WAVE ARCS ────────────────────────────── */}
-        {/* Circles from left-side focal, clipped to left half */}
-        <g className="wave-group wave-group-l"
-           filter="url(#wave-glow)"
-           clipPath="url(#clip-l)">
-          {waves.map(({ r, op }, i) => (
-            <circle
-              key={`l${i}`}
-              cx={LEFT_FX} cy={LEFT_FY}
-              r={r}
-              fill="none"
-              stroke={GREEN}
-              strokeWidth="0.9"
-              strokeOpacity={op}
-              className={`wave-el wl${i}`}
-            />
-          ))}
+        {/* clipPath on outer g, filter on inner g — prevents filter from escaping clip */}
+        <g clipPath="url(#clip-l)">
+          <g className="wave-group wave-group-l" filter="url(#wave-glow)">
+            {waves.map(({ r, op }, i) => (
+              <circle
+                key={`l${i}`}
+                cx={LEFT_FX} cy={LEFT_FY}
+                r={r}
+                fill="none"
+                stroke={GREEN}
+                strokeWidth="0.9"
+                strokeOpacity={op}
+                className={`wave-el wl${i}`}
+              />
+            ))}
+          </g>
         </g>
 
         {/* ── RIGHT WAVE ARCS ───────────────────────────── */}
-        {/* Mirror circles from right-side focal, clipped to right half */}
-        <g className="wave-group wave-group-r"
-           filter="url(#wave-glow)"
-           clipPath="url(#clip-r)">
-          {waves.map(({ r, op }, i) => (
-            <circle
-              key={`r${i}`}
-              cx={RIGHT_FX} cy={RIGHT_FY}
-              r={r}
-              fill="none"
-              stroke={GREEN}
-              strokeWidth="0.9"
-              strokeOpacity={op}
-              className={`wave-el wr${i}`}
-            />
-          ))}
+        <g clipPath="url(#clip-r)">
+          <g className="wave-group wave-group-r" filter="url(#wave-glow)">
+            {waves.map(({ r, op }, i) => (
+              <circle
+                key={`r${i}`}
+                cx={RIGHT_FX} cy={RIGHT_FY}
+                r={r}
+                fill="none"
+                stroke={GREEN}
+                strokeWidth="0.9"
+                strokeOpacity={op}
+                className={`wave-el wr${i}`}
+              />
+            ))}
+          </g>
         </g>
 
         {/* ── CENTER VIGNETTE (hides seam) ─────────────── */}
