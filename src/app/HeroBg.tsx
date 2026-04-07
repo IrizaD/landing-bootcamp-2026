@@ -1,15 +1,13 @@
-// Focal points: left and right SIDES, vertically centered (off-screen)
-// ClipPaths prevent the two groups from crossing in the center
+// Focal point ABOVE the viewport center → circles create horizontal U-shaped arcs
+// ClipPath left/right prevents crossing in center seam
 const GREEN = "#00e040";
-const LEFT_FX  = -380;
-const LEFT_FY  = 430;
-const RIGHT_FX = 1820;
-const RIGHT_FY = 430;
+const FOCAL_X = 720;
+const FOCAL_Y = -520;   // well above viewport
 const NUM_WAVES = 22;
 
 const waves = Array.from({ length: NUM_WAVES }, (_, i) => ({
-  r:  460 + i * 52,                             // 460 → 1482
-  op: 0.07 + (i / (NUM_WAVES - 1)) * 0.36,      // 0.07 → 0.43
+  r:  660 + i * 42,                             // 660 → 1542
+  op: 0.09 + (i / (NUM_WAVES - 1)) * 0.36,      // 0.09 → 0.45
 }));
 
 export function HeroBg() {
@@ -22,39 +20,38 @@ export function HeroBg() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Clip left waves to left portion */}
+          {/* Clip left arcs to left half */}
           <clipPath id="clip-l">
-            <rect x="0" y="0" width="790" height="860" />
+            <rect x="0" y="0" width="780" height="860" />
           </clipPath>
-          {/* Clip right waves to right portion */}
+          {/* Clip right arcs to right half */}
           <clipPath id="clip-r">
-            <rect x="650" y="0" width="790" height="860" />
+            <rect x="660" y="0" width="780" height="860" />
           </clipPath>
 
-          {/* Ambient glow — left side */}
-          <radialGradient id="orb-gl" cx="0%" cy="50%" r="70%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.18" />
-            <stop offset="60%"  stopColor={GREEN} stopOpacity="0.05" />
+          {/* Ambient glow — left */}
+          <radialGradient id="orb-gl" cx="0%" cy="60%" r="80%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.16" />
+            <stop offset="65%"  stopColor={GREEN} stopOpacity="0.04" />
+            <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
+          </radialGradient>
+          {/* Ambient glow — right */}
+          <radialGradient id="orb-gr" cx="100%" cy="60%" r="80%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.13" />
+            <stop offset="65%"  stopColor={GREEN} stopOpacity="0.03" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Ambient glow — right side */}
-          <radialGradient id="orb-gr" cx="100%" cy="50%" r="70%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.15" />
-            <stop offset="60%"  stopColor={GREEN} stopOpacity="0.04" />
-            <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
-          </radialGradient>
-
-          {/* Center vignette — hides crossing seam */}
-          <radialGradient id="vignette" cx="50%" cy="50%" r="40%">
-            <stop offset="0%"   stopColor="#000" stopOpacity="0.72" />
-            <stop offset="60%"  stopColor="#000" stopOpacity="0.12" />
+          {/* Center vignette — darkens the seam */}
+          <radialGradient id="vignette" cx="50%" cy="50%" r="38%">
+            <stop offset="0%"   stopColor="#000" stopOpacity="0.70" />
+            <stop offset="55%"  stopColor="#000" stopOpacity="0.10" />
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
 
-          {/* Glow filter */}
-          <filter id="wave-glow" x="-30%" y="-10%" width="160%" height="120%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="blur" />
+          {/* Glow blur */}
+          <filter id="wave-glow" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -62,22 +59,21 @@ export function HeroBg() {
           </filter>
         </defs>
 
-        {/* ── AMBIENT SIDE GLOWS ────────────────────────── */}
-        <rect x="0"   y="0" width="1440" height="860" fill="url(#orb-gl)" />
-        <rect x="0"   y="0" width="1440" height="860" fill="url(#orb-gr)" />
+        {/* ── AMBIENT GLOWS ─────────────────────────────── */}
+        <rect x="0" y="0" width="1440" height="860" fill="url(#orb-gl)" />
+        <rect x="0" y="0" width="1440" height="860" fill="url(#orb-gr)" />
 
-        {/* ── LEFT WAVE ARCS ────────────────────────────── */}
-        {/* clipPath on outer g, filter on inner g — prevents filter from escaping clip */}
+        {/* ── LEFT ARCS — left half of each U-shape ─────── */}
         <g clipPath="url(#clip-l)">
           <g className="wave-group wave-group-l" filter="url(#wave-glow)">
             {waves.map(({ r, op }, i) => (
               <circle
                 key={`l${i}`}
-                cx={LEFT_FX} cy={LEFT_FY}
+                cx={FOCAL_X} cy={FOCAL_Y}
                 r={r}
                 fill="none"
                 stroke={GREEN}
-                strokeWidth="0.9"
+                strokeWidth="0.85"
                 strokeOpacity={op}
                 className={`wave-el wl${i}`}
               />
@@ -85,17 +81,17 @@ export function HeroBg() {
           </g>
         </g>
 
-        {/* ── RIGHT WAVE ARCS ───────────────────────────── */}
+        {/* ── RIGHT ARCS — right half of each U-shape ───── */}
         <g clipPath="url(#clip-r)">
           <g className="wave-group wave-group-r" filter="url(#wave-glow)">
             {waves.map(({ r, op }, i) => (
               <circle
                 key={`r${i}`}
-                cx={RIGHT_FX} cy={RIGHT_FY}
+                cx={FOCAL_X} cy={FOCAL_Y}
                 r={r}
                 fill="none"
                 stroke={GREEN}
-                strokeWidth="0.9"
+                strokeWidth="0.85"
                 strokeOpacity={op}
                 className={`wave-el wr${i}`}
               />
@@ -103,7 +99,7 @@ export function HeroBg() {
           </g>
         </g>
 
-        {/* ── CENTER VIGNETTE (hides seam) ─────────────── */}
+        {/* ── CENTER VIGNETTE ───────────────────────────── */}
         <rect x="0" y="0" width="1440" height="860" fill="url(#vignette)" />
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
