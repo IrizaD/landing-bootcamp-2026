@@ -1,30 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import sql from "@/lib/db";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const slug       = searchParams.get("slug");
-  const desde      = searchParams.get("desde");
-  const hasta      = searchParams.get("hasta");
-  const pais       = searchParams.get("pais");
-  const fuente     = searchParams.get("fuente");
+  const slug   = searchParams.get("slug");
+  const desde  = searchParams.get("desde");
+  const hasta  = searchParams.get("hasta");
+  const pais   = searchParams.get("pais");
+  const fuente = searchParams.get("fuente");
 
   if (!slug) return NextResponse.json({ error: "slug requerido" }, { status: 400 });
 
-  let q = supabaseAdmin
-    .from("registros")
-    .select("*")
-    .eq("funnel_slug", slug)
-    .order("created_at", { ascending: false })
-    .limit(1000);
+  const conditions = ["funnel_slug = $1"];
+  const values: unknown[] = [slug];
+  let i = 2;
 
-  if (desde) q = q.gte("created_at", desde);
-  if (hasta) q = q.lte("created_at", hasta + "T23:59:59Z");
-  if (pais)  q = q.eq("ip_country", pais);
-  if (fuente) q = q.eq("utm_source", fuente);
+  if (desde)  { conditions.push(`created_at >= $${i++}`); values.push(desde); }
+  if (hasta)  { conditions.push(`created_at <= $${i++}`); values.push(hasta + "T23:59:59Z"); }
+  if (pais)   { conditions.push(`ip_country = $${i++}`);  values.push(pais); }
+  if (fuente) { conditions.push(`utm_source = $${i++}`);  values.push(fuente); }
 
-  const { data, error } = await q;
+  const query = `
+    SELECT * FROM registros
+    WHERE ${conditions.join(" AND ")}
+    ORDER BY created_at DESC
+    LIMIT 1000
+  `;
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const rows = await sql(query, values);
+    return NextResponse.json(rows);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }

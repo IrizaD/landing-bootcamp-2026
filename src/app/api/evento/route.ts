@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import sql from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -18,21 +18,13 @@ export async function POST(req: NextRequest) {
   const ip_city    = decodeURIComponent(req.headers.get("x-vercel-ip-city")           ?? "");
   const ip_region  = decodeURIComponent(req.headers.get("x-vercel-ip-country-region") ?? "");
 
-  const { error } = await supabaseAdmin
-    .from("eventos")
-    .insert({
-      funnel_slug: "bootcamp-2026",
-      session_id,
-      tipo,
-      utm_source,
-      utm_medium,
-      utm_campaign,
-      user_agent,
-      ip_country,
-      ip_city,
-      ip_region,
-    });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  try {
+    await sql`
+      INSERT INTO eventos (funnel_slug, session_id, tipo, utm_source, utm_medium, utm_campaign, user_agent, ip_country, ip_city, ip_region)
+      VALUES ('bootcamp-2026', ${session_id}, ${tipo}, ${utm_source}, ${utm_medium}, ${utm_campaign}, ${user_agent}, ${ip_country}, ${ip_city}, ${ip_region})
+    `;
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }

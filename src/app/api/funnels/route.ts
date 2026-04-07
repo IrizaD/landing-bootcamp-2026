@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import sql from "@/lib/db";
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin
-    .from("funnels")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const rows = await sql`SELECT * FROM funnels ORDER BY created_at DESC`;
+    return NextResponse.json(rows);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -19,12 +18,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "slug y nombre son requeridos" }, { status: 400 });
   }
 
-  const { data, error } = await supabaseAdmin
-    .from("funnels")
-    .insert({ slug, nombre, fb_pixel_id, fb_event_name, ghl_webhook })
-    .select()
-    .single();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const rows = await sql`
+      INSERT INTO funnels (slug, nombre, fb_pixel_id, fb_event_name, ghl_webhook)
+      VALUES (${slug}, ${nombre}, ${fb_pixel_id}, ${fb_event_name}, ${ghl_webhook})
+      RETURNING *
+    `;
+    return NextResponse.json(rows[0]);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }

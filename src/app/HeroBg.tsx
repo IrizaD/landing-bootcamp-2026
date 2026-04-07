@@ -1,3 +1,15 @@
+const GREEN = "#00e040";
+const LEFT_CX = -350;
+const RIGHT_CX = 1790;
+const FOCAL_CY = 430;
+const EL_RY = 720;
+const NUM_WAVES = 13;
+
+const waves = Array.from({ length: NUM_WAVES }, (_, i) => ({
+  ellRx: 460 + i * 68,               // 460 → 1276
+  op: 0.07 + (i / (NUM_WAVES - 1)) * 0.30,  // 0.07 → 0.37
+}));
+
 export function HeroBg() {
   return (
     <div className="hero-bg" aria-hidden="true">
@@ -8,163 +20,101 @@ export function HeroBg() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          <radialGradient id="orb-r" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#eb2b1a" stopOpacity="0.45" />
-            <stop offset="60%" stopColor="#eb2b1a" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#eb2b1a" stopOpacity="0" />
+          {/* Ambient glow orb — left */}
+          <radialGradient id="orb-gl" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.22" />
+            <stop offset="55%"  stopColor={GREEN} stopOpacity="0.06" />
+            <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="orb-b" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#188bf6" stopOpacity="0.28" />
-            <stop offset="60%" stopColor="#188bf6" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#188bf6" stopOpacity="0" />
+
+          {/* Ambient glow orb — right */}
+          <radialGradient id="orb-gr" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.18" />
+            <stop offset="55%"  stopColor={GREEN} stopOpacity="0.05" />
+            <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="orb-r2" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#eb2b1a" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#eb2b1a" stopOpacity="0" />
+
+          {/* Center vignette to keep hero text area clean */}
+          <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stopColor="#000" stopOpacity="0.60" />
+            <stop offset="50%"  stopColor="#000" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
-          <filter id="glow-r" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <filter id="glow-b" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+
+          {/* Glow filter for wave lines */}
+          <filter id="wave-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
 
-        {/* ── ORBS ─────────────────────────────────────── */}
-        <ellipse className="orb-red"   cx="260"  cy="680" rx="560" ry="440" fill="url(#orb-r)"  />
-        <ellipse className="orb-blue"  cx="1260" cy="180" rx="480" ry="380" fill="url(#orb-b)"  />
-        <ellipse className="orb-red-2" cx="820"  cy="420" rx="300" ry="240" fill="url(#orb-r2)" />
-        <ellipse className="orb-blue-m" cx="960" cy="720" rx="320" ry="260" fill="url(#orb-b)" />
-
-        {/* ── PLUS SIGNS ───────────────────────────────── */}
-
-        {/* Large + top-left — center (110, 190) */}
-        <g className="geo geo-plus-1" filter="url(#glow-r)">
-          <line x1="110" y1="170" x2="110" y2="210" stroke="#eb2b1a" strokeWidth="9" strokeLinecap="round" strokeOpacity="0.75" />
-          <line x1="90"  y1="190" x2="130" y2="190" stroke="#eb2b1a" strokeWidth="9" strokeLinecap="round" strokeOpacity="0.75" />
-        </g>
-
-        {/* Medium + top-right — center (1310, 122) */}
-        <g className="geo geo-plus-2" filter="url(#glow-b)">
-          <line x1="1310" y1="106" x2="1310" y2="138" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="1294" y1="122" x2="1326" y2="122" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
-        </g>
-
-        {/* Small + center-right — center (1390, 378) */}
-        <g className="geo geo-plus-3" filter="url(#glow-r)">
-          <line x1="1390" y1="366" x2="1390" y2="390" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="1378" y1="378" x2="1402" y2="378" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.6" />
-        </g>
-
-        {/* Tiny + scattered — center (560, 78) */}
-        <g className="geo geo-plus-4">
-          <line x1="560" y1="70" x2="560" y2="86" stroke="#188bf6" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.6" />
-          <line x1="552" y1="78" x2="568" y2="78" stroke="#188bf6" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.6" />
-        </g>
-
-        {/* Tiny + — center (1080, 710) */}
-        <g className="geo geo-plus-5">
-          <line x1="1080" y1="702" x2="1080" y2="718" stroke="#eb2b1a" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="1072" y1="710" x2="1088" y2="710" stroke="#eb2b1a" strokeWidth="6" strokeLinecap="round" strokeOpacity="0.55" />
-        </g>
-
-        {/* ── VENN — referencia sutil a 1+1=3 ─────────── */}
-        <g className="geo geo-venn-1" filter="url(#glow-r)">
-          <circle cx="1200" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.65" />
-          <circle cx="1228" cy="640" r="38" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.65" />
-        </g>
-
-        <g className="geo geo-venn-2" filter="url(#glow-b)">
-          <circle cx="55"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="3" strokeOpacity="0.6" />
-          <circle cx="76"  cy="340" r="26" fill="none" stroke="#188bf6" strokeWidth="3" strokeOpacity="0.6" />
-        </g>
-
-        {/* ── ARCOS FRAGMENTADOS ────────────────────────── */}
-        <path className="geo geo-arc-1"
-          d="M 760 30 A 60 60 0 0 1 880 30"
-          fill="none" stroke="#188bf6" strokeWidth="3.5" strokeOpacity="0.55" strokeLinecap="round"
+        {/* ── AMBIENT ORBS ──────────────────────────────── */}
+        <ellipse
+          className="orb-wave-l"
+          cx="180" cy="470" rx="430" ry="330"
+          fill="url(#orb-gl)"
         />
-        <path className="geo geo-arc-2"
-          d="M 300 810 A 70 70 0 0 0 440 810"
-          fill="none" stroke="#eb2b1a" strokeWidth="3.2" strokeOpacity="0.5" strokeLinecap="round"
-        />
-        <path className="geo geo-arc-3"
-          d="M 1440 480 A 80 80 0 0 1 1360 580"
-          fill="none" stroke="#188bf6" strokeWidth="3.5" strokeOpacity="0.5" strokeLinecap="round"
+        <ellipse
+          className="orb-wave-r"
+          cx="1260" cy="390" rx="430" ry="330"
+          fill="url(#orb-gr)"
         />
 
-        {/* ── MOBILE — esquina inferior-derecha ── */}
-
-        {/* + grande bottom-right — center (880, 650) */}
-        <g className="geo geo-plus-m1" filter="url(#glow-b)">
-          <line x1="880" y1="630" x2="880" y2="670" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
-          <line x1="860" y1="650" x2="900" y2="650" stroke="#188bf6" strokeWidth="8" strokeLinecap="round" strokeOpacity="0.7" />
+        {/* ── LEFT WAVE LINES ───────────────────────────── */}
+        <g className="wave-group wave-group-l" filter="url(#wave-glow)">
+          {waves.map(({ ellRx, op }, i) => (
+            <ellipse
+              key={`l${i}`}
+              cx={LEFT_CX} cy={FOCAL_CY}
+              rx={ellRx} ry={EL_RY}
+              fill="none"
+              stroke={GREEN}
+              strokeWidth="1"
+              strokeOpacity={op}
+              className={`wave-el wl${i}`}
+            />
+          ))}
         </g>
 
-        <g className="geo geo-venn-m" filter="url(#glow-r)">
-          <circle cx="820" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.6" />
-          <circle cx="848" cy="780" r="32" fill="none" stroke="#eb2b1a" strokeWidth="3.5" strokeOpacity="0.6" />
+        {/* ── RIGHT WAVE LINES ──────────────────────────── */}
+        <g className="wave-group wave-group-r" filter="url(#wave-glow)">
+          {waves.map(({ ellRx, op }, i) => (
+            <ellipse
+              key={`r${i}`}
+              cx={RIGHT_CX} cy={FOCAL_CY}
+              rx={ellRx} ry={EL_RY}
+              fill="none"
+              stroke={GREEN}
+              strokeWidth="1"
+              strokeOpacity={op}
+              className={`wave-el wr${i}`}
+            />
+          ))}
         </g>
 
-        <path className="geo geo-arc-m"
-          d="M 760 830 A 55 55 0 0 1 870 830"
-          fill="none" stroke="#eb2b1a" strokeWidth="3.2" strokeOpacity="0.5" strokeLinecap="round"
-        />
-
-        {/* + tiny mid-right — center (940, 496) */}
-        <g className="geo geo-plus-m2" filter="url(#glow-r)">
-          <line x1="940" y1="484" x2="940" y2="508" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.55" />
-          <line x1="928" y1="496" x2="952" y2="496" stroke="#eb2b1a" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.55" />
-        </g>
-
-        {/* ── ENERGY STREAKS ────────────────────────────── */}
-        <line className="streak streak-1"
-          x1="-100" y1="300" x2="600" y2="60"
-          stroke="#eb2b1a" strokeWidth="3" strokeOpacity="0.28"
-          strokeDasharray="60 90" strokeLinecap="round"
-        />
-        <line className="streak streak-2"
-          x1="700" y1="860" x2="1540" y2="520"
-          stroke="#188bf6" strokeWidth="3" strokeOpacity="0.22"
-          strokeDasharray="80 120" strokeLinecap="round"
-        />
-        <line className="streak streak-3"
-          x1="400" y1="860" x2="1000" y2="600"
-          stroke="#eb2b1a" strokeWidth="2.5" strokeOpacity="0.2"
-          strokeDasharray="40 80" strokeLinecap="round"
-        />
+        {/* ── CENTER VIGNETTE ───────────────────────────── */}
+        <rect x="0" y="0" width="1440" height="860" fill="url(#vignette)" />
 
         {/* ── FLOATING PARTICLES ────────────────────────── */}
         {[
-          { cx: 480,  cy: 700, r: 2.5, cls: "p1",  col: "#eb2b1a", op: 0.55 },
-          { cx: 900,  cy: 780, r: 2,   cls: "p2",  col: "#188bf6", op: 0.45 },
-          { cx: 1100, cy: 650, r: 2,   cls: "p3",  col: "#eb2b1a", op: 0.4  },
-          { cx: 280,  cy: 600, r: 1.5, cls: "p4",  col: "#188bf6", op: 0.5  },
-          { cx: 650,  cy: 720, r: 1.5, cls: "p5",  col: "#eb2b1a", op: 0.35 },
-          { cx: 1250, cy: 560, r: 2,   cls: "p6",  col: "#188bf6", op: 0.4  },
-          { cx: 760,  cy: 800, r: 1.5, cls: "p7",  col: "#eb2b1a", op: 0.3  },
-          { cx: 1050, cy: 750, r: 2.5, cls: "p8",  col: "#188bf6", op: 0.35 },
-          { cx: 180,  cy: 200, r: 2,   cls: "p9",  col: "#eb2b1a", op: 0.4  },
-          { cx: 380,  cy: 120, r: 1.5, cls: "p10", col: "#188bf6", op: 0.45 },
-          { cx: 720,  cy: 160, r: 2,   cls: "p11", col: "#eb2b1a", op: 0.35 },
-          { cx: 1000, cy: 80,  r: 1.5, cls: "p12", col: "#188bf6", op: 0.5  },
-          { cx: 1350, cy: 300, r: 2.5, cls: "p13", col: "#eb2b1a", op: 0.4  },
-          { cx: 1420, cy: 600, r: 2,   cls: "p14", col: "#188bf6", op: 0.35 },
-          { cx: 60,   cy: 500, r: 1.5, cls: "p15", col: "#eb2b1a", op: 0.45 },
-          { cx: 200,  cy: 760, r: 2,   cls: "p16", col: "#188bf6", op: 0.3  },
-          { cx: 520,  cy: 420, r: 1.5, cls: "p17", col: "#eb2b1a", op: 0.3  },
-          { cx: 820,  cy: 340, r: 2,   cls: "p18", col: "#188bf6", op: 0.4  },
-          { cx: 1150, cy: 200, r: 1.5, cls: "p19", col: "#eb2b1a", op: 0.35 },
-          { cx: 960,  cy: 500, r: 2.5, cls: "p20", col: "#188bf6", op: 0.3  },
-          { cx: 340,  cy: 380, r: 2,   cls: "p21", col: "#eb2b1a", op: 0.35 },
-          { cx: 600,  cy: 560, r: 1.5, cls: "p22", col: "#188bf6", op: 0.45 },
-          { cx: 1300, cy: 720, r: 2,   cls: "p23", col: "#eb2b1a", op: 0.3  },
-          { cx: 140,  cy: 840, r: 1.5, cls: "p24", col: "#188bf6", op: 0.35 },
+          { cx: 155,  cy: 670, r: 2,   cls: "p1", op: 0.60 },
+          { cx: 310,  cy: 530, r: 1.5, cls: "p2", op: 0.45 },
+          { cx: 495,  cy: 725, r: 2,   cls: "p3", op: 0.50 },
+          { cx: 1100, cy: 185, r: 2,   cls: "p4", op: 0.50 },
+          { cx: 1258, cy: 345, r: 1.5, cls: "p5", op: 0.45 },
+          { cx: 1392, cy: 155, r: 2,   cls: "p6", op: 0.55 },
+          { cx: 780,  cy: 795, r: 1.5, cls: "p7", op: 0.28 },
+          { cx: 665,  cy: 75,  r: 1.5, cls: "p8", op: 0.32 },
         ].map((p) => (
-          <circle key={p.cls} className={`particle ${p.cls}`}
-            cx={p.cx} cy={p.cy} r={p.r} fill={p.col} fillOpacity={p.op} />
+          <circle
+            key={p.cls}
+            className={`particle ${p.cls}`}
+            cx={p.cx} cy={p.cy} r={p.r}
+            fill={GREEN} fillOpacity={p.op}
+          />
         ))}
       </svg>
     </div>

@@ -6,8 +6,8 @@ import { HeroBg } from "./HeroBg";
 
 // ─── DATA ──────────────────────────────────────────────────
 const speakers = [
-  { name: "Jorge Serratos", initial: "J", role: "Host",    title: "Fundador Sinergéticos · Autor Best Seller · Podcast #1 Negocios México", bg: "linear-gradient(135deg,#eb2b1a,#8a1009)", featured: true  },
-  { name: "Manuel de León", initial: "M", role: "Co-host", title: "COO Sinergéticos · Experto en IA, tráfico y contenido digital",           bg: "linear-gradient(135deg,#188bf6,#0a5fa8)", featured: true  },
+  { name: "Jorge Serratos", initial: "J", role: "Host",    title: "Fundador Sinergéticos · Autor Best Seller · Podcast #1 Negocios México", bg: "linear-gradient(135deg,#00e040,#005a18)", featured: true  },
+  { name: "Manuel de León", initial: "M", role: "Co-host", title: "COO Sinergéticos · Experto en IA, tráfico y contenido digital",           bg: "linear-gradient(135deg,#4ade80,#00a030)", featured: true  },
   { name: "Paola Padilla",  initial: "P", role: null,      title: "Directora del equipo Sinergético · Gestión emocional y logística",         bg: "linear-gradient(135deg,#9333ea,#4c1d95)", featured: false },
 ];
 
