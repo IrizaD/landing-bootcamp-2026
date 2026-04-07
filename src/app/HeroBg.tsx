@@ -1,13 +1,15 @@
-// Focal point ABOVE the viewport center → circles create horizontal U-shaped arcs
-// ClipPath left/right prevents crossing in center seam
+// Focal BELOW viewport → circles produce ∩ arcs that curve UPWARD
+// r range chosen so arcs enter from the side edges and peak near/above the top
 const GREEN = "#00e040";
-const FOCAL_X = 720;
-const FOCAL_Y = -520;   // well above viewport
-const NUM_WAVES = 22;
+const FOCAL_X = 720;   // horizontally centered
+const FOCAL_Y = 1400;  // well below the 860px-tall viewport
+const NUM_WAVES = 24;
 
+// r must be > sqrt(FOCAL_Y² + 720²) ≈ 1577 to span full width at the top.
+// We range from arcs that peak mid-viewport to arcs spanning full width.
 const waves = Array.from({ length: NUM_WAVES }, (_, i) => ({
-  r:  660 + i * 42,                             // 660 → 1542
-  op: 0.09 + (i / (NUM_WAVES - 1)) * 0.36,      // 0.09 → 0.45
+  r:  980 + i * 28,                              // 980 → 1632
+  op: 0.07 + (i / (NUM_WAVES - 1)) * 0.38,       // 0.07 → 0.45
 }));
 
 export function HeroBg() {
@@ -20,38 +22,29 @@ export function HeroBg() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Clip left arcs to left half */}
-          <clipPath id="clip-l">
-            <rect x="0" y="0" width="780" height="860" />
-          </clipPath>
-          {/* Clip right arcs to right half */}
-          <clipPath id="clip-r">
-            <rect x="660" y="0" width="780" height="860" />
-          </clipPath>
-
-          {/* Ambient glow — left */}
-          <radialGradient id="orb-gl" cx="0%" cy="60%" r="80%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.16" />
+          {/* Ambient glow — left edge */}
+          <radialGradient id="orb-gl" cx="0%" cy="70%" r="70%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.18" />
             <stop offset="65%"  stopColor={GREEN} stopOpacity="0.04" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
-          {/* Ambient glow — right */}
-          <radialGradient id="orb-gr" cx="100%" cy="60%" r="80%">
-            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.13" />
+          {/* Ambient glow — right edge */}
+          <radialGradient id="orb-gr" cx="100%" cy="70%" r="70%">
+            <stop offset="0%"   stopColor={GREEN} stopOpacity="0.15" />
             <stop offset="65%"  stopColor={GREEN} stopOpacity="0.03" />
             <stop offset="100%" stopColor={GREEN} stopOpacity="0" />
           </radialGradient>
 
-          {/* Center vignette — darkens the seam */}
-          <radialGradient id="vignette" cx="50%" cy="50%" r="38%">
-            <stop offset="0%"   stopColor="#000" stopOpacity="0.70" />
-            <stop offset="55%"  stopColor="#000" stopOpacity="0.10" />
+          {/* Center vignette — darkens mid-viewport so text reads clearly */}
+          <radialGradient id="vignette" cx="50%" cy="45%" r="42%">
+            <stop offset="0%"   stopColor="#000" stopOpacity="0.68" />
+            <stop offset="55%"  stopColor="#000" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
 
-          {/* Glow blur */}
-          <filter id="wave-glow" x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="blur" />
+          {/* Subtle glow on wave lines */}
+          <filter id="wave-glow" x="-5%" y="-5%" width="110%" height="110%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -59,44 +52,24 @@ export function HeroBg() {
           </filter>
         </defs>
 
-        {/* ── AMBIENT GLOWS ─────────────────────────────── */}
+        {/* ── AMBIENT SIDE GLOWS ────────────────────────── */}
         <rect x="0" y="0" width="1440" height="860" fill="url(#orb-gl)" />
         <rect x="0" y="0" width="1440" height="860" fill="url(#orb-gr)" />
 
-        {/* ── LEFT ARCS — left half of each U-shape ─────── */}
-        <g clipPath="url(#clip-l)">
-          <g className="wave-group wave-group-l" filter="url(#wave-glow)">
-            {waves.map(({ r, op }, i) => (
-              <circle
-                key={`l${i}`}
-                cx={FOCAL_X} cy={FOCAL_Y}
-                r={r}
-                fill="none"
-                stroke={GREEN}
-                strokeWidth="0.85"
-                strokeOpacity={op}
-                className={`wave-el wl${i}`}
-              />
-            ))}
-          </g>
-        </g>
-
-        {/* ── RIGHT ARCS — right half of each U-shape ───── */}
-        <g clipPath="url(#clip-r)">
-          <g className="wave-group wave-group-r" filter="url(#wave-glow)">
-            {waves.map(({ r, op }, i) => (
-              <circle
-                key={`r${i}`}
-                cx={FOCAL_X} cy={FOCAL_Y}
-                r={r}
-                fill="none"
-                stroke={GREEN}
-                strokeWidth="0.85"
-                strokeOpacity={op}
-                className={`wave-el wr${i}`}
-              />
-            ))}
-          </g>
+        {/* ── WAVE ARCS — ∩ shape, curve upward ─────────── */}
+        <g className="wave-group wave-group-l" filter="url(#wave-glow)">
+          {waves.map(({ r, op }, i) => (
+            <circle
+              key={i}
+              cx={FOCAL_X} cy={FOCAL_Y}
+              r={r}
+              fill="none"
+              stroke={GREEN}
+              strokeWidth="0.9"
+              strokeOpacity={op}
+              className={`wave-el w${i}`}
+            />
+          ))}
         </g>
 
         {/* ── CENTER VIGNETTE ───────────────────────────── */}
