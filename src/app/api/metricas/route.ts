@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sql from "@/lib/db";
+import supabase from "@/lib/db";
 import { parseUA, groupCount } from "@/lib/parseUA";
 
 export async function GET(req: NextRequest) {
@@ -14,22 +14,21 @@ export async function GET(req: NextRequest) {
   if (!slug) return NextResponse.json({ error: "slug requerido" }, { status: 400 });
 
   // ── Eventos ─────────────────────────────────────────────────────────────────
-  const evCond = ["funnel_slug = $1"];
-  const evVals: unknown[] = [slug];
-  let ei = 2;
+  let evQuery = supabase
+    .from("eventos")
+    .select("session_id, user_agent, ip_country, ip_city, utm_source, created_at")
+    .eq("funnel_slug", slug);
 
-  if (desde)  { evCond.push(`created_at >= $${ei++}`); evVals.push(desde); }
-  if (hasta)  { evCond.push(`created_at <= $${ei++}`); evVals.push(hasta + "T23:59:59Z"); }
-  if (pais)   { evCond.push(`ip_country = $${ei++}`);  evVals.push(pais); }
-  if (fuente) { evCond.push(`utm_source = $${ei++}`);  evVals.push(fuente); }
+  if (desde)  evQuery = evQuery.gte("created_at", desde);
+  if (hasta)  evQuery = evQuery.lte("created_at", hasta + "T23:59:59Z");
+  if (pais)   evQuery = evQuery.eq("ip_country", pais);
+  if (fuente) evQuery = evQuery.eq("utm_source", fuente);
 
-  const eventosRaw = await sql.unsafe(
-    `SELECT session_id, user_agent, ip_country, ip_city, utm_source, created_at FROM eventos WHERE ${evCond.join(" AND ")}`,
-    evVals as string[]
-  ) as { session_id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
+  const { data: eventosRaw } = await evQuery;
+  const eventosData = (eventosRaw ?? []) as { session_id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
 
-  const sesionesMap = new Map<string, typeof eventosRaw[number]>();
-  eventosRaw.forEach((e) => { if (!sesionesMap.has(e.session_id)) sesionesMap.set(e.session_id, e); });
+  const sesionesMap = new Map<string, typeof eventosData[number]>();
+  eventosData.forEach((e) => { if (!sesionesMap.has(e.session_id)) sesionesMap.set(e.session_id, e); });
   let sesiones = Array.from(sesionesMap.values());
 
   if (dispositivo) {
@@ -47,19 +46,20 @@ export async function GET(req: NextRequest) {
   );
 
   // ── Registros ───────────────────────────────────────────────────────────────
-  const regCond = ["funnel_slug = $1"];
-  const regVals: unknown[] = [slug];
-  let ri = 2;
+  let regQuery = supabase
+    .from("registros")
+    .select("id, user_agent, ip_country, ip_city, utm_source, created_at")
+    .eq("funnel_slug", slug)
+    .order("created_at", { ascending: false })
+    .limit(1000);
 
-  if (desde)  { regCond.push(`created_at >= $${ri++}`); regVals.push(desde); }
-  if (hasta)  { regCond.push(`created_at <= $${ri++}`); regVals.push(hasta + "T23:59:59Z"); }
-  if (pais)   { regCond.push(`ip_country = $${ri++}`);  regVals.push(pais); }
-  if (fuente) { regCond.push(`utm_source = $${ri++}`);  regVals.push(fuente); }
+  if (desde)  regQuery = regQuery.gte("created_at", desde);
+  if (hasta)  regQuery = regQuery.lte("created_at", hasta + "T23:59:59Z");
+  if (pais)   regQuery = regQuery.eq("ip_country", pais);
+  if (fuente) regQuery = regQuery.eq("utm_source", fuente);
 
-  let registros = await sql.unsafe(
-    `SELECT id, user_agent, ip_country, ip_city, utm_source, created_at FROM registros WHERE ${regCond.join(" AND ")} ORDER BY created_at DESC LIMIT 1000`,
-    regVals as string[]
-  ) as { id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
+  const { data: registrosRaw } = await regQuery;
+  let registros = (registrosRaw ?? []) as { id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
 
   if (dispositivo) {
     registros = registros.filter((r) => parseUA(r.user_agent).tipo === dispositivo);

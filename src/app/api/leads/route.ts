@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sql from "@/lib/db";
+import supabase from "@/lib/db";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -11,26 +11,19 @@ export async function GET(req: NextRequest) {
 
   if (!slug) return NextResponse.json({ error: "slug requerido" }, { status: 400 });
 
-  const conditions = ["funnel_slug = $1"];
-  const values: unknown[] = [slug];
-  let i = 2;
+  let query = supabase
+    .from("registros")
+    .select("*")
+    .eq("funnel_slug", slug)
+    .order("created_at", { ascending: false })
+    .limit(1000);
 
-  if (desde)  { conditions.push(`created_at >= $${i++}`); values.push(desde); }
-  if (hasta)  { conditions.push(`created_at <= $${i++}`); values.push(hasta + "T23:59:59Z"); }
-  if (pais)   { conditions.push(`ip_country = $${i++}`);  values.push(pais); }
-  if (fuente) { conditions.push(`utm_source = $${i++}`);  values.push(fuente); }
+  if (desde)  query = query.gte("created_at", desde);
+  if (hasta)  query = query.lte("created_at", hasta + "T23:59:59Z");
+  if (pais)   query = query.eq("ip_country", pais);
+  if (fuente) query = query.eq("utm_source", fuente);
 
-  const query = `
-    SELECT * FROM registros
-    WHERE ${conditions.join(" AND ")}
-    ORDER BY created_at DESC
-    LIMIT 1000
-  `;
-
-  try {
-    const rows = await sql.unsafe(query, values as string[]);
-    return NextResponse.json(rows);
-  } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
-  }
+  const { data, error } = await query;
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data ?? []);
 }

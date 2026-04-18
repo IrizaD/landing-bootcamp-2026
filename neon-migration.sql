@@ -1,0 +1,152 @@
+-- ============================================================
+-- Migración Supabase → Neon — Landing Bootcamp 2026
+-- Ejecutar en: Neon Console → SQL Editor
+-- ============================================================
+
+-- SCHEMA -------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS funnels (
+  id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug          TEXT        UNIQUE NOT NULL,
+  nombre        TEXT        NOT NULL,
+  fb_pixel_id   TEXT        NOT NULL DEFAULT '',
+  fb_event_name TEXT        NOT NULL DEFAULT 'Lead',
+  ghl_webhook   TEXT        NOT NULL DEFAULT '',
+  activo        BOOLEAN     NOT NULL DEFAULT true,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS registros (
+  id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  funnel_slug   TEXT        NOT NULL REFERENCES funnels(slug),
+  nombre        TEXT        NOT NULL,
+  email         TEXT        NOT NULL,
+  telefono      TEXT        NOT NULL,
+  utm_source    TEXT        NOT NULL DEFAULT '',
+  utm_medium    TEXT        NOT NULL DEFAULT '',
+  utm_campaign  TEXT        NOT NULL DEFAULT '',
+  utm_content   TEXT        NOT NULL DEFAULT '',
+  utm_term      TEXT        NOT NULL DEFAULT '',
+  user_agent    TEXT        NOT NULL DEFAULT '',
+  ip_country    TEXT        NOT NULL DEFAULT '',
+  ip_city       TEXT        NOT NULL DEFAULT '',
+  ip_region     TEXT        NOT NULL DEFAULT '',
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS eventos (
+  id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  funnel_slug   TEXT        NOT NULL,
+  session_id    TEXT        NOT NULL,
+  tipo          TEXT        NOT NULL,
+  slide_numero  INTEGER,
+  utm_source    TEXT        NOT NULL DEFAULT '',
+  utm_medium    TEXT        NOT NULL DEFAULT '',
+  utm_campaign  TEXT        NOT NULL DEFAULT '',
+  user_agent    TEXT        NOT NULL DEFAULT '',
+  ip_country    TEXT        NOT NULL DEFAULT '',
+  ip_city       TEXT        NOT NULL DEFAULT '',
+  ip_region     TEXT        NOT NULL DEFAULT '',
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- DATOS --------------------------------------------------------
+
+INSERT INTO funnels (id, slug, nombre, fb_pixel_id, fb_event_name, ghl_webhook, activo, created_at) VALUES
+('6cc5dc6d-3132-4ebb-80f5-69eadb93db23','bootcamp-2026','Bootcamp de Aceleración 2026','','Lead','',true,'2026-04-03 07:15:08.289661+00');
+
+INSERT INTO registros (id, funnel_slug, nombre, email, telefono, utm_source, utm_medium, utm_campaign, utm_content, utm_term, user_agent, ip_country, ip_city, ip_region, created_at) VALUES
+('11f1ff09-db53-4051-81b2-8029f5dc05d8','bootcamp-2026','David Iriza','davidiriza@gmail.com','7771868027','','','','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 14:50:32.53213+00'),
+('9b1a2957-cef5-4e82-9212-de4562b0b3f9','bootcamp-2026','David Iriza','diriza@zigma3.com','7771868026','','','','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 14:53:59.081197+00'),
+('34f6cd60-1a1d-42e2-8a3b-c9a6202a347e','bootcamp-2026','David Iriza','davidiriza@gmail.com','7771868027','','','','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 14:58:15.36986+00');
+
+INSERT INTO eventos (id, funnel_slug, session_id, tipo, slide_numero, utm_source, utm_medium, utm_campaign, user_agent, ip_country, ip_city, ip_region, created_at) VALUES
+('00edb711-8352-405e-93ce-08c3e57f59a2','bootcamp-2026','8c5e4d71-180b-4354-8a81-b605fdf93003','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 14:56:00.208437+00'),
+('7b4a1fc4-a7a9-48a4-be2d-de18a0f2618e','bootcamp-2026','c8a2557e-fffc-44e4-84da-d33d86b432d7','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 14:56:00.518829+00'),
+('bee8247b-7c63-4a0d-a729-9573d719f06e','bootcamp-2026','84cf9e09-a0b5-42d0-88fa-ad26f2f58870','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 14:56:00.580037+00'),
+('57328a22-2244-465c-bc49-2bcbd835b050','bootcamp-2026','046e2961-f4f6-47a1-811f-361e1958b112','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 14:56:00.591102+00'),
+('11836e22-7008-4540-896c-f4b691545de9','bootcamp-2026','832444ad-dcd0-4c96-8bee-892253d36704','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 14:58:05.707956+00'),
+('cb12e9a9-c269-4437-adb2-281491ee0a6b','bootcamp-2026','a198bf7e-da2e-4efc-b3b5-aef8f60d1bb6','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 14:59:51.350216+00'),
+('e4234a5b-0b1f-41b9-8772-be5a5afc1036','bootcamp-2026','d4e66ef9-67b5-42b5-b503-f788bd209111','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 14:59:51.797552+00'),
+('700a6608-b06e-4db3-a425-02b5ce7ff55f','bootcamp-2026','28a15637-239c-4c3c-b7dc-0eb164790039','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 14:59:51.868+00'),
+('fe970624-5c78-45a9-8420-db581b1943db','bootcamp-2026','0420c1ef-fb72-4fbc-8904-20da4ba9fe74','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 14:59:53.755753+00'),
+('97813577-979b-479c-a4ed-af42193b1140','bootcamp-2026','56946a3a-cfb3-4ee7-87bb-a295559095f3','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:12:12.217633+00'),
+('d606be92-db95-4f12-beaa-047ce63b8000','bootcamp-2026','66d7ac3b-7abb-4f91-b55f-5616670b32b2','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:12:12.538611+00'),
+('598dd2f4-8248-492f-9f00-69814716e248','bootcamp-2026','7ca61a4e-cc96-4f5d-a6cf-d8314f1ad83d','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:12:12.543589+00'),
+('44379951-a4dc-4ad5-8833-bc5a54301261','bootcamp-2026','4377ce7a-6dc9-4614-8499-233d169de6cd','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:12:12.738149+00'),
+('a8960897-bf64-4755-a4a0-597aa75d732b','bootcamp-2026','554be54f-ba7e-4df3-823a-a146e6549a1b','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:16:47.728861+00'),
+('e3da8425-bcd0-4e85-8738-54c6aef71d25','bootcamp-2026','5681080b-7a47-4274-b19a-710f0b122001','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:16:47.997837+00'),
+('e646090c-1034-41a0-b5df-6f6a3c31f438','bootcamp-2026','5c379e7f-2c12-4d11-8af9-33de19353949','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:16:48.058807+00'),
+('893f7f9c-c327-4c8c-abb9-9ee0b5bc0566','bootcamp-2026','293cdaca-e8d8-4acc-b0db-591c2e7df74f','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:16:48.078325+00'),
+('c0462658-2dfb-482f-9e8c-70f8b8760f6c','bootcamp-2026','3606787f-ee49-476a-8bd1-9b0fa7fcc202','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:31:25.688611+00'),
+('44752925-5913-4e54-8d42-b0b1f492eb52','bootcamp-2026','d88ffc05-272c-40a2-a933-0baf951d623b','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:31:26.067468+00'),
+('f68a8382-ddc3-46f8-8901-1116ef827f86','bootcamp-2026','7c777238-7ced-4a52-9c4e-6fcfd1e8edf2','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-03 15:31:26.91703+00'),
+('2cace12a-fb33-417c-b17d-0dc43f27f084','bootcamp-2026','b4caa9ea-c9fb-43a2-9f38-33d4fd31652a','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-03 15:31:27.026168+00'),
+('04aef89d-231b-4bbb-a58e-943888396c67','bootcamp-2026','832444ad-dcd0-4c96-8bee-892253d36704','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 17:20:41.181323+00'),
+('8039922d-7db6-4f1c-95fd-0dc93555cd87','bootcamp-2026','e5ecae40-f416-477a-b817-4abaa26e2905','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-03 17:59:51.065699+00'),
+('15aaa835-0c87-4498-ae35-7c2149087a1f','bootcamp-2026','6f2f61c7-cba1-49af-b741-24a3e38808c4','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 00:59:15.747217+00'),
+('4f5c0a9f-2c3b-4cc3-b1a9-53bd8a7334af','bootcamp-2026','29088b9c-f07a-4dac-8551-6e085da554e8','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 05:28:21.434464+00'),
+('d9d0381b-9953-40e2-b3ae-c080e89cca25','bootcamp-2026','c35c7ec7-39fd-45a5-8166-e36b74805476','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 05:56:08.989349+00'),
+('c9f812be-d95c-453f-9981-51d3be40cf54','bootcamp-2026','8787f8bd-b2fc-4c77-83e0-d690bf082814','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 05:56:09.085829+00'),
+('5faff4c2-622d-4e77-b886-7cb4ce09c8d9','bootcamp-2026','8e1baca3-9bce-41b2-b068-596f9a8bf9a2','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 05:56:09.0886+00'),
+('5d59978d-fc14-42d6-9294-1a95efb5e505','bootcamp-2026','3fbf8a66-19bc-45a0-bcfe-d5fc086e6f00','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 05:56:09.326152+00'),
+('7436d823-4b3f-4481-acb2-96023bc49764','bootcamp-2026','500eea4a-15d0-4f1a-a16e-7dd4aad630fb','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 05:56:22.463058+00'),
+('3c058ab2-3de9-433e-b380-14955c7e68a0','bootcamp-2026','58f7edd4-3638-43ca-8caa-73824e3d4df3','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:34:19.628282+00'),
+('293a99bc-6d71-43a5-bd2a-07b00bf138ca','bootcamp-2026','240c7ec6-b861-48bf-b3dd-ac56fa88b002','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:34:19.913439+00'),
+('604657b0-3f49-4390-9066-1efecf882821','bootcamp-2026','e3ebbd85-b87f-4338-879a-6fc7e781377d','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:34:19.988615+00'),
+('39e4a48b-94f0-4ebc-8e2a-b4f39cd37ddf','bootcamp-2026','feac26aa-6c02-4af4-9805-4b60b5302cb7','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:34:23.772647+00'),
+('b4a41ba6-297c-4ef0-87b4-08420385fed3','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 07:34:37.148334+00'),
+('00859f9b-31b5-437b-aa4f-1282693330ba','bootcamp-2026','41135ac0-8de8-49f6-9e65-7f4829292bef','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:50:20.372055+00'),
+('919fa00b-d704-4b47-a766-0a83d3c0ce40','bootcamp-2026','58c931aa-a4fb-4cac-8599-0b1287d948f2','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:50:20.63525+00'),
+('25a7dc25-c24f-492b-819c-2476af47019c','bootcamp-2026','b3d3ac08-785f-4526-84b6-2090f3b404d0','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:50:20.704931+00'),
+('ee243877-d07a-4039-89d4-bf0d136ebb02','bootcamp-2026','3704aa89-d2c0-4b0b-b673-e98374961d62','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:50:23.513174+00'),
+('8622d5d4-0c32-40af-b167-e46139b9659f','bootcamp-2026','c480c38b-912d-44b7-8a8f-331fc874189a','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:58:59.193162+00'),
+('8fa8d481-cc50-4543-b0cf-b75a0f6a0fac','bootcamp-2026','860b8f63-cee0-42d5-ba38-5604070fecf7','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 07:58:59.416413+00'),
+('26fec1da-592a-4f89-abcb-bff3478c721e','bootcamp-2026','489b90ae-ecf7-46b2-ae4e-9fc2d8838a2e','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:58:59.421086+00'),
+('d9906c38-cb99-4680-a653-d9fa52edf8de','bootcamp-2026','e1e86ce4-f179-4306-bb1c-33f791b6c0b5','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 07:58:59.478691+00'),
+('428baffc-671e-4875-ac1d-be61e8b8fdeb','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 08:00:01.671088+00'),
+('7d72b8a3-3f17-4b36-8897-21a1b32df91f','bootcamp-2026','01e4adf5-11c4-4c3f-b0e4-fdd1f06ee168','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:01:21.78572+00'),
+('dde351d6-4765-48c3-8f3d-0dfe2ba6466f','bootcamp-2026','03ef87c3-0530-49ba-bf3e-1fc3df50e3f8','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:01:22.128004+00'),
+('41fae252-4769-418f-851e-e3c4aa69aad0','bootcamp-2026','8f525357-2b75-48ab-bee9-f4a0a5d84ab4','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:01:22.16342+00'),
+('b15df65c-8465-4878-8665-111474509622','bootcamp-2026','19b34c39-6d28-4682-9b3d-c54233e4d029','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:01:22.183517+00'),
+('7e06a586-1545-40e2-8fa8-dbcd19bf61d0','bootcamp-2026','de20ff74-4551-4ccf-96fb-c3236d72ae79','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:02:12.585208+00'),
+('fc3a31c8-6e91-4e26-8de5-17da5a8b90a5','bootcamp-2026','13dd80e3-6a07-4f88-b0ae-42ebdcbbc75e','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:02:13.052007+00'),
+('40b94e98-bda1-4a18-b058-7a1c51882fc8','bootcamp-2026','412a525a-2359-4173-9c5b-19d31231e4e4','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:02:13.068819+00'),
+('7f75fc46-3383-470f-9a17-13feaf928072','bootcamp-2026','dd8a040b-5a7d-4aef-a0fb-64ec59a28bad','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:02:13.148088+00'),
+('6724770f-9ee0-4a7e-970f-5a174d437f14','bootcamp-2026','dd8a040b-5a7d-4aef-a0fb-64ec59a28bad','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:02:20.712057+00'),
+('e068ec4c-ea48-4523-97cb-14c393f47a66','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 08:02:51.738448+00'),
+('f8c7bbf0-7c3a-471a-9477-ad0bcee63781','bootcamp-2026','4d2ed672-9fae-4a14-82f6-64b1773bc92a','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:04:16.254989+00'),
+('11f24721-a002-44d2-99e0-02c147088d35','bootcamp-2026','a3b4bce4-6315-4aaa-93fa-94b189f8587d','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:04:16.263427+00'),
+('2013bbf8-04c3-4385-aaa5-7c78a89e1d71','bootcamp-2026','1a1c9872-b6e2-476c-a414-1f44f49f366a','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:04:16.735735+00'),
+('716f9b9a-12ee-466f-b7c4-568580f4d0d2','bootcamp-2026','464ffc2f-9e05-4de2-8dd4-553fab82ded7','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:04:16.869153+00'),
+('eec66193-44a2-47f4-a762-91d8dc7a5af4','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 08:05:15.109431+00'),
+('66d6b592-aa65-4be9-8b36-0509ddd4adbc','bootcamp-2026','906d9300-419c-4e96-9308-ca7d06cb9da0','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:12:11.580241+00'),
+('ea1c2c0f-8c7d-4c6d-a709-e5e84c05e01f','bootcamp-2026','6623f3a5-0fc4-4111-bc85-acb938fd3284','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 08:12:11.841954+00'),
+('cf8fd9a7-fc91-4e80-bd61-b817fccf5813','bootcamp-2026','73e5cb6a-07cd-40e3-bee5-a1cd6edb101c','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:12:11.881023+00'),
+('3ea1b0f9-773b-4785-a302-810eb507d4ad','bootcamp-2026','78a58ada-755d-44a0-980a-cd2b8cf025a4','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 08:12:12.029704+00'),
+('6a412af6-5a5e-4ca5-8393-b8b7ed45a8b8','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 08:13:50.085372+00'),
+('5c2e2087-138c-4ee0-845b-c111226ecb7f','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 18:25:17.67745+00'),
+('186b2af1-9942-4c1e-a646-1749c580eca5','bootcamp-2026','c9eae1ba-9e4b-48c7-a585-c7a3815f756c','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:25:24.689303+00'),
+('79c4dc5f-c575-4e8a-8c0d-b629516526a7','bootcamp-2026','61e21f3c-f4b5-4641-b235-01316dafbdb5','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:25:25.114841+00'),
+('52908f20-7c23-4c78-8150-741a0e5615c6','bootcamp-2026','4e8e34f3-d21c-41f6-ac48-0a0da4dad712','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:25:25.192528+00'),
+('43f1445a-dfa9-4ed8-b4a3-c356cdf6f7f5','bootcamp-2026','99e9db52-de4f-4204-b2a5-758d7a1c942a','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:25:25.292485+00'),
+('eb8b13f3-1bbd-4a6f-b02e-dfd1a90d23dc','bootcamp-2026','2c692540-0270-48c5-b700-84c1027c9b2e','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:26:29.370316+00'),
+('4e6cb3d9-1245-4c4f-89b2-9863205da29e','bootcamp-2026','01f520ed-6e1d-448e-b176-08fe6296402d','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:26:29.407367+00'),
+('a3e8c015-40d6-4621-916e-b2474624158a','bootcamp-2026','aadb844a-03de-41ee-a4d2-0ae5df6d86ee','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:26:29.559245+00'),
+('c669c4a8-e8b3-4ac6-9629-6158817e704c','bootcamp-2026','338d0897-6bcb-4c29-a014-2252517692f9','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:26:29.847425+00'),
+('a8deb669-f221-4e89-8589-9085010ee2f3','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 18:33:00.985082+00'),
+('7f9db4c7-bd4b-4528-a228-78eac0d96b20','bootcamp-2026','3ddf21cb-19e8-45b6-9a6a-54b50810f120','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:38:24.561585+00'),
+('58b77fdf-bdcb-4c0a-a776-ccea6c1817d9','bootcamp-2026','a358964f-308a-4fc9-af0e-c829fc112709','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:38:24.863413+00'),
+('57082800-2db3-4206-afe4-69b5416cec74','bootcamp-2026','1a94a986-2c24-467d-a73a-3cade4eaa285','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:38:24.929407+00'),
+('a78815ba-8110-4c58-bb0c-9d539d2747cf','bootcamp-2026','8ce2875c-611f-456f-9ffd-c9baf298c1e4','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:38:25.002167+00'),
+('9c08a192-3742-4e38-b6ab-7d0a49b8c90b','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 18:39:12.439895+00'),
+('ae834b13-a3b9-4f53-99df-f3a16e54cfee','bootcamp-2026','b3d708a2-003c-4889-aa28-57bcdb7470a5','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:40:13.270408+00'),
+('fd999c0a-863b-4698-bca8-50e3ea906eb0','bootcamp-2026','fa4ce639-f64c-4526-91b3-733ae0224552','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:40:13.303817+00'),
+('cecc14a1-486d-48e1-8b8c-a4b7c3c38613','bootcamp-2026','5a01f6c5-4b19-4ac5-8fdf-d90169359247','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:40:13.466118+00'),
+('d979252d-609a-4a0a-92f7-e58c3b45ef0f','bootcamp-2026','f6588cee-43f3-48fe-b1e4-5eb332b71ad8','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:40:13.842851+00'),
+('5314391b-1648-4fa6-9f2b-2a6dbde0e47a','bootcamp-2026','f96acf25-d221-421c-9d10-cc72ff0593d2','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 18:58:32.649955+00'),
+('860ef239-8d2c-48aa-b774-13266d9a955e','bootcamp-2026','a8d819cc-dc92-43fa-9002-60444d70a6f4','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:58:42.258397+00'),
+('5a43d353-12b4-4b34-a970-405d745643e2','bootcamp-2026','58b075c8-0fb8-4f83-8478-3d5903a72d96','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:58:42.76287+00'),
+('f40a05ae-4b53-4060-a1fc-71738ef001de','bootcamp-2026','9e385d96-358e-4b30-8cbe-13987371135f','page_view',NULL,'','','','vercel-screenshot/1.0','US','Santa Clara','CA','2026-04-04 18:58:42.927971+00'),
+('48c5fd90-ddcd-4410-b2ef-1d96fe5aaba9','bootcamp-2026','0e92c364-ca3e-4343-8c7e-ea41f20064b0','page_view',NULL,'','','','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36','US','San Jose','CA','2026-04-04 18:58:44.5941+00'),
+('b85ed834-39f0-4a0a-b28c-7c1a3442ec1f','bootcamp-2026','89868c93-5108-45d6-bcb5-b5fc6d951dc4','page_view',NULL,'','','','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36','MX','Guadalajara','JAL','2026-04-04 20:58:11.156335+00');
