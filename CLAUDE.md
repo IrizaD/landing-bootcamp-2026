@@ -25,7 +25,7 @@ npm run dev
 - URL: `https://povjtkfbdbvghdsrcaxc.supabase.co`
 - DB client: `postgres` package (tagged template literals + `sql.unsafe()` para queries dinámicas)
 
-**GitHub:** `IrizaD/landing-bootcamp-2026`
+**GitHub:** `synergy-code-3/landing-bootcamp-2026`
 
 ## Migración 2026-04-18
 
