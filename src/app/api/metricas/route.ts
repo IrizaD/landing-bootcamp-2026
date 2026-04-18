@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
   if (pais)   { evCond.push(`ip_country = $${ei++}`);  evVals.push(pais); }
   if (fuente) { evCond.push(`utm_source = $${ei++}`);  evVals.push(fuente); }
 
-  const eventosRaw = await sql(
+  const eventosRaw = await sql.unsafe(
     `SELECT session_id, user_agent, ip_country, ip_city, utm_source, created_at FROM eventos WHERE ${evCond.join(" AND ")}`,
-    evVals
+    evVals as string[]
   ) as { session_id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
 
   const sesionesMap = new Map<string, typeof eventosRaw[number]>();
@@ -56,9 +56,9 @@ export async function GET(req: NextRequest) {
   if (pais)   { regCond.push(`ip_country = $${ri++}`);  regVals.push(pais); }
   if (fuente) { regCond.push(`utm_source = $${ri++}`);  regVals.push(fuente); }
 
-  let registros = await sql(
+  let registros = await sql.unsafe(
     `SELECT id, user_agent, ip_country, ip_city, utm_source, created_at FROM registros WHERE ${regCond.join(" AND ")} ORDER BY created_at DESC LIMIT 1000`,
-    regVals
+    regVals as string[]
   ) as { id: string; user_agent: string; ip_country: string; ip_city: string; utm_source: string; created_at: string }[];
 
   if (dispositivo) {

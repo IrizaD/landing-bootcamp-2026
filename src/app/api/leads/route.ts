@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
   `;
 
   try {
-    const rows = await sql(query, values);
+    const rows = await sql.unsafe(query, values as string[]);
     return NextResponse.json(rows);
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });

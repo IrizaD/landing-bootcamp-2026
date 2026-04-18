@@ -41,7 +41,7 @@ export async function PUT(
   const query = `UPDATE funnels SET ${fields.join(", ")} WHERE slug = $${i} RETURNING *`;
 
   try {
-    const rows = await sql(query, values);
+    const rows = await sql.unsafe(query, values as string[]);
     if (rows.length === 0) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
     return NextResponse.json(rows[0]);
   } catch (e) {
