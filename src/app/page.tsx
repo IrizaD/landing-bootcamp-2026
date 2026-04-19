@@ -51,10 +51,19 @@ const detailIcons = [
   <svg key="vid" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>,
 ];
 
-// ─── TRACKER HOOK ──────────────────────────────────────────
+// ─── TRACKER HOOK (diferido post-LCP) ──────────────────────
+type IdleWindow = Window & {
+  requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+};
 function useTracker() {
   useEffect(() => {
-    initTracker();
+    const w = window as IdleWindow;
+    const start = () => initTracker();
+    if (typeof w.requestIdleCallback === "function") {
+      w.requestIdleCallback(start, { timeout: 3000 });
+    } else {
+      w.setTimeout(start, 1800);
+    }
   }, []);
 }
 
@@ -766,7 +775,15 @@ export default function Page() {
         <div className="container" style={{ width: "100%" }}>
           <div className="hero-content">
             <div className="hero-logo-wrap">
-              <img src="/nuevoboot.png" alt="Bootcamp de Aceleración de Emprendimiento Synergy Education 2026" className="hero-logo" />
+              <img
+                src="/nuevoboot.webp"
+                alt="Bootcamp de Aceleración de Emprendimiento Synergy Education 2026"
+                className="hero-logo"
+                width={1200}
+                height={355}
+                fetchPriority="high"
+                decoding="async"
+              />
             </div>
             <h1>{content.hero.h1_part1}<br /><em>{content.hero.h1_em}</em></h1>
             <p className="hero-sub">{content.hero.subhead}</p>

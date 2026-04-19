@@ -3014,13 +3014,22 @@ h2.section-title {
   .detail-item                { padding: 24px 18px; }
 }
 
-/* ─── PERFORMANCE: apagar spins en dispositivos de menos poder ── */
-@media (max-width: 640px) {
+/* ─── PERFORMANCE: apagar spins en mobile ─────────────────── */
+@media (max-width: 900px) {
+  /* La ruleta es un adorno — en mobile agota CPU sin aportar */
   .roulette-wheel,
   .roulette-slot-inner,
   .roulette-hub {
-    animation-duration: 88s; /* 2x más lento para reducir jank */
+    animation: none !important;
+    transform-style: flat;
   }
+  .roulette-hub {
+    transform: translate(-50%, -50%);
+  }
+  /* Partículas del fondo de pilares — costosas en mobile */
+  .pillars-particle { display: none; }
+  /* Reducir will-change que mantiene capas compuestas activas */
+  .pillar-card { will-change: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
