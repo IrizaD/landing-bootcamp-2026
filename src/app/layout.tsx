@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Poppins } from "next/font/google";
+import { content } from "./content";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -16,25 +17,159 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const SITE_URL  = content.seo.url;
+const OG_IMAGE  = `${SITE_URL}/og-bootcamp-2026.jpg`;
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Bootcamp de Aceleración de Emprendimiento 2026 — Sinergéticos",
-  description:
-    "3 días en vivo con más de 20 speakers internacionales. 100% gratis. La fórmula, la mentalidad y el ecosistema para llevar tu negocio al siguiente nivel. 5, 6 y 7 de Junio de 2026.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default:  content.seo.title,
+    template: "%s · Synergy Education",
+  },
+  description: content.seo.description,
+  keywords: content.seo.keywords,
+  applicationName: "Synergy Education · Bootcamp 2026",
+  authors: [{ name: "Synergy Education", url: SITE_URL }],
+  creator: "Synergy Education",
+  publisher: "Sinergéticos",
+  category: "Education",
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      "es-MX": SITE_URL,
+      "es":    SITE_URL,
+      "x-default": SITE_URL,
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Bootcamp de Aceleración de Emprendimiento 2026",
-    description:
-      "3 días en vivo con más de 20 speakers internacionales. 100% gratis. 5, 6 y 7 de Junio de 2026.",
-    siteName: "Sinergéticos",
+    type: "website",
+    siteName: "Synergy Education",
+    title:    content.seo.title,
+    description: content.seo.description,
+    url: SITE_URL,
+    locale: "es_MX",
+    images: [
+      { url: OG_IMAGE, width: 1200, height: 630, alt: "Bootcamp de Aceleración de Emprendimiento 2026" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: content.seo.title,
+    description: content.seo.description,
+    images: [OG_IMAGE],
+    site: "@sinergeticos",
+    creator: "@jorgeserratos",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  verification: {
+    google: "",      // rellenar si se valida con Search Console
+  },
+  other: {
+    "fb:app_id":   "",
+    "og:site_name": "Synergy Education",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// JSON-LD para SEO enriquecido (Event + Organization + FAQPage + BreadcrumbList)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id":  `${SITE_URL}#organization`,
+      name:   "Synergy Education · Sinergéticos",
+      url:    SITE_URL,
+      logo:   `${SITE_URL}/logo-bootcamp.webp`,
+      description: "Ecosistema de aceleración de emprendedores hispanos liderado por Jorge Serratos.",
+      sameAs: [
+        "https://www.instagram.com/jorgeserratos/",
+        "https://www.instagram.com/sinergeticos/",
+        "https://www.youtube.com/@JorgeSerratos",
+        "https://open.spotify.com/show/3Fdo3WXdeK8fQVobPFICpQ",
+      ],
+      contactPoint: [{
+        "@type": "ContactPoint",
+        email: content.footer.contact.email,
+        contactType: "customer support",
+        availableLanguage: ["Spanish", "English"],
+      }],
+    },
+    {
+      "@type": "Event",
+      "@id":   `${SITE_URL}#event`,
+      name:    "Bootcamp de Aceleración de Emprendimiento 2026",
+      description: content.seo.description,
+      startDate: "2026-06-05T09:00:00-06:00",
+      endDate:   "2026-06-07T22:00:00-06:00",
+      eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      location: {
+        "@type": "VirtualLocation",
+        url: SITE_URL,
+      },
+      image: [OG_IMAGE],
+      organizer: { "@id": `${SITE_URL}#organization` },
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/LimitedAvailability",
+        validFrom: "2026-04-01T00:00:00-06:00",
+        url: `${SITE_URL}#registro`,
+        description: "Acceso digital de cortesía registrándose antes del 20 de mayo. Valor regular: $497 USD.",
+      },
+      performer: content.speakers.list.map((s) => ({
+        "@type": "Person",
+        name:    s.name,
+        description: s.title,
+        ...(s.ig ? { sameAs: [`https://instagram.com/${s.ig}`] } : {}),
+      })),
+      inLanguage: "es",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        { "@type": "Question", name: "¿Cuánto cuesta el Bootcamp?", acceptedAnswer: { "@type": "Answer", text: "El valor del evento es de $497 USD. Si te registras antes del 20 de mayo, obtienes un acceso digital de cortesía 100% gratis." } },
+        { "@type": "Question", name: "¿Dónde se realiza el Bootcamp?", acceptedAnswer: { "@type": "Answer", text: "Es 100% online, en vivo. Puedes conectarte desde cualquier país." } },
+        { "@type": "Question", name: "¿Cuándo es el Bootcamp?", acceptedAnswer: { "@type": "Answer", text: "5, 6 y 7 de junio de 2026." } },
+        { "@type": "Question", name: "¿Quiénes son los speakers?", acceptedAnswer: { "@type": "Answer", text: "Más de 21 referentes hispanos como Daniel Marcos, Fernando Anzures, Claudia Lizaldi, Coral Mujaes, Alejandro Kasuga, Spencer Hoffmann, entre otros." } },
+        { "@type": "Question", name: "¿Habrá premios?", acceptedAnswer: { "@type": "Answer", text: "Sí — sorteamos más de $10,000 USD en premios: iPads, MacBooks, accesos a eventos, experiencias y becas." } },
+      ],
+    },
+  ],
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${outfit.variable} ${poppins.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
