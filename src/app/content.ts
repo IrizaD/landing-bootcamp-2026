@@ -3,15 +3,30 @@
 
 export interface Speaker {
   name:      string;
-  role?:     string | null;   // "Host", "Co-host" o null
-  title:     string;          // descripción corta
-  ig?:       string;          // handle sin @
+  role?:     string | null;     // "Host", "Co-host" o null
+  title:     string;            // bio corta (quién es)
+  topic:     string;            // de qué va a hablar en el Bootcamp
+  pillar?:   "Mentalidad" | "Velocidad" | "Entorno";
+  ig?:       string;            // handle sin @
+  photo?:    string;            // ruta a /public/speakers/<handle>.jpg (fallback a iniciales)
   featured?: boolean;
   initial?:  string;
   bg?:       string;
 }
 
 export const content = {
+
+  // ─── REPLAY MODE (a partir del 9 de junio de 2026) ──────────────────────
+  // Después de esta fecha, la home muestra un pop-up redirigiendo a /repeticion
+  // donde la persona se registra para ver la repetición. Se activa automáticamente.
+  replay: {
+    enabled_from: "2026-06-09T00:00:00-06:00", // America/Mexico_City
+    alt_path:     "/repeticion",
+    popup_title:  "El Bootcamp ya terminó en vivo",
+    popup_body:   "Puedes registrarte para ver la repetición por tiempo limitado. Solo para personas que no pudieron conectarse los días 5, 6 y 7 de junio.",
+    popup_cta:    "Ver repetición",
+    popup_dismiss: "Cerrar",
+  },
 
   // ─── SEO ─────────────────────────────────────────────────────────────────
   seo: {
@@ -41,8 +56,8 @@ export const content = {
   // ─── TOP BAR ──────────────────────────────────────────────────────────────
   topbar: {
     date:   "5, 6 y 7 de Junio 2026",
-    online: "100% online",
-    free:   "ACCESO DIGITAL DE CORTESÍA · antes del 20 de mayo",
+    online: "EN VIVO · Sin repetición · Sin grabación",
+    free:   "Acceso digital de cortesía hasta 20 de mayo",
     cta:    "Asegura tu lugar",
   },
 
@@ -69,40 +84,62 @@ export const content = {
 
   // ─── PROBLEMA ─────────────────────────────────────────────────────────────
   problem: {
-    label:    "La brecha real",
+    label:    "La brecha real · Escucha esto",
     title_1:  "Ya sabes lo que debes hacer.",
-    title_em: "¿Por qué no está pasando?",
-    body:     "No es falta de motivación ni de información. Hay un techo invisible que no se rompe solo. Se rompe con el entorno correcto, las herramientas correctas y la decisión de dejar de postergar. Cada día que esperas, alguien con menos talento que tú se mueve primero.",
+    title_em: "¿Por qué carajos no está pasando?",
+    body_lead: "No es falta de motivación. No es falta de información. YouTube, Google e Instagram te entregaron TODO lo que necesitas para escalar. Y aun así, estás atorado.",
+    body:      "El problema no es la información — es que la información sin ejecución pesa. Cada día con ese peso encima, alguien más joven, con menos experiencia y menos talento que tú se está moviendo primero. Y lo sabes. Duele porque lo sabes.",
     bullets: [
-      "Tienes conocimiento acumulado que aún no da los resultados que merece",
-      "Tu negocio avanza, pero a un ritmo que ya no te satisface",
-      "Sientes que el siguiente salto requiere algo diferente y aún no encontraste qué",
+      "Llevas +2 años con el mismo techo de facturación — aunque trabajas más horas que nunca",
+      "Sabes que tu producto vale más caro, pero cada vez que piensas en subir el precio te agarra el miedo",
+      "Ves a gente con la mitad de tu experiencia facturar el triple — y no te explicas cómo",
+      "Tu negocio depende 100% de ti. Si paras, todo se detiene. Vacaciones, enfermedad, distracción: cero ingresos",
+      "Ya tomaste cursos. Lo escribiste. Lo guardaste. Nunca lo ejecutaste. Ese es el verdadero costo",
     ],
-    quote:           "Lo que hoy te limita, en 3 días puede dejar de existir.",
-    callout_title:   "El Bootcamp es ese momento.",
-    callout_body:    "Tres días intensivos. Más de 21 expertos. El entorno correcto para que todo lo que ya sabes finalmente opere a otro nivel.",
+    quote: "Lo que hoy te limita, en 3 días puede dejar de existir.",
+    callout_title: "El Bootcamp es el punto de quiebre.",
+    callout_body:  "No otro curso. No otra motivación. Tres días en vivo — sin grabación, sin repetición — donde instalas mentalidad, velocidad y entorno al mismo tiempo.",
+    journey: {
+      eyebrow: "Así se atraviesa el dolor",
+      title:   "3 días · 3 capas · 1 negocio distinto",
+      steps: [
+        { day: "Día 1", tag: "Mentalidad",  title: "Rompes el techo invisible",   body: "Identificas exactamente qué modelo mental te frena y lo reemplazas por el del empresario." },
+        { day: "Día 2", tag: "Velocidad",   title: "Activas las 3 palancas",       body: "Subes ticket, escalas adquisición y conviertes compra única en recurrencia." },
+        { day: "Día 3", tag: "Entorno",     title: "Cambias tu círculo",           body: "Conectas con +20 referentes y miles de builders que juegan al nivel al que tú quieres llegar." },
+      ],
+      result: "Sales con un plan distinto al que entraste.",
+    },
   },
 
   // ─── "¿QUÉ ES UN BOOTCAMP?" ──────────────────────────────────────────────
   whatIs: {
-    label:    "Qué es un bootcamp",
+    label:    "Esto no existe en el mercado hispano",
     title_1:  "Esto",
-    title_em: "NO es otro curso",
-    title_2:  "más.",
-    intro:    "Un bootcamp no es teoría acumulada. Es 3 días comprimidos donde aprendes mientras ejecutas. Diseñado para emprendedores ocupados — no para estudiantes.",
+    title_em: "NO es",
+    title_2:  "otro curso.",
+    intro:    "Lo que estás a punto de experimentar no se vende en ningún lado. No se repite. No queda grabado. Es un evento comprimido de 3 días donde aprendes mientras ejecutas — diseñado para emprendedores que ya están ocupados ganando dinero, no para estudiantes buscando motivación.",
+    notHeader: "Lo que NO estás a punto de recibir",
     notItems: [
-      { t: "No es un curso grabado",     d: "Que te obliga a consumir 40 horas antes de aplicar algo." },
-      { t: "No es un webinar pasivo",    d: "Donde escuchas y te vas sin nada concreto." },
-      { t: "No es mentoría 1 a 1 lenta", d: "Que tarda meses en darte tracción." },
-      { t: "No es motivación vacía",     d: "Sin plan, sin sistema, sin siguiente paso claro." },
+      { t: "No es un curso grabado",     d: "40 horas de video que nunca terminas. Que se acumulan en tu drive junto a los otros 8 que compraste." },
+      { t: "No es otro webinar",         d: "60 minutos de humo con un pitch al final. Sales igual que entraste." },
+      { t: "No es mentoría 1 a 1 lenta", d: "6 meses de llamadas para ver qué pasa. Aquí se mueve todo en 72 horas." },
+      { t: "No es motivación vacía",     d: "No vas a salir 'inspirado'. Vas a salir con un plan ejecutado, no con ganas." },
+      { t: "No es teoría universitaria", d: "Cero modelos académicos. Solo lo que funciona en negocios reales con dinero real moviéndose." },
     ],
+    bridge: "En cambio, esto es lo que SÍ vas a recibir",
+    isHeader: "Lo que SÍ vas a experimentar",
     isItems: [
-      { t: "Inmersivo y en vivo",        d: "Tres días, sin repetición. Toda la energía, todos los speakers, un solo evento." },
-      { t: "Ejecutas mientras aprendes", d: "Implementas cambios en tu negocio durante el Bootcamp, no 6 meses después." },
-      { t: "Para personas ocupadas",     d: "Sin relleno. Solo lo que mueve la aguja en negocios reales con ingresos reales." },
-      { t: "Comunidad real",             d: "+20 speakers y miles de emprendedores que ya juegan al nivel al que tú quieres jugar." },
+      { t: "Inmersión total · EN VIVO",  d: "3 días comprimidos. Sin repetición. Sin grabación. Si no estás conectado, te lo perdiste." },
+      { t: "Ejecutas mientras aprendes", d: "Subes precios, rediseñas oferta y activas canales durante el Bootcamp. Los resultados empiezan el mismo día." },
+      { t: "+21 speakers en un solo evento", d: "Daniel Marcos, Fernando Anzures, Claudia Lizaldi, Alejandro Kasuga, Coral Mujaes… juntos. No existe en otro lugar." },
+      { t: "Comunidad que ya factura",   d: "Miles de emprendedores hispanos conectados en vivo. El networking de 3 días que abre puertas los siguientes 3 años." },
+      { t: "+$10,000 USD en premios",    d: "Sorteos en vivo: iPads, MacBooks, accesos premium, experiencias. Solo para quienes están presentes." },
     ],
-    closing: "Si sientes que te falta tiempo, pero tienes claro que quieres crecer: esto fue diseñado exactamente para ti.",
+    closing_1: "Esto es una",
+    closing_em: "decisión de 3 días",
+    closing_2: "que cambia los siguientes 3 años.",
+    closing_foot: "Si eres de los que ejecutan — no de los que coleccionan cursos — fue diseñado exactamente para ti.",
+    live_badge: "SOLO EN VIVO · Sin grabación",
   },
 
   // ─── 3 PILARES (reemplaza el carrusel de promises) ──────────────────────
@@ -239,32 +276,96 @@ export const content = {
     mystery_name:  "Por revelar",
     mystery_title: "Próximo anuncio",
     note:     "La lista puede actualizarse. Seguimos los anuncios oficiales en redes.",
-    // NOTA: Las descripciones e Instagram son la mejor aproximación pública.
-    // Verifica/ajusta cada ficha en content.ts antes del lanzamiento final.
+    // IG handles: mejor aproximación pública conocida (verificar + reemplazar donde aplique).
+    // Fotos: sube cada imagen a /public/speakers/<handle>.jpg y el sistema las toma automáticamente.
     list: [
-      { name: "Jorge Serratos",     role: "Host",     title: "Fundador Sinergéticos · Autor Best Seller · Podcast #1 Negocios México",                                  ig: "jorgeserratos",      featured: true,  initial: "J", bg: "linear-gradient(135deg,#00e040,#005a18)" },
-      { name: "Manuel de León",     role: "Co-host",  title: "COO Sinergéticos · Experto en IA, tráfico y contenido digital",                                          ig: "manueldeleonmx",     featured: true,  initial: "M", bg: "linear-gradient(135deg,#4ade80,#00a030)" },
+      { name: "Jorge Serratos",     role: "Host",     title: "Fundador Sinergéticos · Autor Best Seller · Podcast #1 Negocios México",
+        topic: "Cómo construir un movimiento, no solo un negocio",
+        pillar: "Entorno", featured: true, ig: "jorgeserratos", photo: "/speakers/jorgeserratos.jpg", initial: "J", bg: "linear-gradient(135deg,#00e040,#005a18)" },
 
-      { name: "Daniel Marcos",      role: null,       title: "CEO Growth Institute · Autor de Scaling Up · Referente global en escalamiento de startups latinas",      ig: "dmarcos",             initial: "D", bg: "linear-gradient(135deg,#38bdf8,#0c4a6e)" },
-      { name: "Fernando Anzures",   role: null,       title: "CEO ExmaCon · Autor 'El Consumidor es el Medio' · Marketing y consumo digital en LATAM",                 ig: "fernandoanzures",     initial: "F", bg: "linear-gradient(135deg,#f97316,#7c2d12)" },
-      { name: "Claudia Lizaldi",    role: null,       title: "Conductora, actriz y empresaria · Marca personal y reinvención",                                         ig: "claudializaldi",      initial: "C", bg: "linear-gradient(135deg,#a855f7,#581c87)" },
-      { name: "Alejandro Kasuga",   role: null,       title: "Empresario mexicano (Yakult) · Autor y speaker en Kaizen y liderazgo consciente",                        ig: "alejandrokasuga",     initial: "A", bg: "linear-gradient(135deg,#fbbf24,#78350f)" },
-      { name: "Alejandro Saracho",  role: null,       title: "Coach ejecutivo · Autor 'Despertando al líder' · Alto rendimiento y liderazgo",                          ig: "alejandrosaracho",    initial: "A", bg: "linear-gradient(135deg,#22d3ee,#0e7490)" },
-      { name: "Coral Mujaes",       role: null,       title: "Ex boxeadora profesional · Autora y coach · Mindset, hábitos y resiliencia",                             ig: "coralmujaes",         initial: "C", bg: "linear-gradient(135deg,#ec4899,#831843)" },
-      { name: "Spencer Hoffmann",   role: null,       title: "CEO Chopper · Autor y speaker · Liderazgo, productividad y hábitos de alto rendimiento",                 ig: "spencerhoffmann",     initial: "S", bg: "linear-gradient(135deg,#84cc16,#365314)" },
-      { name: "Efrén Martínez",     role: null,       title: "Coach internacional · Formador de formadores · Desarrollo humano y mentalidad",                          ig: "efrenmartinezcoach",  initial: "E", bg: "linear-gradient(135deg,#14b8a6,#134e4a)" },
-      { name: "Salvador Alba",      role: null,       title: "Empresario y speaker · Estrategia comercial y escalamiento B2B",                                         ig: "salvadoralba",        initial: "S", bg: "linear-gradient(135deg,#6366f1,#312e81)" },
-      { name: "Pavo Gómez",         role: null,       title: "Creador digital y emprendedor · Storytelling de marca y contenido que vende",                            ig: "pavogomez",           initial: "P", bg: "linear-gradient(135deg,#f43f5e,#881337)" },
-      { name: "Karla Barajas",      role: null,       title: "Empresaria y speaker · Liderazgo femenino y construcción de marca personal",                             ig: "karlabarajasoficial", initial: "K", bg: "linear-gradient(135deg,#e879f9,#701a75)" },
-      { name: "Mike Munzvil",       role: null,       title: "Speaker internacional · Ventas de alto ticket y negociación",                                            ig: "mikemunzvil",         initial: "M", bg: "linear-gradient(135deg,#0ea5e9,#082f49)" },
-      { name: "Dr. Roch",           role: null,       title: "Médico y speaker · Salud, energía y alto rendimiento para emprendedores",                                ig: "doctor.roch",         initial: "R", bg: "linear-gradient(135deg,#10b981,#064e3b)" },
-      { name: "Tati Arias",         role: null,       title: "Experta en marca personal · Comunicación y posicionamiento para emprendedores",                          ig: "tatiarias",           initial: "T", bg: "linear-gradient(135deg,#eab308,#713f12)" },
-      { name: "Luis Fallas",        role: null,       title: "Emprendedor y speaker · Ventas, liderazgo y equipos comerciales",                                        ig: "luisfallas",          initial: "L", bg: "linear-gradient(135deg,#8b5cf6,#4c1d95)" },
-      { name: "Valentina Ortiz",    role: null,       title: "Creadora de contenido y empresaria · Marketing digital y comunidad",                                     ig: "valentinaortiz",      initial: "V", bg: "linear-gradient(135deg,#f472b6,#9d174d)" },
-      { name: "Javi Rodríguez",     role: null,       title: "Experto en medios pagados · Funnels y escalamiento de campañas Meta/Google",                             ig: "javirodriguez",       initial: "J", bg: "linear-gradient(135deg,#06b6d4,#164e63)" },
-      { name: "Titto Luzardo",      role: null,       title: "Empresario y speaker · Emprendimiento, libertad financiera y negocios digitales",                        ig: "tittoluzardo",        initial: "T", bg: "linear-gradient(135deg,#fb923c,#7c2d12)" },
-      { name: "Brando Angulo",      role: null,       title: "Emprendedor digital · Ventas online y marca personal rentable",                                          ig: "brandoangulo",        initial: "B", bg: "linear-gradient(135deg,#34d399,#065f46)" },
-      { name: "Alejandro Cardona",  role: null,       title: "Experto en ventas consultivas · Procesos comerciales y cierre para negocios de servicios",                ig: "alejandrocardona",    initial: "A", bg: "linear-gradient(135deg,#fde047,#a16207)" },
+      { name: "Manuel de León",     role: "Co-host",  title: "COO Sinergéticos · Experto en IA, tráfico y contenido digital",
+        topic: "IA + tráfico + contenido: el stack técnico del crecimiento en 2026",
+        pillar: "Velocidad", featured: true, ig: "manueldeleonmjr", photo: "/speakers/manueldeleonmjr.jpg", initial: "M", bg: "linear-gradient(135deg,#4ade80,#00a030)" },
+
+      { name: "Daniel Marcos",      title: "CEO Growth Institute · Coautor de Scaling Up en LATAM · Referente en escalamiento empresarial",
+        topic: "Scaling Up: el playbook para pasar de $100K a $10M anuales",
+        pillar: "Velocidad", ig: "dmarcos", photo: "/speakers/dmarcos.jpg", initial: "D", bg: "linear-gradient(135deg,#38bdf8,#0c4a6e)" },
+
+      { name: "Fernando Anzures",   title: "CEO ExmaCon · Autor 'El Consumidor es el Medio' · Referente en consumer marketing LATAM",
+        topic: "El consumidor es el medio: vender sin vender en la era del algoritmo",
+        pillar: "Velocidad", ig: "fernandoanzures", photo: "/speakers/fernandoanzures.jpg", initial: "F", bg: "linear-gradient(135deg,#f97316,#7c2d12)" },
+
+      { name: "Claudia Lizaldi",    title: "Conductora, actriz y empresaria · Expertise en marca personal y reinvención",
+        topic: "Reinvención después de los 40: construir una marca personal que paga",
+        pillar: "Mentalidad", ig: "claudializaldi", photo: "/speakers/claudializaldi.jpg", initial: "C", bg: "linear-gradient(135deg,#a855f7,#581c87)" },
+
+      { name: "Alejandro Kasuga",   title: "Empresario mexicano (Yakult México) · Autor y speaker en Kaizen y liderazgo consciente",
+        topic: "Kaizen empresarial: mejoras del 1% que transforman negocios de décadas",
+        pillar: "Mentalidad", ig: "alejandrokasuga", photo: "/speakers/alejandrokasuga.jpg", initial: "A", bg: "linear-gradient(135deg,#fbbf24,#78350f)" },
+
+      { name: "Alejandro Saracho",  title: "Coach ejecutivo · Autor 'Despertando al líder que está en ti'",
+        topic: "De operador a dueño: el salto mental que desbloquea la libertad",
+        pillar: "Mentalidad", ig: "alejandrosaracho", photo: "/speakers/alejandrosaracho.jpg", initial: "A", bg: "linear-gradient(135deg,#22d3ee,#0e7490)" },
+
+      { name: "Coral Mujaes",       title: "Ex boxeadora profesional · Autora y coach · Mindset, hábitos y resiliencia",
+        topic: "Disciplina de campeona: el mindset deportivo aplicado a tu negocio",
+        pillar: "Mentalidad", ig: "coralmujaes", photo: "/speakers/coralmujaes.jpg", initial: "C", bg: "linear-gradient(135deg,#ec4899,#831843)" },
+
+      { name: "Spencer Hoffmann",   title: "CEO Chopper · Speaker en liderazgo, productividad y hábitos de alto rendimiento",
+        topic: "La rutina que construye imperios: hábitos de alto rendimiento del fundador",
+        pillar: "Mentalidad", ig: "spencerhoffmann", photo: "/speakers/spencerhoffmann.jpg", initial: "S", bg: "linear-gradient(135deg,#84cc16,#365314)" },
+
+      { name: "Efrén Martínez",     title: "Coach internacional · Formador de formadores · Desarrollo humano aplicado a empresarios",
+        topic: "Romper las programaciones mentales heredadas que sabotean tu crecimiento",
+        pillar: "Mentalidad", ig: "efrenmartinezcoach", photo: "/speakers/efrenmartinezcoach.jpg", initial: "E", bg: "linear-gradient(135deg,#14b8a6,#134e4a)" },
+
+      { name: "Salvador Alba",      title: "Empresario y speaker · Estrategia comercial y escalamiento B2B",
+        topic: "Estrategia B2B: cerrar contratos de 6 cifras sin depender de ti",
+        pillar: "Velocidad", ig: "salvadoralba", photo: "/speakers/salvadoralba.jpg", initial: "S", bg: "linear-gradient(135deg,#6366f1,#312e81)" },
+
+      { name: "Pavo Gómez",         title: "Creador digital · Storytelling de marca y contenido que convierte",
+        topic: "Storytelling que vende: tu historia como tu diferenciador más caro",
+        pillar: "Velocidad", ig: "pavogomez", photo: "/speakers/pavogomez.jpg", initial: "P", bg: "linear-gradient(135deg,#f43f5e,#881337)" },
+
+      { name: "Karla Barajas",      title: "Empresaria y speaker · Liderazgo femenino y marca personal rentable",
+        topic: "Marca personal femenina: cobrar lo que vales sin justificarte",
+        pillar: "Mentalidad", ig: "karlabarajasoficial", photo: "/speakers/karlabarajasoficial.jpg", initial: "K", bg: "linear-gradient(135deg,#e879f9,#701a75)" },
+
+      { name: "Mike Munzvil",       title: "Speaker internacional · Ventas de alto ticket y negociación",
+        topic: "Negociación de alto ticket: vender valor, nunca precio",
+        pillar: "Velocidad", ig: "mikemunzvil", photo: "/speakers/mikemunzvil.jpg", initial: "M", bg: "linear-gradient(135deg,#0ea5e9,#082f49)" },
+
+      { name: "Dr. Roch",           title: "Médico y speaker · Salud, hormonas y performance ejecutivo",
+        topic: "Energía del emprendedor: la biología que sostiene tu ejecución",
+        pillar: "Mentalidad", ig: "doctor.roch", photo: "/speakers/doctor.roch.jpg", initial: "R", bg: "linear-gradient(135deg,#10b981,#064e3b)" },
+
+      { name: "Tati Arias",         title: "Experta en marca personal · Comunicación y posicionamiento para emprendedores",
+        topic: "Posicionarte como autoridad en 12 meses (aunque hoy nadie te conozca)",
+        pillar: "Velocidad", ig: "tatiarias", photo: "/speakers/tatiarias.jpg", initial: "T", bg: "linear-gradient(135deg,#eab308,#713f12)" },
+
+      { name: "Luis Fallas",        title: "Emprendedor y speaker · Ventas, liderazgo y equipos comerciales",
+        topic: "Equipos de ventas que venden sin ti: estructura, KPIs y comisiones",
+        pillar: "Velocidad", ig: "luisfallas", photo: "/speakers/luisfallas.jpg", initial: "L", bg: "linear-gradient(135deg,#8b5cf6,#4c1d95)" },
+
+      { name: "Valentina Ortiz",    title: "Creadora de contenido y empresaria · Marketing digital y comunidad",
+        topic: "Comunidad pagada: convertir audiencia en ingresos recurrentes",
+        pillar: "Entorno", ig: "valentinaortiz", photo: "/speakers/valentinaortiz.jpg", initial: "V", bg: "linear-gradient(135deg,#f472b6,#9d174d)" },
+
+      { name: "Javi Rodríguez",     title: "Experto en medios pagados · Funnels y escalamiento de campañas Meta/Google",
+        topic: "Meta Ads 2026: CPL predecible para negocios de servicios",
+        pillar: "Velocidad", ig: "javirodriguez", photo: "/speakers/javirodriguez.jpg", initial: "J", bg: "linear-gradient(135deg,#06b6d4,#164e63)" },
+
+      { name: "Titto Luzardo",      title: "Empresario y speaker · Libertad financiera y negocios digitales",
+        topic: "Separar persona y negocio: la arquitectura financiera del dueño libre",
+        pillar: "Velocidad", ig: "tittoluzardo", photo: "/speakers/tittoluzardo.jpg", initial: "T", bg: "linear-gradient(135deg,#fb923c,#7c2d12)" },
+
+      { name: "Brando Angulo",      title: "Emprendedor digital · Ventas online y marca personal rentable",
+        topic: "Lanzamientos digitales: cómo facturar 6 cifras en 7 días",
+        pillar: "Velocidad", ig: "brandoangulo", photo: "/speakers/brandoangulo.jpg", initial: "B", bg: "linear-gradient(135deg,#34d399,#065f46)" },
+
+      { name: "Alejandro Cardona",  title: "Experto en ventas consultivas · Procesos comerciales para negocios de servicios",
+        topic: "Ventas consultivas: el proceso que cierra 4 de cada 10 llamadas",
+        pillar: "Velocidad", ig: "alejandrocardona", photo: "/speakers/alejandrocardona.jpg", initial: "A", bg: "linear-gradient(135deg,#fde047,#a16207)" },
     ] as Speaker[],
   },
 

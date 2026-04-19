@@ -75,22 +75,30 @@ function useReveal() {
 function WhatIsBootcamp() {
   return (
     <section className="whatis section" data-section="whatis">
+      <div className="whatis-bg" aria-hidden="true" />
       <div className="container">
         <div className="whatis-header">
-          <span className="section-label reveal">{content.whatIs.label}</span>
-          <h2 className="section-title reveal reveal-delay-1">
-            {content.whatIs.title_1} <span className="text-red">{content.whatIs.title_em}</span> {content.whatIs.title_2}
+          <span className="whatis-live-badge reveal">{content.whatIs.live_badge}</span>
+          <span className="section-label reveal reveal-delay-1">{content.whatIs.label}</span>
+          <h2 className="section-title reveal reveal-delay-2">
+            {content.whatIs.title_1} <span className="text-red whatis-strike">{content.whatIs.title_em}</span> {content.whatIs.title_2}
           </h2>
-          <p className="whatis-intro reveal reveal-delay-2">{content.whatIs.intro}</p>
+          <p className="whatis-intro reveal reveal-delay-3">{content.whatIs.intro}</p>
         </div>
 
-        <div className="whatis-grid">
-          <div className="whatis-col reveal">
-            <div className="whatis-col-tag whatis-no">✕ · Lo que NO es</div>
+        <div className="whatis-split">
+          <div className="whatis-col whatis-col-no reveal">
+            <div className="whatis-col-head whatis-no">
+              <span className="whatis-col-mark">✕</span>
+              <div>
+                <div className="whatis-col-eyebrow">01 · Frena</div>
+                <div className="whatis-col-label">{content.whatIs.notHeader}</div>
+              </div>
+            </div>
             <ul className="whatis-list">
-              {content.whatIs.notItems.map((it) => (
-                <li key={it.t} className="whatis-item whatis-item-no">
-                  <span className="whatis-item-dot"></span>
+              {content.whatIs.notItems.map((it, i) => (
+                <li key={it.t} className="whatis-item whatis-item-no" style={{ animationDelay: `${0.15 + i * 0.08}s` }}>
+                  <span className="whatis-item-strike"></span>
                   <div>
                     <div className="whatis-item-title">{it.t}</div>
                     <div className="whatis-item-body">{it.d}</div>
@@ -100,12 +108,24 @@ function WhatIsBootcamp() {
             </ul>
           </div>
 
-          <div className="whatis-col reveal reveal-delay-2">
-            <div className="whatis-col-tag whatis-yes">✓ · Lo que SÍ es</div>
+          <div className="whatis-bridge" aria-hidden="true">
+            <div className="whatis-bridge-line"></div>
+            <div className="whatis-bridge-label">{content.whatIs.bridge}</div>
+            <div className="whatis-bridge-arrow">→</div>
+          </div>
+
+          <div className="whatis-col whatis-col-yes reveal reveal-delay-2">
+            <div className="whatis-col-head whatis-yes">
+              <span className="whatis-col-mark">✓</span>
+              <div>
+                <div className="whatis-col-eyebrow">02 · Transforma</div>
+                <div className="whatis-col-label">{content.whatIs.isHeader}</div>
+              </div>
+            </div>
             <ul className="whatis-list">
-              {content.whatIs.isItems.map((it) => (
-                <li key={it.t} className="whatis-item whatis-item-yes">
-                  <span className="whatis-item-dot"></span>
+              {content.whatIs.isItems.map((it, i) => (
+                <li key={it.t} className="whatis-item whatis-item-yes" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+                  <span className="whatis-item-check"><CheckCircle /></span>
                   <div>
                     <div className="whatis-item-title">{it.t}</div>
                     <div className="whatis-item-body">{it.d}</div>
@@ -116,7 +136,12 @@ function WhatIsBootcamp() {
           </div>
         </div>
 
-        <p className="whatis-closing reveal reveal-delay-3">{content.whatIs.closing}</p>
+        <div className="whatis-closing reveal reveal-delay-3">
+          <p className="whatis-closing-headline">
+            {content.whatIs.closing_1} <span className="text-red">{content.whatIs.closing_em}</span> {content.whatIs.closing_2}
+          </p>
+          <p className="whatis-closing-foot">{content.whatIs.closing_foot}</p>
+        </div>
       </div>
     </section>
   );
@@ -124,47 +149,54 @@ function WhatIsBootcamp() {
 
 // ─── 3D PILLARS ANIMATION ──────────────────────────────────
 function PillarsSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0); // 0 → 1 (scroll-linked)
-  const [activeIdx, setActiveIdx] = useState(-1);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const synthRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState<[boolean, boolean, boolean]>([false, false, false]);
+  const [synthVisible, setSynthVisible] = useState(false);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    let rafId = 0;
-    let ticking = false;
+    const stage = stageRef.current;
+    if (!stage) return;
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      rafId = requestAnimationFrame(() => {
-        const rect = el.getBoundingClientRect();
-        const vh = window.innerHeight;
-        // p = 0 cuando la sección recién entra desde abajo, 1 cuando se va por arriba
-        const start = vh;
-        const end = -rect.height + vh * 0.4;
-        const raw = (start - rect.top) / (start - end);
-        const p = Math.min(1, Math.max(0, raw));
-        setProgress(p);
-        const idx = p < 0.18 ? -1 : p < 0.45 ? 0 : p < 0.72 ? 1 : 2;
-        setActiveIdx(idx);
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
+    const cards = stage.querySelectorAll<HTMLElement>(".pillar-card");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const idx = Number(entry.target.getAttribute("data-idx"));
+          if (entry.isIntersecting && Number.isFinite(idx)) {
+            setVisible((prev) => {
+              if (prev[idx]) return prev;
+              const next = [...prev] as [boolean, boolean, boolean];
+              next[idx] = true;
+              return next;
+            });
+          }
+        });
+      },
+      { threshold: 0.35, rootMargin: "0px 0px -10% 0px" }
+    );
+    cards.forEach((c) => obs.observe(c));
+
+    const synthEl = synthRef.current;
+    let synthObs: IntersectionObserver | null = null;
+    if (synthEl) {
+      synthObs = new IntersectionObserver(
+        (entries) => entries.forEach((e) => { if (e.isIntersecting) setSynthVisible(true); }),
+        { threshold: 0.4 }
+      );
+      synthObs.observe(synthEl);
+    }
+
+    return () => { obs.disconnect(); synthObs?.disconnect(); };
   }, []);
 
   const pillars = content.pillars.items;
+  const doneCount = visible.filter(Boolean).length;
 
   return (
-    <section className="pillars section" ref={containerRef} data-section="pillars">
+    <section className="pillars section" data-section="pillars">
       <div className="pillars-bg" aria-hidden="true">
-        <div className="pillars-bg-glow" style={{ opacity: 0.3 + progress * 0.7 }} />
+        <div className="pillars-bg-glow" />
         <div className="pillars-bg-grid" />
         {Array.from({ length: 18 }).map((_, i) => (
           <span key={i} className="pillars-particle" style={{ left: `${(i * 43) % 100}%`, animationDelay: `${i * 0.4}s` }} />
@@ -182,25 +214,31 @@ function PillarsSection() {
           </p>
         </div>
 
-        <div className="pillars-stage">
-          {/* 3D scene — 3 cards apiladas en perspectiva */}
-          <div className="pillars-scene" style={{ transform: `perspective(1400px) rotateX(${10 - progress * 6}deg) rotateY(${-6 + progress * 6}deg)` }}>
+        <div className="pillars-stage" ref={stageRef}>
+          {/* Connector line (ahora arriba del grid para indicar progreso) */}
+          <div className="pillars-connector" aria-hidden="true">
+            <div className="pillars-connector-track" />
+            <div className="pillars-connector-fill" style={{ width: `${(doneCount / pillars.length) * 100}%` }} />
+            {pillars.map((p, i) => (
+              <span
+                key={i}
+                className={`pillars-connector-dot ${visible[i] ? "on" : ""}`}
+                style={{ left: `${(i / (pillars.length - 1)) * 100}%`, ["--pillar-color" as string]: p.color }}
+              >
+                <span className="pillars-connector-pulse" />
+              </span>
+            ))}
+          </div>
+
+          <div className="pillars-scene">
             {pillars.map((p, i) => {
-              const isActive = activeIdx === i;
-              const isPast = activeIdx > i;
-              const offset = (i - 1) * 24; // -24, 0, 24
-              const localReveal = activeIdx >= i ? 1 : 0;
+              const isOn = visible[i];
               return (
                 <div
                   key={p.n}
-                  className={`pillar-card ${isActive ? "active" : ""} ${isPast ? "past" : ""}`}
-                  style={{
-                    "--pillar-color":  p.color,
-                    "--pillar-offset": `${offset}px`,
-                    "--pillar-depth":  `${(i - 1) * -60}px`,
-                    opacity:           isActive ? 1 : isPast ? 0.85 : 0.5 + localReveal * 0.5,
-                    transform: `translateX(${offset}px) translateZ(${(i - 1) * -60}px) rotateY(${(i - 1) * -8 + (isActive ? 0 : 0)}deg) ${isActive ? "scale(1.05)" : "scale(1)"}`,
-                  } as React.CSSProperties}
+                  data-idx={i}
+                  className={`pillar-card ${isOn ? "visible" : ""}`}
+                  style={{ "--pillar-color": p.color, "--pillar-delay": `${i * 0.12}s` } as React.CSSProperties}
                 >
                   <div className="pillar-card-glow" />
                   <div className="pillar-num">{p.n}</div>
@@ -218,32 +256,14 @@ function PillarsSection() {
             })}
           </div>
 
-          {/* Línea conectora */}
-          <div className="pillars-connector" aria-hidden="true">
-            <div className="pillars-connector-track" />
-            <div className="pillars-connector-fill" style={{ width: `${Math.min(100, progress * 110)}%` }} />
-            {pillars.map((p, i) => (
-              <span
-                key={i}
-                className={`pillars-connector-dot ${activeIdx >= i ? "on" : ""}`}
-                style={{ left: `${(i / (pillars.length - 1)) * 100}%`, ["--pillar-color" as string]: p.color }}
-              >
-                <span className="pillars-connector-pulse" />
-              </span>
-            ))}
-          </div>
-
-          {/* Caption progresiva */}
           <div className="pillars-caption">
-            {activeIdx < 0 && <span>Desliza para ver cómo se apilan →</span>}
-            {activeIdx === 0 && <span className="pillars-caption-active" style={{ color: pillars[0].color }}>Capa 1/3 — {pillars[0].tag}</span>}
-            {activeIdx === 1 && <span className="pillars-caption-active" style={{ color: pillars[1].color }}>Capa 2/3 — {pillars[1].tag}</span>}
-            {activeIdx === 2 && <span className="pillars-caption-active" style={{ color: pillars[2].color }}>Capa 3/3 — {pillars[2].tag}</span>}
+            {doneCount === 0 && <span>Desliza para ver cómo se apilan las 3 capas</span>}
+            {doneCount > 0 && doneCount < 3 && <span className="pillars-caption-active">{doneCount} / 3 capas activadas</span>}
+            {doneCount === 3 && <span className="pillars-caption-active" style={{ color: "#4ade80" }}>3 / 3 capas activadas — negocio transformado</span>}
           </div>
         </div>
 
-        {/* Síntesis final */}
-        <div className={`pillars-synthesis ${progress > 0.9 ? "visible" : ""}`}>
+        <div className={`pillars-synthesis ${synthVisible ? "visible" : ""}`} ref={synthRef}>
           <div className="pillars-synthesis-bar">
             {pillars.map((p) => (
               <span key={p.n} className="pillars-synthesis-chip" style={{ background: p.color }}>{p.tag}</span>
@@ -257,6 +277,124 @@ function PillarsSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// ─── PRIZES · RULETA 3D ────────────────────────────────────
+function PrizesRoulette() {
+  const prizes = content.prizes.items;
+  const [highlight, setHighlight] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHighlight((h) => (h + 1) % prizes.length);
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, [prizes.length]);
+
+  return (
+    <section className="prizes section" data-section="prizes">
+      <div className="prizes-bg" aria-hidden="true" />
+      <div className="container">
+        <div className="prizes-header">
+          <span className="section-label reveal">{content.prizes.label}</span>
+          <h2 className="section-title reveal reveal-delay-1">
+            {content.prizes.title_1} <span className="text-gold">{content.prizes.title_em}</span>
+          </h2>
+          <p className="reveal reveal-delay-2" style={{ fontSize: 17, color: "rgba(255,255,255,0.55)", maxWidth: 620, margin: "0 auto" }}>
+            {content.prizes.subtitle}
+          </p>
+        </div>
+
+        <div className="roulette-wrap reveal reveal-delay-2">
+          <div className="roulette-indicator" aria-hidden="true">▼</div>
+          <div className="roulette-wheel">
+            {prizes.map((p, i) => {
+              const angle = (360 / prizes.length) * i;
+              const isActive = highlight === i;
+              return (
+                <div
+                  key={i}
+                  className={`roulette-slot ${isActive ? "active" : ""}`}
+                  style={{ "--slot-angle": `${angle}deg` } as React.CSSProperties}
+                >
+                  <div className="roulette-slot-inner">
+                    <div className="roulette-slot-icon" aria-hidden="true">{p.icon}</div>
+                    <div className="roulette-slot-title">{p.title}</div>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="roulette-hub">
+              <div className="roulette-hub-label">Valor total</div>
+              <div className="roulette-hub-amount">+$10,000</div>
+              <div className="roulette-hub-currency">USD</div>
+            </div>
+          </div>
+
+          <aside className="roulette-legend">
+            <div className="roulette-legend-eyebrow">Sorteando ahora</div>
+            <div key={highlight} className="roulette-legend-card">
+              <div className="roulette-legend-icon">{prizes[highlight].icon}</div>
+              <div>
+                <div className="roulette-legend-title">{prizes[highlight].title}</div>
+                <div className="roulette-legend-body">{prizes[highlight].body}</div>
+              </div>
+            </div>
+            <ul className="roulette-legend-list">
+              {prizes.map((p, i) => (
+                <li key={i} className={highlight === i ? "is-on" : ""}>
+                  <span className="roulette-legend-dot"></span>{p.title}
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+
+        <div className="prizes-live-note">
+          <span className="prizes-live-pulse" aria-hidden="true"></span>
+          Solo para conectados en vivo · Sin grabación, sin repetición
+        </div>
+        <p className="prizes-foot reveal">{content.prizes.footnote}</p>
+      </div>
+    </section>
+  );
+}
+
+// ─── REPLAY GATE (activable el 9 de junio) ─────────────────
+function ReplayGate() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const enabled = new Date(content.replay.enabled_from).getTime();
+    if (Number.isNaN(enabled)) return;
+    if (Date.now() >= enabled) {
+      const dismissed = typeof window !== "undefined" && sessionStorage.getItem("_replay_dismissed");
+      if (!dismissed) setShow(true);
+    }
+  }, []);
+
+  if (!show) return null;
+
+  const dismiss = () => {
+    try { sessionStorage.setItem("_replay_dismissed", "1"); } catch { /* noop */ }
+    setShow(false);
+  };
+
+  return (
+    <div className="replay-overlay" role="dialog" aria-modal="true" aria-labelledby="replay-title">
+      <div className="replay-backdrop" onClick={dismiss} />
+      <div className="replay-modal">
+        <button className="replay-close" onClick={dismiss} aria-label="Cerrar">✕</button>
+        <div className="replay-eyebrow">Bootcamp 2026 · Post-evento</div>
+        <h2 id="replay-title" className="replay-title">{content.replay.popup_title}</h2>
+        <p className="replay-body">{content.replay.popup_body}</p>
+        <div className="replay-actions">
+          <a className="btn-primary" href={content.replay.alt_path}>{content.replay.popup_cta}</a>
+          <button type="button" className="btn-ghost" onClick={dismiss}>{content.replay.popup_dismiss}</button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -302,21 +440,31 @@ function SocialProofPopup() {
   );
 }
 
-// ─── ROI CALCULATOR ────────────────────────────────────────
+// ─── ROI CALCULATOR · TACÓMETRO ─────────────────────────────
 function RoiCalculator() {
   const [ticket, setTicket]         = useState(500);
   const [clients, setClients]       = useState(10);
-  const [priceLever, setPriceLever] = useState(30);   // +%
-  const [volumeLever, setVolumeLever] = useState(50); // +%
-  const [recurrence, setRecurrence] = useState(1.5);  // x veces/año
+  const [priceLever, setPriceLever] = useState(30);
+  const [volumeLever, setVolumeLever] = useState(50);
+  const [recurrence, setRecurrence] = useState(1.5);
 
-  const currentMonth    = ticket * clients;
-  const newTicket       = ticket * (1 + priceLever / 100);
-  const newClients      = clients * (1 + volumeLever / 100);
-  const projectedMonth  = newTicket * newClients;
-  const projectedYear   = projectedMonth * 12 * recurrence;
-  const currentYear     = currentMonth * 12;
-  const deltaYear       = projectedYear - currentYear;
+  const currentMonth   = ticket * clients;
+  const newTicket      = ticket * (1 + priceLever / 100);
+  const newClients     = clients * (1 + volumeLever / 100);
+  const projectedMonth = newTicket * newClients;
+  const projectedYear  = projectedMonth * 12 * recurrence;
+  const currentYear    = currentMonth * 12;
+  const deltaYear      = projectedYear - currentYear;
+  const multiplier     = currentYear > 0 ? projectedYear / currentYear : 1;
+
+  // Aguja: 0° = reposo (-120°), 240° de barrido máximo → 5× = tope
+  const MAX_MULTI = 5;
+  const clamped   = Math.min(MAX_MULTI, Math.max(1, multiplier));
+  const needle    = -120 + ((clamped - 1) / (MAX_MULTI - 1)) * 240;
+
+  // Arco de llenado (mismo cálculo para el dash offset)
+  const ARC_LEN = 565; // ~ 240° de un círculo r=135
+  const fill    = ((clamped - 1) / (MAX_MULTI - 1)) * ARC_LEN;
 
   const fmt = (n: number) => new Intl.NumberFormat("es-MX", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Math.max(0, n));
 
@@ -338,106 +486,155 @@ function RoiCalculator() {
           </p>
         </div>
 
-        <div className="calc-card reveal reveal-delay-2">
-          <div className="calc-grid">
-            {/* Inputs */}
-            <div className="calc-inputs">
-              <div className="calc-field">
-                <label className="calc-label">{content.calculator.inputs.ticket_label}</label>
-                <div className="calc-input-wrap">
-                  <span className="calc-currency">$</span>
-                  <input
-                    type="number"
-                    className="calc-input"
-                    value={ticket}
-                    min={10}
-                    step={10}
-                    onChange={(e) => setTicket(Math.max(0, Number(e.target.value)))}
-                    data-track="calc_ticket"
-                  />
-                  <span className="calc-suffix">USD</span>
-                </div>
-                <span className="calc-hint">{content.calculator.inputs.ticket_hint}</span>
+        <div className="accelerator reveal reveal-delay-2">
+          <div className="accelerator-grid">
+            {/* ─── Tacómetro central ─── */}
+            <div className="tacho">
+              <svg className="tacho-svg" viewBox="0 0 320 240" aria-hidden="true">
+                <defs>
+                  <linearGradient id="tacho-fill" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%"   stopColor="#4ade80" />
+                    <stop offset="50%"  stopColor="#fbbf24" />
+                    <stop offset="100%" stopColor="#ef4444" />
+                  </linearGradient>
+                  <filter id="tacho-glow">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                {/* Track base */}
+                <path d="M 35 200 A 135 135 0 1 1 285 200" stroke="rgba(255,255,255,0.06)" strokeWidth="18" fill="none" strokeLinecap="round" />
+                {/* Fill */}
+                <path
+                  d="M 35 200 A 135 135 0 1 1 285 200"
+                  stroke="url(#tacho-fill)"
+                  strokeWidth="18"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeDasharray={ARC_LEN}
+                  strokeDashoffset={ARC_LEN - fill}
+                  style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.22,1,0.36,1)", filter: "url(#tacho-glow)" }}
+                />
+                {/* Ticks */}
+                {[1, 1.5, 2, 3, 4, 5].map((m, i) => {
+                  const angle = -120 + ((m - 1) / (MAX_MULTI - 1)) * 240;
+                  const r1 = 115, r2 = 130;
+                  const rad = (angle - 90) * Math.PI / 180;
+                  const x1 = 160 + Math.cos(rad) * r1;
+                  const y1 = 160 + Math.sin(rad) * r1;
+                  const x2 = 160 + Math.cos(rad) * r2;
+                  const y2 = 160 + Math.sin(rad) * r2;
+                  const lx = 160 + Math.cos(rad) * (r1 - 14);
+                  const ly = 160 + Math.sin(rad) * (r1 - 14);
+                  return (
+                    <g key={i}>
+                      <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+                      <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight="700" fill="rgba(255,255,255,0.55)">
+                        {m}×
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {/* Aguja */}
+              <div className="tacho-needle-wrap">
+                <div className="tacho-needle" style={{ transform: `rotate(${needle}deg)` }} />
+                <div className="tacho-hub" />
               </div>
 
-              <div className="calc-field">
-                <label className="calc-label">{content.calculator.inputs.clients_label}</label>
-                <div className="calc-input-wrap">
-                  <input
-                    type="number"
-                    className="calc-input"
-                    value={clients}
-                    min={1}
-                    step={1}
-                    onChange={(e) => setClients(Math.max(0, Number(e.target.value)))}
-                    data-track="calc_clients"
-                  />
-                  <span className="calc-suffix">clientes/mes</span>
-                </div>
-                <span className="calc-hint">{content.calculator.inputs.clients_hint}</span>
+              <div className="tacho-readout">
+                <div className="tacho-readout-label">Multiplicador anual</div>
+                <div className="tacho-readout-value">{multiplier.toFixed(2)}×</div>
+                <div className="tacho-readout-sub">vs tu facturación actual</div>
               </div>
+            </div>
 
-              <div className="calc-lever">
-                <div className="calc-lever-head">
-                  <span className="calc-lever-num">01</span>
-                  <div>
-                    <div className="calc-lever-label">{content.calculator.levers.price_label}</div>
-                    <div className="calc-lever-value">+{priceLever}%</div>
+            {/* ─── Controles tipo cockpit ─── */}
+            <div className="cockpit">
+              <div className="cockpit-row">
+                <div className="cockpit-field">
+                  <label className="cockpit-label">{content.calculator.inputs.ticket_label}</label>
+                  <div className="cockpit-input-wrap">
+                    <span className="cockpit-prefix">$</span>
+                    <input type="number" className="cockpit-input" value={ticket} min={10} step={10} onChange={(e) => setTicket(Math.max(0, Number(e.target.value)))} data-track="calc_ticket" />
+                    <span className="cockpit-suffix">USD</span>
                   </div>
+                </div>
+                <div className="cockpit-field">
+                  <label className="cockpit-label">{content.calculator.inputs.clients_label}</label>
+                  <div className="cockpit-input-wrap">
+                    <input type="number" className="cockpit-input" value={clients} min={1} step={1} onChange={(e) => setClients(Math.max(0, Number(e.target.value)))} data-track="calc_clients" />
+                    <span className="cockpit-suffix">/mes</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="throttle">
+                <div className="throttle-head">
+                  <span className="throttle-num">01</span>
+                  <div>
+                    <div className="throttle-label">{content.calculator.levers.price_label}</div>
+                    <div className="throttle-hint">{content.calculator.levers.price_hint}</div>
+                  </div>
+                  <div className="throttle-value">+{priceLever}%</div>
                 </div>
                 <input type="range" min={0} max={150} step={5} value={priceLever} onChange={(e) => setPriceLever(Number(e.target.value))} data-track="calc_price_lever" />
-                <span className="calc-hint">{content.calculator.levers.price_hint}</span>
               </div>
 
-              <div className="calc-lever">
-                <div className="calc-lever-head">
-                  <span className="calc-lever-num">02</span>
+              <div className="throttle">
+                <div className="throttle-head">
+                  <span className="throttle-num">02</span>
                   <div>
-                    <div className="calc-lever-label">{content.calculator.levers.volume_label}</div>
-                    <div className="calc-lever-value">+{volumeLever}%</div>
+                    <div className="throttle-label">{content.calculator.levers.volume_label}</div>
+                    <div className="throttle-hint">{content.calculator.levers.volume_hint}</div>
                   </div>
+                  <div className="throttle-value">+{volumeLever}%</div>
                 </div>
                 <input type="range" min={0} max={300} step={10} value={volumeLever} onChange={(e) => setVolumeLever(Number(e.target.value))} data-track="calc_volume_lever" />
-                <span className="calc-hint">{content.calculator.levers.volume_hint}</span>
               </div>
 
-              <div className="calc-lever">
-                <div className="calc-lever-head">
-                  <span className="calc-lever-num">03</span>
+              <div className="throttle">
+                <div className="throttle-head">
+                  <span className="throttle-num">03</span>
                   <div>
-                    <div className="calc-lever-label">{content.calculator.levers.recurrence_label}</div>
-                    <div className="calc-lever-value">{recurrence.toFixed(1)}x</div>
+                    <div className="throttle-label">{content.calculator.levers.recurrence_label}</div>
+                    <div className="throttle-hint">{content.calculator.levers.recurrence_hint}</div>
                   </div>
+                  <div className="throttle-value">{recurrence.toFixed(1)}×</div>
                 </div>
                 <input type="range" min={1} max={6} step={0.1} value={recurrence} onChange={(e) => setRecurrence(Number(e.target.value))} data-track="calc_recurrence_lever" />
-                <span className="calc-hint">{content.calculator.levers.recurrence_hint}</span>
               </div>
-            </div>
-
-            {/* Outputs */}
-            <div className="calc-outputs">
-              <div className="calc-output-row">
-                <span className="calc-output-label">{content.calculator.outputs.current_month}</span>
-                <span className="calc-output-value">{fmt(currentMonth)}</span>
-              </div>
-              <div className="calc-output-row">
-                <span className="calc-output-label">{content.calculator.outputs.projected_month}</span>
-                <span className="calc-output-value text-green">{fmt(projectedMonth)}</span>
-              </div>
-              <div className="calc-output-row">
-                <span className="calc-output-label">{content.calculator.outputs.projected_year}</span>
-                <span className="calc-output-value text-green big">{fmt(projectedYear)}</span>
-              </div>
-              <div className="calc-delta">
-                <span className="calc-delta-label">{content.calculator.outputs.delta_year}</span>
-                <span className="calc-delta-value">+ {fmt(deltaYear)}</span>
-              </div>
-              <button type="button" className="btn-primary calc-cta" onClick={scrollToRegistro}>
-                {content.calculator.outputs.cta} <ArrowRight />
-              </button>
-              <p className="calc-foot">{content.calculator.footnote}</p>
             </div>
           </div>
+
+          {/* Panel de resultados */}
+          <div className="dashboard-readout">
+            <div className="readout-cell">
+              <div className="readout-cell-label">{content.calculator.outputs.current_month}</div>
+              <div className="readout-cell-value">{fmt(currentMonth)}</div>
+            </div>
+            <div className="readout-cell">
+              <div className="readout-cell-label">{content.calculator.outputs.projected_month}</div>
+              <div className="readout-cell-value text-green">{fmt(projectedMonth)}</div>
+            </div>
+            <div className="readout-cell readout-cell-primary">
+              <div className="readout-cell-label">{content.calculator.outputs.projected_year}</div>
+              <div className="readout-cell-value big text-green">{fmt(projectedYear)}</div>
+            </div>
+            <div className="readout-cell readout-delta">
+              <div className="readout-cell-label">{content.calculator.outputs.delta_year}</div>
+              <div className="readout-cell-value big">+ {fmt(deltaYear)}</div>
+            </div>
+          </div>
+
+          <button type="button" className="btn-primary calc-cta" onClick={scrollToRegistro}>
+            {content.calculator.outputs.cta} <ArrowRight />
+          </button>
+          <p className="calc-foot">{content.calculator.footnote}</p>
         </div>
       </div>
     </section>
@@ -446,14 +643,45 @@ function RoiCalculator() {
 
 // ─── SPEAKER CARD ──────────────────────────────────────────
 function SpeakerCard({ s }: { s: Speaker }) {
+  const [photoOk, setPhotoOk] = useState(Boolean(s.photo));
+  const pillarColor: Record<string, string> = {
+    Mentalidad: "#00e040",
+    Velocidad:  "#4ade80",
+    Entorno:    "#fbbf24",
+  };
+
   return (
     <div className={`speaker-card${s.featured ? " featured" : ""}`}>
       {s.role && <span className="speaker-role-tag">{s.role}</span>}
-      <div className="speaker-avatar" style={{ background: s.bg ?? "linear-gradient(135deg,#1a1a1a,#333)" }}>
-        {s.initial ?? s.name.slice(0,1)}
+      <div className="speaker-avatar-wrap">
+        {s.photo && photoOk ? (
+          <img
+            className="speaker-photo"
+            src={s.photo}
+            alt={s.name}
+            loading="lazy"
+            onError={() => setPhotoOk(false)}
+          />
+        ) : (
+          <div className="speaker-avatar" style={{ background: s.bg ?? "linear-gradient(135deg,#1a1a1a,#333)" }}>
+            {s.initial ?? s.name.slice(0, 1)}
+          </div>
+        )}
+        {s.pillar && (
+          <span
+            className="speaker-pillar-chip"
+            style={{ background: `${pillarColor[s.pillar]}22`, color: pillarColor[s.pillar], borderColor: `${pillarColor[s.pillar]}55` }}
+          >
+            {s.pillar}
+          </span>
+        )}
       </div>
       <div className="speaker-name">{s.name}</div>
       <div className="speaker-title">{s.title}</div>
+      <div className="speaker-topic">
+        <span className="speaker-topic-label">Va a hablar de</span>
+        <span className="speaker-topic-text">{s.topic}</span>
+      </div>
       {s.ig && (
         <a
           className="speaker-ig"
@@ -546,6 +774,10 @@ export default function Page() {
               <span className="hero-price-strike">{content.hero.price_strike}</span>
               <span className="hero-price-now">{content.hero.price_now}</span>
             </div>
+            <div className="hero-live-badge">
+              <span className="hero-live-dot" aria-hidden="true"></span>
+              EN VIVO · Sin grabación · Sin repetición
+            </div>
             <div className="hero-date">
               <span className="hero-date-nums">{content.hero.date_nums}</span>
               <span className="hero-date-sep" />
@@ -580,12 +812,13 @@ export default function Page() {
               <h2 className="section-title reveal reveal-delay-1">
                 {content.problem.title_1} <span className="text-red">{content.problem.title_em}</span>
               </h2>
-              <p className="reveal reveal-delay-2" style={{ fontSize: 17, color: "rgba(255,255,255,0.65)", lineHeight: 1.75, marginBottom: 0 }}>
+              <p className="problem-lead reveal reveal-delay-2">{content.problem.body_lead}</p>
+              <p className="reveal reveal-delay-2" style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: 1.75, marginBottom: 0 }}>
                 {content.problem.body}
               </p>
               <ul className="problem-bullets">
                 {content.problem.bullets.map((text, i) => (
-                  <li key={i} className={`reveal reveal-delay-${i + 1}`}>
+                  <li key={i} className={`reveal reveal-delay-${(i % 4) + 1} problem-pain-item`}>
                     <span className="bullet-icon"><CheckCircle /></span>{text}
                   </li>
                 ))}
@@ -596,6 +829,31 @@ export default function Page() {
               <div className="problem-callout">
                 <p className="problem-callout-title">{content.problem.callout_title}</p>
                 <p className="problem-callout-text">{content.problem.callout_body}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ruta de 3 días */}
+          <div className="journey reveal">
+            <div className="journey-head">
+              <span className="journey-eyebrow">{content.problem.journey.eyebrow}</span>
+              <h3 className="journey-title">{content.problem.journey.title}</h3>
+            </div>
+            <div className="journey-track">
+              {content.problem.journey.steps.map((step, i) => (
+                <div key={i} className="journey-step">
+                  <div className="journey-day">{step.day}</div>
+                  <div className="journey-dot" aria-hidden="true"></div>
+                  <div className="journey-tag">{step.tag}</div>
+                  <h4 className="journey-step-title">{step.title}</h4>
+                  <p className="journey-step-body">{step.body}</p>
+                </div>
+              ))}
+              <div className="journey-arrow" aria-hidden="true">→</div>
+              <div className="journey-step journey-result">
+                <div className="journey-day">FIN</div>
+                <div className="journey-dot journey-dot-final" aria-hidden="true"></div>
+                <h4 className="journey-step-title">{content.problem.journey.result}</h4>
               </div>
             </div>
           </div>
@@ -630,30 +888,8 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ─── PRIZES ──────────────────────────────────────── */}
-      <section className="prizes section" data-section="prizes">
-        <div className="container">
-          <div className="prizes-header">
-            <span className="section-label reveal">{content.prizes.label}</span>
-            <h2 className="section-title reveal reveal-delay-1">
-              {content.prizes.title_1} <span className="text-gold">{content.prizes.title_em}</span>
-            </h2>
-            <p className="reveal reveal-delay-2" style={{ fontSize: 17, color: "rgba(255,255,255,0.55)", maxWidth: 620, margin: "0 auto" }}>
-              {content.prizes.subtitle}
-            </p>
-          </div>
-          <div className="prizes-grid">
-            {content.prizes.items.map((p, i) => (
-              <div key={i} className={`prize-card reveal reveal-delay-${(i % 4) + 1}`}>
-                <div className="prize-icon" aria-hidden="true">{p.icon}</div>
-                <div className="prize-title">{p.title}</div>
-                <div className="prize-body">{p.body}</div>
-              </div>
-            ))}
-          </div>
-          <p className="prizes-foot reveal">{content.prizes.footnote}</p>
-        </div>
-      </section>
+      {/* ─── PRIZES (RULETA) ─────────────────────────────── */}
+      <PrizesRoulette />
 
       {/* ─── SPEAKERS ────────────────────────────────────── */}
       <section className="speakers section" data-section="speakers">
@@ -862,6 +1098,9 @@ export default function Page() {
 
       {/* ─── SOCIAL PROOF POPUP ──────────────────────────── */}
       <SocialProofPopup />
+
+      {/* ─── REPLAY GATE (activa el 9 de junio) ──────────── */}
+      <ReplayGate />
     </>
   );
 }
