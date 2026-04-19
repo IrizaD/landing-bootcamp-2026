@@ -2705,34 +2705,335 @@ h2.section-title {
 .legal-body code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
 .legal-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 13px; color: var(--gray-300); }
 
-/* ─── RESPONSIVE ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE MOBILE — Ajustes completos para preservar la
+   experiencia de Manuel en viewports 430px / 375px / 360px
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── TABLET (≤ 960px) ──────────────────────────────────── */
 @media (max-width: 960px) {
-  .whatis-grid { grid-template-columns: 1fr; gap: 16px; }
+  /* WhatIs — stack columns + bridge becomes horizontal divider */
+  .whatis-split {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .whatis-bridge {
+    flex-direction: row;
+    min-width: 0;
+    min-height: 56px;
+    padding: 8px 0;
+  }
+  .whatis-bridge-line {
+    top: 50%; bottom: auto; left: 0; right: 0;
+    width: auto; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(239,68,68,0.3), rgba(0,224,64,0.5), transparent);
+    transform: translateY(-50%);
+  }
+  .whatis-bridge-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+    padding: 6px 14px;
+  }
+  .whatis-bridge-arrow {
+    transform: rotate(90deg);
+    padding: 0 8px;
+  }
+  @keyframes bridge-arrow-bounce {
+    0%, 100% { transform: rotate(90deg) translateX(0); }
+    50%      { transform: rotate(90deg) translateX(6px); }
+  }
+
+  /* Pillars — single column + keep progress connector visible */
   .pillars-scene { grid-template-columns: 1fr; gap: 16px; }
   .pillar-card { transform: none !important; }
   .pillars-connector { display: none; }
-  .calc-grid { grid-template-columns: 1fr; gap: 24px; }
+  .pillars-stage { min-height: auto; }
+
+  /* Calculator — stack tacómetro arriba, cockpit abajo */
+  .accelerator { padding: 24px; }
+  .accelerator-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* Roulette — single column, smaller wheel */
+  .roulette-wrap {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 520px;
+  }
+  .roulette-indicator { left: 50%; }
+
+  /* Footer — single column */
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
+  /* Journey — 2 columnas + resultado full-width */
+  .journey-track {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .journey-arrow { display: none; }
+  .journey-result { grid-column: 1 / -1; }
 }
 
+/* ─── MOBILE (≤ 640px) ──────────────────────────────────── */
 @media (max-width: 640px) {
-  .section                    { padding: 72px 0; }
-  .details-grid               { grid-template-columns: 1fr; }
-  .prizes-grid                { grid-template-columns: repeat(2, 1fr); }
-  .speakers-grid              { grid-template-columns: repeat(2, 1fr); }
-  .topbar-text                { font-size: 11px; }
-  .featured-quote-text        { font-size: 22px; }
-  .testimonials-featured-quote { padding: 36px 24px; }
+  /* Container — padding reducido */
+  .container                  { padding: 0 16px; }
+  .section                    { padding: 64px 0; }
+  .section-sm                 { padding: 48px 0; }
 
-  /* Hero mobile — proporciones naturales */
+  /* Topbar — compacto */
+  .topbar-inner               { gap: 10px; }
+  .topbar-text                { font-size: 10px; letter-spacing: 0.02em; }
+  .btn-topbar                 { padding: 8px 14px; font-size: 10px; }
+
+  /* Hero */
   .hero                       { padding: 24px 0 28px; min-height: auto; }
   .hero-logo                  { height: 52px; }
-  .hero-logo-wrap             { margin-bottom: 20px; }
-  .hero h1                    { font-size: 34px; line-height: 1.28; margin-bottom: 18px; }
-  .hero-sub                   { font-size: 16px; line-height: 2.0; margin-bottom: 16px; }
-  .hero-date                  { margin-bottom: 0; gap: 10px; }
-  .hero-date-nums             { font-size: 24px; }
-  .hero-date-month            { font-size: 16px; }
-  .hero-cta-group             { margin-top: 20px; }
-  .hero .btn-primary          { font-size: 13px; padding: 18px 28px; width: 100%; justify-content: center; }
+  .hero-logo-wrap             { margin-bottom: 18px; }
+  .hero h1                    { font-size: 34px; line-height: 1.28; margin-bottom: 16px; }
+  .hero-sub                   { font-size: 15px; line-height: 1.7; margin-bottom: 14px; padding: 0 4px; }
+  .hero-cta-group             { margin-top: 18px; }
+  .hero .btn-primary          { font-size: 13px; padding: 16px 24px; width: 100%; justify-content: center; }
+
+  /* Hero price + live badge — compactos y en línea */
+  .hero-price {
+    gap: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .hero-live-badge {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    padding: 7px 12px;
+    margin-top: 10px;
+    gap: 8px;
+  }
+
+  /* Hero date row — separadores desaparecen, todo wrap */
+  .hero-date {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 12px;
+    margin-bottom: 0;
+  }
+  .hero-date-sep              { display: none; }
+  .hero-date-nums             { font-size: 22px; }
+  .hero-date-month            { font-size: 15px; }
+  .hero-date-tag              { font-size: 10px; flex-basis: 100%; text-align: center; }
+
+  /* Titles genéricos */
+  .section-title              { font-size: clamp(26px, 8vw, 34px); line-height: 1.15; }
+
+  /* Details + featured quote */
+  .details-grid               { grid-template-columns: 1fr; gap: 18px; }
+  .featured-quote-text        { font-size: 20px; }
+  .testimonials-featured-quote { padding: 32px 20px; }
+
+  /* WhatIs — textos y paddings */
+  .whatis-col                 { padding: 24px 20px; }
+  .whatis-col-label           { font-size: 16px; }
+  .whatis-col-mark            { width: 38px; height: 38px; font-size: 18px; }
+  .whatis-item-title          { font-size: 15px; }
+  .whatis-item-body           { font-size: 13px; }
+  .whatis-closing             { margin-top: 40px; }
+  .whatis-header              { margin-bottom: 36px; }
+
+  /* Problem — bullets con padding menor */
+  .problem-lead               { font-size: 17px; }
+  .problem-pain-item          { font-size: 14px; }
+  .problem-bullets li         { padding: 12px 0; }
+
+  /* Journey — vertical stack total */
+  .journey                    { padding: 28px 20px; margin-top: 56px; }
+  .journey-track              { grid-template-columns: 1fr; gap: 12px; }
+  .journey-step               { padding: 16px 14px; }
+  .journey-step-title         { font-size: 15px; }
+  .journey-step-body          { font-size: 12.5px; }
+  .journey-result             { grid-column: 1; }
+
+  /* Pillars */
+  .pillars-header             { margin-bottom: 40px; }
+  .pillar-card                { padding: 28px 20px 24px; }
+  .pillar-num                 { font-size: 64px; }
+  .pillar-title               { font-size: 20px; }
+  .pillar-headline            { font-size: 14px; }
+  .pillar-body                { font-size: 13px; }
+  .pillars-synthesis          { margin-top: 56px; }
+  .pillars-synthesis-equation { font-size: clamp(22px, 7vw, 32px); gap: 10px; }
+
+  /* Calculator — tacómetro compacto, readout 2x2 */
+  .calculator-header          { margin-bottom: 36px; }
+  .accelerator                { padding: 20px 16px; border-radius: 20px; }
+  .tacho                      { max-width: 320px; aspect-ratio: 320 / 220; }
+  .tacho-readout              { bottom: 4%; }
+  .tacho-readout-value        { font-size: 32px; }
+  .tacho-readout-label        { font-size: 8.5px; }
+  .tacho-readout-sub          { font-size: 10px; }
+  .cockpit-row                { gap: 10px; }
+  .cockpit-input              { font-size: 18px; padding: 10px 0; }
+  .cockpit-input-wrap         { padding: 0 12px; }
+  .cockpit-prefix, .cockpit-suffix { font-size: 11px; }
+  .throttle                   { padding: 12px 14px; }
+  .throttle-head              { grid-template-columns: auto 1fr auto; gap: 10px; margin-bottom: 8px; }
+  .throttle-num               { font-size: 18px; }
+  .throttle-label             { font-size: 13px; }
+  .throttle-hint              { font-size: 10.5px; }
+  .throttle-value             { font-size: 15px; }
+  .throttle input[type="range"]::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -9px; }
+  .dashboard-readout          { grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+  .readout-cell               { padding: 12px 14px; }
+  .readout-cell-label         { font-size: 9px; }
+  .readout-cell-value         { font-size: 16px; }
+  .readout-cell-value.big     { font-size: 22px; }
+
+  /* Prizes — roulette compacta */
+  .prizes-header              { margin-bottom: 36px; }
+  .roulette-wheel {
+    width: min(320px, 92%);
+  }
+  .roulette-slot {
+    width: 82px;
+    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-50% - 18px));
+  }
+  .roulette-slot-icon         { font-size: 20px; margin-bottom: 2px; }
+  .roulette-slot-title        { font-size: 9px; letter-spacing: 0.04em; }
+  .roulette-hub               { width: 110px; height: 110px; border-width: 2px; }
+  .roulette-hub-amount        { font-size: 20px; }
+  .roulette-hub-label, .roulette-hub-currency { font-size: 8px; }
+  .roulette-legend            { padding: 18px; border-radius: 16px; }
+  .roulette-legend-icon       { font-size: 28px; }
+  .roulette-legend-title      { font-size: 15px; }
+  .roulette-legend-body       { font-size: 12px; }
+  .roulette-legend-card       { padding: 12px; }
+  .roulette-legend-list li    { font-size: 11.5px; }
+  .prizes-live-note           { font-size: 10.5px; letter-spacing: 0.1em; padding: 12px 18px; margin-top: 36px; }
+  .prizes-grid                { grid-template-columns: repeat(2, 1fr); }
+
+  /* Speakers grid — 2 columnas */
+  .speakers-grid              { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 44px; }
+  .speaker-card               { padding: 20px 14px; }
+  .speaker-avatar-wrap        { width: 72px; height: 72px; margin-bottom: 12px; }
+  .speaker-avatar-wrap .speaker-avatar,
+  .speaker-photo              { width: 72px; height: 72px; }
+  .speaker-card.featured .speaker-avatar { width: 72px; height: 72px; }
+  .speaker-name               { font-size: 13px; }
+  .speaker-title              { font-size: 10.5px; }
+  .speaker-topic              { margin-top: 10px; padding: 8px 10px; }
+  .speaker-topic-label        { font-size: 8px; }
+  .speaker-topic-text         { font-size: 11px; line-height: 1.35; }
+  .speaker-ig                 { font-size: 10px; padding: 5px 10px; margin-top: 10px; }
+  .speaker-pillar-chip        { font-size: 8px; padding: 2px 6px; }
+  .speaker-role-tag           { font-size: 9px; padding: 3px 8px; }
+
+  /* Credentials */
+  .credentials-stats          { gap: 20px; }
+  .cred-stat-number           { font-size: 32px; }
+  .cred-stat-label            { font-size: 12px; }
+
+  /* Bonus */
+  .bonus-card                 { padding: 36px 22px; }
+  .bonus-card h2              { font-size: 24px; }
+
+  /* Registration */
+  .form-card                  { padding: 28px 20px; }
+  .registration h2            { font-size: clamp(26px, 7vw, 34px); }
+  .form-input                 { font-size: 15px; padding: 14px 16px; }
+  .btn-submit                 { font-size: 14px; padding: 16px; }
+
+  /* Footer */
+  .footer-grid                { padding: 36px 0 24px; gap: 28px; }
+  .footer-disclaimer-text     { font-size: 10.5px; }
+
+  /* Popup social proof — más pequeño y fuera del camino */
+  .popup-proof {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    padding: 12px 36px 12px 54px;
+    border-radius: 14px;
+  }
+  .popup-avatar               { left: 10px; top: 12px; width: 32px; height: 32px; font-size: 13px; }
+  .popup-name                 { font-size: 12px; }
+  .popup-action               { font-size: 11px; }
+  .popup-time                 { font-size: 10px; }
+
+  /* Replay modal */
+  .replay-modal               { padding: 32px 22px; border-radius: 20px; }
+  .replay-title               { font-size: 22px; }
+  .replay-body                { font-size: 14px; }
+  .replay-actions             { flex-direction: column; gap: 10px; }
+  .replay-actions .btn-primary,
+  .replay-actions .btn-ghost  { width: 100%; justify-content: center; }
+}
+
+/* ─── SMALL MOBILE (≤ 420px) ────────────────────────────── */
+@media (max-width: 420px) {
+  .container                  { padding: 0 14px; }
+  .section                    { padding: 56px 0; }
+
+  /* Topbar — en 2 líneas si hace falta */
+  .topbar                     { padding: 10px 0; }
+  .topbar-inner               { flex-direction: column; gap: 8px; align-items: stretch; }
+  .topbar-text                { text-align: center; }
+  .btn-topbar                 { align-self: center; }
+
+  /* Hero — más compacto aún */
+  .hero h1                    { font-size: 30px; }
+  .hero-sub                   { font-size: 14px; }
+  .hero-logo                  { height: 44px; }
+  .hero-price                 { font-size: 11px; flex-wrap: wrap; justify-content: center; }
+  .hero-live-badge            { font-size: 9px; padding: 6px 10px; letter-spacing: 0.14em; }
+
+  /* Calculator — cockpit inputs en columna */
+  .cockpit-row                { grid-template-columns: 1fr; gap: 10px; }
+  .tacho                      { max-width: 280px; }
+  .tacho-readout-value        { font-size: 28px; }
+
+  /* Roulette — wheel aún más compacta */
+  .roulette-wheel             { width: min(280px, 90%); }
+  .roulette-slot              { width: 72px; transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-50% - 12px)); }
+  .roulette-slot-icon         { font-size: 18px; }
+  .roulette-slot-title        { font-size: 8.5px; }
+  .roulette-hub               { width: 96px; height: 96px; }
+  .roulette-hub-amount        { font-size: 17px; }
+
+  /* Speakers — 1 columna en viewports muy pequeños */
+  .speakers-grid              { grid-template-columns: 1fr; max-width: 320px; margin: 44px auto 0; }
+  .speaker-avatar-wrap        { width: 80px; height: 80px; }
+  .speaker-avatar-wrap .speaker-avatar,
+  .speaker-photo              { width: 80px; height: 80px; }
+
+  /* Pillars */
+  .pillar-num                 { font-size: 56px; }
+
+  /* Details */
+  .detail-item                { padding: 24px 18px; }
+}
+
+/* ─── PERFORMANCE: apagar spins en dispositivos de menos poder ── */
+@media (max-width: 640px) {
+  .roulette-wheel,
+  .roulette-slot-inner,
+  .roulette-hub {
+    animation-duration: 88s; /* 2x más lento para reducir jank */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roulette-wheel,
+  .roulette-slot-inner,
+  .roulette-hub {
+    animation: none !important;
+  }
+  .whatis-bridge-arrow,
+  .hero-live-dot,
+  .prizes-live-pulse,
+  .roulette-legend-eyebrow::before,
+  .roulette-indicator {
+    animation: none !important;
+  }
 }
