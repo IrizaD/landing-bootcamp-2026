@@ -2947,19 +2947,8 @@ h2.section-title {
   .footer-grid                { padding: 36px 0 24px; gap: 28px; }
   .footer-disclaimer-text     { font-size: 10.5px; }
 
-  /* Popup social proof — más pequeño y fuera del camino */
-  .popup-proof {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    width: auto;
-    padding: 12px 36px 12px 54px;
-    border-radius: 14px;
-  }
-  .popup-avatar               { left: 10px; top: 12px; width: 32px; height: 32px; font-size: 13px; }
-  .popup-name                 { font-size: 12px; }
-  .popup-action               { font-size: 11px; }
-  .popup-time                 { font-size: 10px; }
+  /* Popup social proof — oculto en mobile */
+  .popup-proof { display: none !important; }
 
   /* Replay modal */
   .replay-modal               { padding: 32px 22px; border-radius: 20px; }

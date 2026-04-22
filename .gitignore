@@ -11,6 +11,7 @@
 # env
 .env*.local
 .env
+.env.production
 
 # vercel
 .vercel
