@@ -1237,14 +1237,29 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <button onClick={handleLogout}
-          style={{
-            background:"transparent", border:`1px solid ${C.border}`, color: C.textMuted,
-            borderRadius:"10px", padding:"9px 18px", fontSize:"12.5px", cursor:"pointer", flexShrink:0,
-            fontFamily: FONT_HEAD, textTransform:"uppercase", letterSpacing:"0.05em", fontWeight:700,
-          }}>
-          Salir
-        </button>
+        <div style={{ display:"flex", gap:"8px", flexShrink:0 }}>
+          <a href="/ops"
+            style={{
+              display:"flex", alignItems:"center", gap:"7px",
+              background: C.accentSoft, border:`1px solid ${C.borderHi}`, color: C.accent,
+              borderRadius:"10px", padding:"9px 16px", fontSize:"12.5px", cursor:"pointer",
+              fontFamily: FONT_HEAD, textTransform:"uppercase", letterSpacing:"0.05em", fontWeight:700,
+              textDecoration:"none",
+            }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Ops
+          </a>
+          <button onClick={handleLogout}
+            style={{
+              background:"transparent", border:`1px solid ${C.border}`, color: C.textMuted,
+              borderRadius:"10px", padding:"9px 18px", fontSize:"12.5px", cursor:"pointer",
+              fontFamily: FONT_HEAD, textTransform:"uppercase", letterSpacing:"0.05em", fontWeight:700,
+            }}>
+            Salir
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}

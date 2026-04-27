@@ -3,9 +3,9 @@ import { OPS_COOKIE } from "@/lib/ops/auth";
 
 export async function POST(req: NextRequest) {
   const { password } = (await req.json()) as { password?: string };
-  const expected = process.env.OPS_PASSWORD?.trim();
+  const expected = process.env.DASHBOARD_PASSWORD?.trim();
   if (!expected) {
-    return NextResponse.json({ error: "ops_password_not_configured" }, { status: 500 });
+    return NextResponse.json({ error: "password_not_configured" }, { status: 500 });
   }
   if (!password || password !== expected) {
     return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });

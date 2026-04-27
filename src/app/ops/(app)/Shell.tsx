@@ -337,6 +337,44 @@ export default function Shell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
+        {/* Switch to Dashboard */}
+        <Link
+          href="/dashboard"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            padding: "11px 14px",
+            borderRadius: "12px",
+            background: "rgba(255,255,255,0.03)",
+            border: `1px solid ${OPS.border}`,
+            color: OPS.textMuted,
+            textDecoration: "none",
+            fontFamily: OPS_FONT_HEAD,
+            fontSize: "11px",
+            fontWeight: 700,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            transition: `color 220ms ${EASE}, border-color 220ms ${EASE}, background 220ms ${EASE}`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = OPS.text;
+            e.currentTarget.style.borderColor = OPS.borderHi;
+            e.currentTarget.style.background = OPS.accentSoft;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = OPS.textMuted;
+            e.currentTarget.style.borderColor = OPS.border;
+            e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+          }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+            <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+          </svg>
+          Dashboard Analytics
+        </Link>
+
         {/* Nav */}
         <nav style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           <div
