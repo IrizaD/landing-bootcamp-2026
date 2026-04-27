@@ -812,7 +812,331 @@ function SeccionConfiguracion({ funnels }: { funnels: Funnel[]; onRefresh: () =>
 
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
-type Tab = "metricas" | "engagement" | "leads" | "config";
+// ─── Speaker types ────────────────────────────────────────────────────────────
+
+interface SpeakerRow {
+  id:        string;
+  name:      string;
+  role:      string | null;
+  title:     string;
+  topic:     string;
+  pillar:    string | null;
+  ig:        string | null;
+  photo_url: string | null;
+  featured:  boolean;
+  order:     number;
+  active:    boolean;
+}
+
+const PILLAR_OPTIONS = ["", "Mentalidad", "Velocidad", "Entorno"];
+const ROLE_OPTIONS   = ["", "Host", "Co-host"];
+
+function SpeakerForm({
+  initial,
+  onSave,
+  onCancel,
+  saving,
+}: {
+  initial?: Partial<SpeakerRow>;
+  onSave: (data: Partial<SpeakerRow>, file?: File) => Promise<void>;
+  onCancel: () => void;
+  saving: boolean;
+}) {
+  const [form, setForm] = useState<Partial<SpeakerRow>>(initial ?? { featured: false, order: 0, active: true });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>(initial?.photo_url ?? "");
+
+  function set(key: keyof SpeakerRow, value: unknown) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setFile(f);
+    const reader = new FileReader();
+    reader.onload = (ev) => setPreview(String(ev.target?.result ?? ""));
+    reader.readAsDataURL(f);
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%", background: C.bgSubtle, border: `1px solid ${C.border}`,
+    color: C.text, borderRadius: "10px", padding: "11px 14px", fontSize: "14px",
+    boxSizing: "border-box", outline: "none", fontFamily: FONT_BODY,
+  };
+  const labelStyle: React.CSSProperties = {
+    color: C.textDim, fontSize: "10.5px", fontWeight: 700, textTransform: "uppercase",
+    letterSpacing: "0.1em", marginBottom: "5px", display: "block", fontFamily: FONT_HEAD,
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      {/* Foto */}
+      <div>
+        <label style={labelStyle}>Foto del speaker</label>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          {preview ? (
+            <img src={preview} alt="preview" style={{ width: 72, height: 72, borderRadius: "50%", objectFit: "cover", border: `2px solid ${C.accent}` }} />
+          ) : (
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: C.bgSubtle, border: `2px dashed ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", color: C.textDim, fontSize: "24px" }}>?</div>
+          )}
+          <label style={{ cursor: "pointer", background: C.accentSoft, border: `1px solid ${C.borderHi}`, color: C.accent, borderRadius: "8px", padding: "9px 16px", fontSize: "13px", fontWeight: 700, fontFamily: FONT_HEAD }}>
+            Subir imagen
+            <input type="file" accept="image/*" onChange={onFileChange} style={{ display: "none" }} />
+          </label>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+        <div>
+          <label style={labelStyle}>Nombre *</label>
+          <input style={inputStyle} value={form.name ?? ""} onChange={(e) => set("name", e.target.value)} placeholder="Jorge Serratos" />
+        </div>
+        <div>
+          <label style={labelStyle}>Rol</label>
+          <select style={{ ...inputStyle, cursor: "pointer" }} value={form.role ?? ""} onChange={(e) => set("role", e.target.value || null)}>
+            {ROLE_OPTIONS.map((r) => <option key={r} value={r}>{r || "— Sin rol —"}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label style={labelStyle}>Bio corta (quién es) *</label>
+        <input style={inputStyle} value={form.title ?? ""} onChange={(e) => set("title", e.target.value)} placeholder="Fundador Sinergéticos · Autor Best Seller" />
+      </div>
+
+      <div>
+        <label style={labelStyle}>Tema en el Bootcamp *</label>
+        <input style={inputStyle} value={form.topic ?? ""} onChange={(e) => set("topic", e.target.value)} placeholder="Cómo construir un movimiento, no solo un negocio" />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+        <div>
+          <label style={labelStyle}>Pilar</label>
+          <select style={{ ...inputStyle, cursor: "pointer" }} value={form.pillar ?? ""} onChange={(e) => set("pillar", e.target.value || null)}>
+            {PILLAR_OPTIONS.map((p) => <option key={p} value={p}>{p || "— Sin pilar —"}</option>)}
+          </select>
+        </div>
+        <div>
+          <label style={labelStyle}>Instagram (sin @)</label>
+          <input style={inputStyle} value={form.ig ?? ""} onChange={(e) => set("ig", e.target.value || null)} placeholder="jorgeserratos" />
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px" }}>
+        <div>
+          <label style={labelStyle}>Orden</label>
+          <input type="number" style={inputStyle} value={form.order ?? 0} onChange={(e) => set("order", Number(e.target.value))} min={0} />
+        </div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: "10px", paddingBottom: "2px" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input type="checkbox" checked={form.featured ?? false} onChange={(e) => set("featured", e.target.checked)} />
+            <span style={{ color: C.textMuted, fontSize: "13px" }}>Destacado</span>
+          </label>
+        </div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: "10px", paddingBottom: "2px" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input type="checkbox" checked={form.active ?? true} onChange={(e) => set("active", e.target.checked)} />
+            <span style={{ color: C.textMuted, fontSize: "13px" }}>Activo</span>
+          </label>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
+        <button
+          onClick={() => onSave(form, file ?? undefined)}
+          disabled={saving || !form.name || !form.title || !form.topic}
+          style={{
+            background: C.accent, color: "#000", border: "none",
+            borderRadius: "10px", padding: "12px 26px", fontSize: "14px", fontWeight: 800,
+            cursor: "pointer", fontFamily: FONT_HEAD, textTransform: "uppercase", letterSpacing: "0.05em",
+            opacity: (!form.name || !form.title || !form.topic) ? 0.4 : 1,
+          }}>
+          {saving ? "Guardando..." : "Guardar"}
+        </button>
+        <button
+          onClick={onCancel}
+          style={{
+            background: "none", color: C.textMuted, border: `1px solid ${C.border}`,
+            borderRadius: "10px", padding: "12px 22px", fontSize: "14px", fontWeight: 700,
+            cursor: "pointer", fontFamily: FONT_HEAD,
+          }}>
+          Cancelar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function SeccionSpeakers() {
+  const [speakers, setSpeakers] = useState<SpeakerRow[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [editId, setEditId]     = useState<string | null>(null);
+  const [saving, setSaving]     = useState(false);
+
+  async function load() {
+    setLoading(true);
+    const r = await fetch("/api/speakers");
+    const d = await r.json();
+    setSpeakers(Array.isArray(d) ? d : []);
+    setLoading(false);
+  }
+
+  useEffect(() => { load(); }, []);
+
+  async function uploadPhoto(file: File): Promise<string> {
+    const fd = new FormData();
+    fd.append("file", file);
+    const r = await fetch("/api/speakers/upload", { method: "POST", body: fd });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    return d.url as string;
+  }
+
+  async function handleCreate(form: Partial<SpeakerRow>, file?: File) {
+    setSaving(true);
+    try {
+      let photo_url = form.photo_url ?? null;
+      if (file) photo_url = await uploadPhoto(file);
+      await fetch("/api/speakers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, photo_url }),
+      });
+      setCreating(false);
+      await load();
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleEdit(id: string, form: Partial<SpeakerRow>, file?: File) {
+    setSaving(true);
+    try {
+      let photo_url = form.photo_url;
+      if (file) photo_url = await uploadPhoto(file);
+      await fetch(`/api/speakers/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, photo_url }),
+      });
+      setEditId(null);
+      await load();
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("¿Eliminar este speaker?")) return;
+    await fetch(`/api/speakers/${id}`, { method: "DELETE" });
+    await load();
+  }
+
+  const pillarColor: Record<string, string> = {
+    Mentalidad: C.accent,
+    Velocidad:  "#4ade80",
+    Entorno:    C.gold,
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <h3 style={{ color: C.text, fontWeight: 800, fontSize: "1.1rem", fontFamily: FONT_HEAD, letterSpacing: "-0.01em", margin: 0 }}>
+            Speakers del Bootcamp
+          </h3>
+          <p style={{ color: C.textDim, fontSize: "12.5px", margin: "4px 0 0" }}>
+            Los speakers aquí reemplazan la lista estática de la landing.
+          </p>
+        </div>
+        {!creating && (
+          <button
+            onClick={() => setCreating(true)}
+            style={{
+              background: C.accent, color: "#000", border: "none",
+              borderRadius: "10px", padding: "11px 22px", fontSize: "13px", fontWeight: 800,
+              cursor: "pointer", fontFamily: FONT_HEAD, textTransform: "uppercase", letterSpacing: "0.05em",
+            }}>
+            + Agregar speaker
+          </button>
+        )}
+      </div>
+
+      {creating && (
+        <div style={{ background: C.bgCard, border: `1px solid ${C.borderHi}`, borderRadius: "14px", padding: "24px" }}>
+          <p style={{ color: C.accent, fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "18px", fontFamily: FONT_HEAD }}>Nuevo speaker</p>
+          <SpeakerForm
+            onSave={handleCreate}
+            onCancel={() => setCreating(false)}
+            saving={saving}
+          />
+        </div>
+      )}
+
+      {loading ? (
+        <p style={{ color: C.textMuted }}>Cargando speakers...</p>
+      ) : speakers.length === 0 && !creating ? (
+        <div style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: "14px", padding: "36px", textAlign: "center" }}>
+          <p style={{ color: C.textMuted, marginBottom: "14px" }}>No hay speakers en la base de datos.</p>
+          <p style={{ color: C.textDim, fontSize: "13px" }}>Mientras esté vacío, la landing muestra los speakers del archivo estático.</p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {speakers.map((sp) => (
+            <div key={sp.id} style={{ background: C.bgCard, border: `1px solid ${editId === sp.id ? C.borderHi : C.border}`, borderRadius: "14px", padding: "20px 22px" }}>
+              {editId === sp.id ? (
+                <>
+                  <p style={{ color: C.accent, fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "16px", fontFamily: FONT_HEAD }}>Editando: {sp.name}</p>
+                  <SpeakerForm
+                    initial={sp}
+                    onSave={(form, file) => handleEdit(sp.id, form, file)}
+                    onCancel={() => setEditId(null)}
+                    saving={saving}
+                  />
+                </>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                  {sp.photo_url ? (
+                    <img src={sp.photo_url} alt={sp.name} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+                  ) : (
+                    <div style={{ width: 52, height: 52, borderRadius: "50%", background: C.bgSubtle, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted, fontSize: "18px", fontWeight: 700, flexShrink: 0, fontFamily: FONT_HEAD }}>
+                      {sp.name.slice(0, 1)}
+                    </div>
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                      <span style={{ color: C.text, fontWeight: 700, fontSize: "14px", fontFamily: FONT_HEAD }}>{sp.name}</span>
+                      {sp.role && <span style={{ background: C.accentSoft, color: C.accent, border: `1px solid ${C.borderHi}`, borderRadius: "6px", padding: "2px 8px", fontSize: "11px", fontWeight: 700 }}>{sp.role}</span>}
+                      {sp.pillar && <span style={{ background: `${pillarColor[sp.pillar] ?? C.accent}18`, color: pillarColor[sp.pillar] ?? C.accent, borderRadius: "6px", padding: "2px 8px", fontSize: "11px", fontWeight: 700 }}>{sp.pillar}</span>}
+                      {!sp.active && <span style={{ background: "rgba(239,68,68,0.1)", color: C.danger, borderRadius: "6px", padding: "2px 8px", fontSize: "11px", fontWeight: 700 }}>Inactivo</span>}
+                    </div>
+                    <p style={{ color: C.textMuted, fontSize: "12.5px", margin: "3px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sp.title}</p>
+                  </div>
+                  <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+                    <button
+                      onClick={() => setEditId(sp.id)}
+                      style={{ background: C.accentSoft, border: `1px solid ${C.borderHi}`, color: C.accent, borderRadius: "8px", padding: "8px 14px", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: FONT_HEAD }}>
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(sp.id)}
+                      style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: C.danger, borderRadius: "8px", padding: "8px 14px", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: FONT_HEAD }}>
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+type Tab = "metricas" | "engagement" | "leads" | "speakers" | "config";
 
 export default function DashboardPage() {
   const [tab, setTab]               = useState<Tab>("metricas");
@@ -861,6 +1185,7 @@ export default function DashboardPage() {
     { id:"metricas",   label:"Métricas" },
     { id:"engagement", label:"Engagement" },
     { id:"leads",      label:"Leads" },
+    { id:"speakers",   label:"Speakers" },
     { id:"config",     label:"Configuración" },
   ];
 
@@ -946,7 +1271,9 @@ export default function DashboardPage() {
 
       {/* Content */}
       <div style={{ maxWidth:"1200px", margin:"0 auto", padding:"28px 20px 80px" }}>
-        {!selectedSlug ? (
+        {tab === "speakers" ? (
+          <SeccionSpeakers />
+        ) : !selectedSlug ? (
           <p style={{ color: C.textMuted }}>Cargando funnels...</p>
         ) : (
           <>

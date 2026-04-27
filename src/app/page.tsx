@@ -752,7 +752,33 @@ export default function Page() {
     setLoading(false);
   }
 
-  const speakers = useMemo(() => content.speakers.list, []);
+  const [dbSpeakers, setDbSpeakers] = useState<Speaker[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/speakers")
+      .then((r) => r.json())
+      .then((data: unknown) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        const mapped = (data as Array<Record<string, unknown>>).map((sp) => ({
+          name:     String(sp.name ?? ""),
+          role:     sp.role     ? String(sp.role)     : null,
+          title:    String(sp.title   ?? ""),
+          topic:    String(sp.topic   ?? ""),
+          pillar:   sp.pillar   ? (String(sp.pillar) as Speaker["pillar"])  : undefined,
+          ig:       sp.ig       ? String(sp.ig)       : undefined,
+          photo:    sp.photo_url ? String(sp.photo_url) : undefined,
+          featured: Boolean(sp.featured),
+          initial:  String(sp.name ?? "").slice(0, 1),
+        }));
+        setDbSpeakers(mapped);
+      })
+      .catch(() => {});
+  }, []);
+
+  const speakers = useMemo(
+    () => dbSpeakers ?? content.speakers.list,
+    [dbSpeakers]
+  );
 
   return (
     <>
@@ -788,7 +814,7 @@ export default function Page() {
             <h1>{content.hero.h1_part1}<br /><em>{content.hero.h1_em}</em></h1>
             <p className="hero-sub">{content.hero.subhead}</p>
             <div className="hero-price">
-              <span className="hero-price-strike">{content.hero.price_strike}</span>
+              {content.hero.price_strike && <span className="hero-price-strike">{content.hero.price_strike}</span>}
               <span className="hero-price-now">{content.hero.price_now}</span>
             </div>
             <div className="hero-live-badge">
@@ -961,12 +987,14 @@ export default function Page() {
               </div>
             ))}
           </div>
-          <div className="featured-quote-block reveal">
-            <div className="featured-quote-text">&ldquo;{content.testimonials.featured_quote}&rdquo;</div>
-            <div className="featured-quote-author">
-              — <span>{content.testimonials.featured_author}</span>, {content.testimonials.featured_role}
+          {content.testimonials.featured_quote && (
+            <div className="featured-quote-block reveal">
+              <div className="featured-quote-text">&ldquo;{content.testimonials.featured_quote}&rdquo;</div>
+              <div className="featured-quote-author">
+                — <span>{content.testimonials.featured_author}</span>, {content.testimonials.featured_role}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
