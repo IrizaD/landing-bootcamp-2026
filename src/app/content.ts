@@ -276,7 +276,7 @@ export const content = {
     // IG handles verificados públicamente (abril 2026) — cuenta con más seguidores / verificada.
     // Fotos: sube cada imagen a /public/speakers/<handle>.jpg y se cargan automáticamente.
     list: [
-      { name: "Jorge Serratos",     role: "Host",     title: "Fundador Sinergéticos · Autor Best Seller · Podcast #1 Negocios México",
+      { name: "Jorge Serratos",     role: "Host",     title: "CEO Grupo Serlo · Doctor en derecho · Podcast Sinergéticos #1 Negocios México · +11M seguidores",
         topic: "Cómo construir un movimiento, no solo un negocio",
         pillar: "Entorno", featured: true, ig: "jorgeserratos", photo: "/speakers/jorgeserratos.jpg", initial: "J", bg: "linear-gradient(135deg,#00e040,#005a18)" },
 
@@ -384,13 +384,13 @@ export const content = {
 
   // ─── CREDENCIALES (Jorge) ─────────────────────────────────────────────────
   credentials: {
-    host_badge: "Tu host en el Bootcamp",
+    host_badge: "Host del Bootcamp",
     name_1:     "Jorge",
     name_em:    "Serratos",
-    bio:        "No es un nativo digital. Es abogado y empresario que construyó todo esto desde cero, igual que tú. Hoy lidera el movimiento sinergético más grande del mundo hispano y viene al Bootcamp a despertarte, no a motivarte.",
+    bio:        "Doctor en derecho, empresario y CEO de Grupo Serlo — un conglomerado de 6 empresas que incluye Sinertegia, Sinergia Academy, Stario Capital y WAS Editorial. Host del podcast Sinergéticos #1 de negocios en México. Lleva más de 11 millones de seguidores con una sola idea: que \"1+1=3\". No viene al Bootcamp a motivarte — viene a mostrarte cómo construir el sistema.",
     stats: [
-      { number: "+20,000",   label: "emprendedores ayudados a convertir su conocimiento en un negocio digital rentable" },
-      { number: "+$2M USD",  label: "invertidos en capacitación con los mejores del mundo" },
+      { number: "+11M",      label: "seguidores en todas sus plataformas" },
+      { number: "+20,000",   label: "emprendedores que ya convirtieron su conocimiento en un negocio digital rentable" },
       { number: "209M",      label: "personas de alcance · Podcast Sinergéticos #1 Negocios México · +100k calificaciones" },
     ],
   },
