@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import db from "@/lib/db";
 import { isOpsAuthed } from "@/lib/ops/auth";
 
@@ -51,6 +52,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         .insert(assignees.map((member_id) => ({ task_id: id, member_id })));
     }
   }
+  revalidateTag("ops_tasks", "max");
   return NextResponse.json({ ok: true });
 }
 
@@ -62,5 +64,6 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
   if (!Number.isFinite(id)) return NextResponse.json({ error: "invalid_id" }, { status: 400 });
   const { error } = await db.from("ops_tasks").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  revalidateTag("ops_tasks", "max");
   return NextResponse.json({ ok: true });
 }

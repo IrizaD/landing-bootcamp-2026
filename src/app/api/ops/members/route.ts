@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import db from "@/lib/db";
 import { isOpsAuthed } from "@/lib/ops/auth";
 
@@ -43,5 +44,6 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  revalidateTag("ops_members", "max");
   return NextResponse.json(data);
 }
