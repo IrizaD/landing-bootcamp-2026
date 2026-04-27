@@ -9,6 +9,8 @@ import {
   UsersThreeIcon,
   ChartLineIcon,
   SignOutIcon,
+  ListIcon,
+  XIcon,
 } from "@phosphor-icons/react";
 import { OPS, OPS_FONT_HEAD, OPS_FONT_BODY, MESH_BG, EASE } from "@/lib/ops/theme";
 
@@ -75,6 +77,98 @@ export default function Shell({ children }: { children: ReactNode }) {
         }}
       />
 
+      {/* Mobile topbar */}
+      <div
+        className="ops-mobile-topbar"
+        style={{
+          display: "none",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "14px 20px",
+          borderBottom: `1px solid ${OPS.border}`,
+          background: "rgba(5,6,8,0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          position: "sticky",
+          top: 0,
+          zIndex: 8,
+        }}
+      >
+        <Link
+          href="/ops"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            textDecoration: "none",
+            color: OPS.text,
+          }}
+        >
+          <span
+            style={{
+              width: "30px",
+              height: "30px",
+              borderRadius: "10px",
+              background: OPS.accent,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#000",
+              fontFamily: OPS_FONT_HEAD,
+              fontWeight: 900,
+              fontSize: "12px",
+              letterSpacing: "-0.04em",
+              boxShadow: `0 0 16px ${OPS.accentGlow}`,
+            }}
+          >
+            SY
+          </span>
+          <span
+            style={{
+              fontFamily: OPS_FONT_HEAD,
+              fontSize: "13px",
+              fontWeight: 800,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Synergy Ops
+          </span>
+        </Link>
+        <button
+          onClick={() => setMobileOpen(true)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "36px",
+            height: "36px",
+            borderRadius: "10px",
+            background: "rgba(255,255,255,0.05)",
+            border: `1px solid ${OPS.border}`,
+            color: OPS.text,
+            cursor: "pointer",
+          }}
+          aria-label="Abrir menú"
+        >
+          <ListIcon size={18} weight="bold" />
+        </button>
+      </div>
+
+      {/* Backdrop */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+            zIndex: 9,
+          }}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         style={{
@@ -82,7 +176,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           top: 0,
           height: "100dvh",
           borderRight: `1px solid ${OPS.border}`,
-          background: "rgba(5,6,8,0.65)",
+          background: "rgba(5,6,8,0.85)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           padding: "28px 20px",
@@ -91,8 +185,31 @@ export default function Shell({ children }: { children: ReactNode }) {
           gap: "28px",
           zIndex: 10,
         }}
-        className="ops-sidebar"
+        className={`ops-sidebar${mobileOpen ? " ops-sidebar--open" : ""}`}
       >
+        {/* Mobile close button */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="ops-sidebar-close"
+          style={{
+            display: "none",
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "32px",
+            height: "32px",
+            borderRadius: "8px",
+            background: "rgba(255,255,255,0.05)",
+            border: `1px solid ${OPS.border}`,
+            color: OPS.textMuted,
+            cursor: "pointer",
+          }}
+          aria-label="Cerrar menú"
+        >
+          <XIcon size={16} weight="bold" />
+        </button>
         {/* Brand */}
         <Link
           href="/ops"
@@ -241,6 +358,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setMobileOpen(false)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -317,19 +435,30 @@ export default function Shell({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <style jsx global>{`
+      <style>{`
         @media (max-width: 900px) {
           .ops-shell {
             grid-template-columns: 1fr !important;
           }
+          .ops-mobile-topbar {
+            display: flex !important;
+          }
           .ops-sidebar {
-            position: ${mobileOpen ? "fixed" : "relative"} !important;
-            width: 100% !important;
-            height: auto !important;
-            padding: 16px !important;
-            flex-direction: row !important;
-            overflow-x: auto;
-            gap: 12px !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 280px !important;
+            height: 100dvh !important;
+            padding: 24px 20px !important;
+            transform: translateX(-100%) !important;
+            transition: transform 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            z-index: 20 !important;
+          }
+          .ops-sidebar--open {
+            transform: translateX(0) !important;
+          }
+          .ops-sidebar-close {
+            display: flex !important;
           }
         }
       `}</style>

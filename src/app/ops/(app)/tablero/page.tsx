@@ -1,24 +1,20 @@
-import { fetchAreas, fetchMembers, fetchTasks } from "@/lib/ops/queries";
+import { fetchAreas, fetchTasks } from "@/lib/ops/queries";
 import PageHeader from "../PageHeader";
-import KanbanBoard from "./KanbanBoard";
+import Checklist from "./KanbanBoard";
 
 export const dynamic = "force-dynamic";
 
 export default async function TableroPage() {
-  const [tasks, areas, members] = await Promise.all([
-    fetchTasks(),
-    fetchAreas(),
-    fetchMembers(),
-  ]);
+  const [tasks, areas] = await Promise.all([fetchTasks(), fetchAreas()]);
 
   return (
     <>
       <PageHeader
-        eyebrow="Tablero · Kanban"
-        title="Tablero de tareas"
-        subtitle="Arrastra y suelta entre columnas. Filtra por área, persona o prioridad."
+        eyebrow="Tablero · Checklist"
+        title="Tareas por área"
+        subtitle="Marca una tarea para completarla. Los cambios se guardan al instante."
       />
-      <KanbanBoard initialTasks={tasks} areas={areas} members={members} />
+      <Checklist initialTasks={tasks} areas={areas} />
     </>
   );
 }
