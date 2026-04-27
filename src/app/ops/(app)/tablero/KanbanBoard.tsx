@@ -9,12 +9,26 @@ interface Props {
   initialMembers: OpsMember[];
 }
 
-async function patchTask(id: number, payload: { estado?: OpsEstado; assignees?: number[] }) {
+async function patchTask(id: number, payload: { estado?: OpsEstado; assignees?: number[]; titulo?: string }) {
   await fetch(`/api/ops/tasks/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+}
+
+async function deleteTask(id: number) {
+  await fetch(`/api/ops/tasks/${id}`, { method: "DELETE" });
+}
+
+async function createTask(area_id: number, titulo: string): Promise<OpsTaskWithRelations> {
+  const res = await fetch("/api/ops/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ area_id, titulo }),
+  });
+  if (!res.ok) throw new Error("Error al crear tarea");
+  return res.json();
 }
 
 async function createMember(nombre: string, rol: string): Promise<OpsMember> {
@@ -74,6 +88,26 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
     setMembers((prev) => [...prev, m]);
   }
 
+  function handleDelete(id: number) {
+    if (!confirm("¿Eliminar esta tarea?")) return;
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+    startTransition(() => {
+      deleteTask(id).catch(() => setTasks(tasks));
+    });
+  }
+
+  function handleRename(id: number, titulo: string) {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, titulo } : t)));
+    startTransition(() => {
+      patchTask(id, { titulo }).catch(() => setTasks(tasks));
+    });
+  }
+
+  async function handleCreate(areaId: number, titulo: string) {
+    const newTask = await createTask(areaId, titulo);
+    setTasks((prev) => [...prev, newTask]);
+  }
+
   const sinArea = tasks.filter((t) => !t.area_id);
 
   return (
@@ -89,11 +123,11 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           {areas.map((area) => {
             const areaTasks = tasks.filter((t) => t.area_id === area.id);
-            if (areaTasks.length === 0) return null;
             const done = areaTasks.filter((t) => t.estado === "hecho").length;
             return (
               <AreaSection
                 key={area.id}
+                areaId={area.id}
                 label={area.nombre}
                 color={area.color}
                 done={done}
@@ -105,11 +139,15 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
                 onToggleAssignee={toggleAssignee}
                 onOpenPicker={(id) => setOpenPickerId((prev) => (prev === id ? null : id))}
                 onMemberCreated={handleMemberCreated}
+                onDelete={handleDelete}
+                onRename={handleRename}
+                onAddTask={handleCreate}
               />
             );
           })}
           {sinArea.length > 0 && (
             <AreaSection
+              areaId={0}
               label="Sin área"
               color={OPS.textDim}
               done={sinArea.filter((t) => t.estado === "hecho").length}
@@ -121,6 +159,9 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
               onToggleAssignee={toggleAssignee}
               onOpenPicker={(id) => setOpenPickerId((prev) => (prev === id ? null : id))}
               onMemberCreated={handleMemberCreated}
+              onDelete={handleDelete}
+              onRename={handleRename}
+              onAddTask={handleCreate}
             />
           )}
         </div>
@@ -129,8 +170,12 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
       <style>{`
         .ops-check-row:hover { background: rgba(255,255,255,0.03) !important; }
         .ops-assignee-pill:hover { border-color: rgba(255,255,255,0.2) !important; }
+        .ops-task-row-wrap:hover .ops-row-action { opacity: 1 !important; }
+        .ops-row-action:hover { color: #e0e0e0 !important; }
+        .ops-row-delete:hover { color: #ff4d6d !important; }
         @media (max-width: 640px) {
           section { padding: 20px 16px 60px !important; }
+          .ops-row-action { opacity: 0.6 !important; }
         }
       `}</style>
     </>
@@ -138,9 +183,10 @@ export default function Checklist({ initialTasks, areas, initialMembers }: Props
 }
 
 function AreaSection({
-  label, color, done, total, tasks, members, openPickerId,
-  onToggleDone, onToggleAssignee, onOpenPicker, onMemberCreated,
+  areaId, label, color, done, total, tasks, members, openPickerId,
+  onToggleDone, onToggleAssignee, onOpenPicker, onMemberCreated, onDelete, onRename, onAddTask,
 }: {
+  areaId: number;
   label: string;
   color: string;
   done: number;
@@ -152,8 +198,32 @@ function AreaSection({
   onToggleAssignee: (taskId: number, memberId: number) => void;
   onOpenPicker: (id: number) => void;
   onMemberCreated: (m: OpsMember) => void;
+  onDelete: (id: number) => void;
+  onRename: (id: number, titulo: string) => void;
+  onAddTask: (areaId: number, titulo: string) => Promise<void>;
 }) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const [showForm, setShowForm] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [saving, setSaving] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showForm) inputRef.current?.focus();
+  }, [showForm]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+    setSaving(true);
+    try {
+      await onAddTask(areaId, newTitle.trim());
+      setNewTitle("");
+      setShowForm(false);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <div>
@@ -184,15 +254,88 @@ function AreaSection({
               t={t}
               areaColor={color}
               members={members}
-              isLast={i === tasks.length - 1}
+              isLast={i === tasks.length - 1 && !showForm}
               pickerOpen={openPickerId === t.id}
               onToggleDone={() => onToggleDone(t.id)}
               onToggleAssignee={(mid) => onToggleAssignee(t.id, mid)}
               onOpenPicker={() => onOpenPicker(t.id)}
               onMemberCreated={onMemberCreated}
+              onDelete={() => onDelete(t.id)}
+              onRename={(titulo) => onRename(t.id, titulo)}
             />
           ))}
+
+          {/* Inline new task form */}
+          {showForm && (
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                display: "flex", alignItems: "center", gap: "8px",
+                padding: "10px 14px",
+                borderTop: tasks.length > 0 ? `1px solid ${OPS.border}` : "none",
+              }}
+            >
+              <input
+                ref={inputRef}
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Escape") { setShowForm(false); setNewTitle(""); } }}
+                placeholder="Título de la tarea…"
+                style={{
+                  flex: 1, background: "transparent", border: "none", outline: "none",
+                  color: OPS.text, fontFamily: OPS_FONT_BODY, fontSize: "14px",
+                }}
+              />
+              <button
+                type="submit"
+                disabled={saving || !newTitle.trim()}
+                style={{
+                  padding: "5px 14px", borderRadius: "8px",
+                  background: newTitle.trim() ? OPS.accent : OPS.bgInset,
+                  border: "none", color: newTitle.trim() ? "#000" : OPS.textDim,
+                  fontFamily: OPS_FONT_HEAD, fontSize: "11px", fontWeight: 800,
+                  letterSpacing: "0.08em", cursor: newTitle.trim() ? "pointer" : "default",
+                  transition: `background 150ms ${EASE}`,
+                  flexShrink: 0,
+                }}
+              >
+                {saving ? "..." : "Agregar"}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowForm(false); setNewTitle(""); }}
+                style={{
+                  padding: "5px 10px", borderRadius: "8px",
+                  background: "transparent", border: `1px solid ${OPS.border}`,
+                  color: OPS.textMuted, cursor: "pointer", flexShrink: 0,
+                  fontFamily: OPS_FONT_HEAD, fontSize: "11px",
+                }}
+              >
+                Esc
+              </button>
+            </form>
+          )}
         </div>
+
+        {/* + Nueva tarea button */}
+        {!showForm && (
+          <button
+            onClick={() => setShowForm(true)}
+            style={{
+              display: "flex", alignItems: "center", gap: "6px",
+              width: "100%", padding: "9px 18px", marginTop: "2px",
+              background: "transparent", border: "none",
+              color: OPS.textDim, cursor: "pointer",
+              fontFamily: OPS_FONT_HEAD, fontSize: "11px", fontWeight: 700,
+              letterSpacing: "0.12em", textTransform: "uppercase",
+              transition: `color 180ms ${EASE}`,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = OPS.accent; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = OPS.textDim; }}
+          >
+            <span style={{ fontSize: "15px", lineHeight: 1 }}>+</span> Nueva tarea
+          </button>
+        )}
       </div>
     </div>
   );
@@ -200,7 +343,7 @@ function AreaSection({
 
 function TaskRow({
   t, areaColor, members, isLast, pickerOpen,
-  onToggleDone, onToggleAssignee, onOpenPicker, onMemberCreated,
+  onToggleDone, onToggleAssignee, onOpenPicker, onMemberCreated, onDelete, onRename,
 }: {
   t: OpsTaskWithRelations;
   areaColor: string;
@@ -211,8 +354,35 @@ function TaskRow({
   onToggleAssignee: (memberId: number) => void;
   onOpenPicker: () => void;
   onMemberCreated: (m: OpsMember) => void;
+  onDelete: () => void;
+  onRename: (titulo: string) => void;
 }) {
   const isDone = t.estado === "hecho";
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(t.titulo);
+  const editRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) editRef.current?.focus();
+  }, [editing]);
+
+  function startEdit() {
+    setEditValue(t.titulo);
+    setEditing(true);
+  }
+
+  function commitEdit() {
+    const trimmed = editValue.trim();
+    if (trimmed && trimmed !== t.titulo) {
+      onRename(trimmed);
+    }
+    setEditing(false);
+  }
+
+  function cancelEdit() {
+    setEditValue(t.titulo);
+    setEditing(false);
+  }
 
   return (
     <div
@@ -220,6 +390,7 @@ function TaskRow({
         borderBottom: isLast ? "none" : `1px solid ${OPS.border}`,
         position: "relative",
       }}
+      className="ops-task-row-wrap"
     >
       <div
         className="ops-check-row"
@@ -250,22 +421,82 @@ function TaskRow({
           )}
         </button>
 
-        {/* Title */}
-        <span
-          style={{
-            flex: 1, fontFamily: OPS_FONT_BODY, fontSize: "14px",
-            fontWeight: isDone ? 400 : 500,
-            color: isDone ? OPS.textDim : OPS.text,
-            textDecoration: isDone ? "line-through" : "none",
-            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-            transition: `color 180ms ${EASE}`,
-          }}
-        >
-          {t.titulo}
-        </span>
+        {/* Title / Edit input */}
+        {editing ? (
+          <input
+            ref={editRef}
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitEdit();
+              if (e.key === "Escape") cancelEdit();
+            }}
+            style={{
+              flex: 1, background: OPS.bgInset, border: `1px solid ${OPS.borderHi}`,
+              borderRadius: "6px", padding: "2px 8px",
+              color: OPS.text, fontFamily: OPS_FONT_BODY, fontSize: "14px", fontWeight: 500,
+              outline: "none",
+            }}
+          />
+        ) : (
+          <span
+            style={{
+              flex: 1, fontFamily: OPS_FONT_BODY, fontSize: "14px",
+              fontWeight: isDone ? 400 : 500,
+              color: isDone ? OPS.textDim : OPS.text,
+              textDecoration: isDone ? "line-through" : "none",
+              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+              transition: `color 180ms ${EASE}`,
+            }}
+          >
+            {t.titulo}
+          </span>
+        )}
 
-        {/* Right side: assignees + date + picker toggle */}
-        <div style={{ display: "flex", gap: "8px", alignItems: "center", flexShrink: 0 }}>
+        {/* Right side: edit/delete + assignees + date + picker toggle */}
+        <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0 }}>
+          {/* Edit & Delete — visible on row hover via CSS */}
+          {!editing && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); startEdit(); }}
+                title="Editar título"
+                className="ops-row-action"
+                style={{
+                  width: "22px", height: "22px", borderRadius: "6px",
+                  background: "transparent", border: "none",
+                  color: OPS.textDim, display: "flex", alignItems: "center",
+                  justifyContent: "center", cursor: "pointer", flexShrink: 0,
+                  opacity: 0, transition: `opacity 150ms ${EASE}, color 150ms ${EASE}`,
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                title="Eliminar tarea"
+                className="ops-row-action ops-row-delete"
+                style={{
+                  width: "22px", height: "22px", borderRadius: "6px",
+                  background: "transparent", border: "none",
+                  color: OPS.textDim, display: "flex", alignItems: "center",
+                  justifyContent: "center", cursor: "pointer", flexShrink: 0,
+                  opacity: 0, transition: `opacity 150ms ${EASE}, color 150ms ${EASE}`,
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6"/><path d="M14 11v6"/>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+              </button>
+            </>
+          )}
+
           {t.fecha_limite && !isDone && (
             <span
               style={{
