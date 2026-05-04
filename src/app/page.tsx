@@ -516,7 +516,7 @@ function RoiCalculator() {
           <div className="accelerator-grid">
             {/* ─── Tacómetro central ─── */}
             <div className="tacho">
-              <svg className="tacho-svg" viewBox="0 0 320 240" aria-hidden="true">
+              <svg className="tacho-svg" viewBox="0 0 320 240" overflow="hidden" aria-hidden="true">
                 <defs>
                   <linearGradient id="tacho-fill" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%"   stopColor="#4ade80" />
@@ -570,7 +570,7 @@ function RoiCalculator() {
                 })}
                 {/* Needle — rect with fill-box so transform-origin 50%/100% = pivot at (160,200) */}
                 <rect
-                  x="158.5" y="78" width="3" height="122" rx="1.5"
+                  x="158.5" y="124" width="3" height="76" rx="1.5"
                   fill="#ef4444"
                   filter="url(#tacho-glow)"
                   className="tacho-needle-svg"
