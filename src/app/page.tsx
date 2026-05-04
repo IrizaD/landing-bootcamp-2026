@@ -332,25 +332,26 @@ function PrizesRoulette() {
           </p>
         </div>
 
-        <div className="roulette-wrap reveal reveal-delay-2">
-          {/* Prize display — orb + cards */}
-          <div className="prize-display">
-            <div className="prize-orb">
-              <div className="prize-orb-label">Valor total</div>
-              <div className="prize-orb-amount">+$10,000</div>
-              <div className="prize-orb-currency">USD</div>
-            </div>
-            <div className="prize-cards">
-              {prizes.map((p, i) => (
-                <div key={i} className={`prize-card ${highlight === i ? "active" : ""}`}>
-                  <div className="prize-card-icon" aria-hidden="true">{p.icon}</div>
-                  <div className="prize-card-title">{p.title}</div>
-                </div>
-              ))}
-            </div>
+        <div className="prize-display reveal reveal-delay-2">
+          {/* Orb */}
+          <div className="prize-orb">
+            <div className="prize-orb-label">Valor total</div>
+            <div className="prize-orb-amount">+$10,000</div>
+            <div className="prize-orb-currency">USD</div>
           </div>
 
-          <aside className="roulette-legend">
+          {/* Cards */}
+          <div className="prize-cards">
+            {prizes.map((p, i) => (
+              <div key={i} className={`prize-card ${highlight === i ? "active" : ""}`}>
+                <div className="prize-card-icon" aria-hidden="true">{p.icon}</div>
+                <div className="prize-card-title">{p.title}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Sorteando ahora */}
+          <div className="prize-legend">
             <div className="roulette-legend-eyebrow">Sorteando ahora</div>
             <div key={highlight} className="roulette-legend-card">
               <div className="roulette-legend-icon">{prizes[highlight].icon}</div>
@@ -366,7 +367,7 @@ function PrizesRoulette() {
                 </li>
               ))}
             </ul>
-          </aside>
+          </div>
         </div>
 
         <div className="prizes-live-note">
@@ -507,6 +508,7 @@ function RoiCalculator() {
         <div className="accelerator reveal reveal-delay-2">
           <div className="accelerator-grid">
             {/* ─── Tacómetro central ─── */}
+            <div className="tacho-col">
             <div className="tacho">
               <svg className="tacho-svg" viewBox="0 0 320 240" overflow="hidden" aria-hidden="true">
                 <defs>
@@ -578,6 +580,7 @@ function RoiCalculator() {
               <div className="tacho-readout-value">{multiplier.toFixed(2)}×</div>
               <div className="tacho-readout-sub">vs tu facturación actual</div>
             </div>
+            </div>{/* /tacho-col */}
 
             {/* ─── Controles tipo cockpit ─── */}
             <div className="cockpit">

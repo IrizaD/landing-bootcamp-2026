@@ -2181,6 +2181,11 @@ h2.section-title {
   gap: 40px;
   align-items: center;
 }
+.tacho-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 /* Tacómetro */
 .tacho {
@@ -2454,21 +2459,15 @@ h2.section-title {
 .prizes > .container { position: relative; z-index: 1; }
 .prizes-header { text-align: center; margin-bottom: 48px; }
 
-.roulette-wrap {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 40px;
-  align-items: center;
-  max-width: 1100px;
-  margin: 0 auto;
-  position: relative;
-}
-/* Prize display — orb + cards */
+/* prize-display replaces roulette-wrap — single centered column */
+/* Prize display — centered column layout */
 .prize-display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
+  max-width: 740px;
+  margin: 0 auto;
 }
 .prize-orb {
   width: 160px; height: 160px;
@@ -2540,6 +2539,13 @@ h2.section-title {
   line-height: 1.3;
 }
 
+.prize-legend {
+  width: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 20px;
+  padding: 24px;
+}
 .roulette-legend {
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
   border: 1px solid rgba(212,168,67,0.2);
