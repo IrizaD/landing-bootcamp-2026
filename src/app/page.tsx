@@ -67,6 +67,23 @@ function useTracker() {
   }, []);
 }
 
+// ─── COUNTDOWN HOOK ────────────────────────────────────────
+function useCountdown(isoTarget: string) {
+  const target = useMemo(() => new Date(isoTarget).getTime(), [isoTarget]);
+  const [diff, setDiff] = useState(() => Math.max(0, target - Date.now()));
+  useEffect(() => {
+    const t = setInterval(() => setDiff(Math.max(0, target - Date.now())), 1000);
+    return () => clearInterval(t);
+  }, [target]);
+  return {
+    d: Math.floor(diff / 86400000),
+    h: Math.floor((diff % 86400000) / 3600000),
+    m: Math.floor((diff % 3600000) / 60000),
+    s: Math.floor((diff % 60000) / 1000),
+    done: diff === 0,
+  };
+}
+
 // ─── SCROLL REVEAL HOOK ────────────────────────────────────
 function useReveal() {
   useEffect(() => {
@@ -506,6 +523,10 @@ function RoiCalculator() {
                     <stop offset="50%"  stopColor="#fbbf24" />
                     <stop offset="100%" stopColor="#ef4444" />
                   </linearGradient>
+                  <radialGradient id="hub-grad" cx="35%" cy="35%" r="65%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#6b7280" />
+                  </radialGradient>
                   <filter id="tacho-glow">
                     <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                     <feMerge>
@@ -547,13 +568,21 @@ function RoiCalculator() {
                     </g>
                   );
                 })}
+                {/* Needle — drawn in SVG so it clips to viewBox naturally */}
+                <line
+                  x1="160" y1="200" x2="160" y2="78"
+                  stroke="#ef4444" strokeWidth="4" strokeLinecap="round"
+                  filter="url(#tacho-glow)"
+                  style={{
+                    transformBox: 'view-box' as never,
+                    transformOrigin: '50% 83.33%',
+                    transform: `rotate(${needle}deg)`,
+                    transition: 'transform 0.9s cubic-bezier(0.22,1,0.36,1)',
+                  }}
+                />
+                {/* Hub dot */}
+                <circle cx="160" cy="200" r="12" fill="url(#hub-grad)" style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9))' }} />
               </svg>
-
-              {/* Aguja */}
-              <div className="tacho-needle-wrap">
-                <div className="tacho-needle" style={{ transform: `rotate(${needle}deg)` }} />
-                <div className="tacho-hub" />
-              </div>
 
               <div className="tacho-readout">
                 <div className="tacho-readout-label">Multiplicador anual</div>
@@ -650,59 +679,53 @@ function RoiCalculator() {
   );
 }
 
-// ─── SPEAKER CARD ──────────────────────────────────────────
+// ─── SPEAKER CARD (magazine portrait) ─────────────────────
 function SpeakerCard({ s }: { s: Speaker }) {
   const [photoOk, setPhotoOk] = useState(Boolean(s.photo));
-  const pillarColor: Record<string, string> = {
-    Mentalidad: "#00e040",
-    Velocidad:  "#4ade80",
-    Entorno:    "#fbbf24",
-  };
 
   return (
-    <div className={`speaker-card${s.featured ? " featured" : ""}`}>
-      {s.role && <span className="speaker-role-tag">{s.role}</span>}
-      <div className="speaker-avatar-wrap">
-        {s.photo && photoOk ? (
-          <img
-            className="speaker-photo"
-            src={s.photo}
-            alt={s.name}
-            loading="lazy"
-            onError={() => setPhotoOk(false)}
-          />
-        ) : (
-          <div className="speaker-avatar" style={{ background: s.bg ?? "linear-gradient(135deg,#1a1a1a,#333)" }}>
-            {s.initial ?? s.name.slice(0, 1)}
+    <div className={`scm${s.featured ? " scm-featured" : ""}`}>
+      {s.photo && photoOk ? (
+        <img
+          className="scm-photo"
+          src={s.photo}
+          alt={s.name}
+          loading="lazy"
+          onError={() => setPhotoOk(false)}
+        />
+      ) : (
+        <div className="scm-fallback" style={{ background: s.bg ?? "linear-gradient(135deg,#1a1a1a,#333)" }}>
+          {s.initial ?? s.name.slice(0, 1)}
+        </div>
+      )}
+      <div className="scm-overlay" aria-hidden="true" />
+      {s.role && <span className="scm-role">{s.role}</span>}
+      <div className="scm-info">
+        <div className="scm-name">{s.name}</div>
+      </div>
+      <div className="scm-hover-panel">
+        <div className="scm-hover-name">{s.name}</div>
+        {s.title && s.title !== "Próximamente" && (
+          <p className="scm-hover-title">{s.title}</p>
+        )}
+        {s.topic && s.topic !== "Próximamente" && (
+          <div className="scm-hover-topic">
+            <span className="scm-hover-topic-label">Va a hablar de</span>
+            <span className="scm-hover-topic-text">{s.topic}</span>
           </div>
         )}
-        {s.pillar && (
-          <span
-            className="speaker-pillar-chip"
-            style={{ background: `${pillarColor[s.pillar]}22`, color: pillarColor[s.pillar], borderColor: `${pillarColor[s.pillar]}55` }}
+        {s.ig && (
+          <a
+            className="scm-hover-ig"
+            href={`https://instagram.com/${s.ig}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
           >
-            {s.pillar}
-          </span>
+            <IgIcon /> @{s.ig}
+          </a>
         )}
       </div>
-      <div className="speaker-name">{s.name}</div>
-      <div className="speaker-title">{s.title}</div>
-      <div className="speaker-topic">
-        <span className="speaker-topic-label">Va a hablar de</span>
-        <span className="speaker-topic-text">{s.topic}</span>
-      </div>
-      {s.ig && (
-        <a
-          className="speaker-ig"
-          href={`https://instagram.com/${s.ig}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-track={`speaker_ig_${s.ig}`}
-          aria-label={`Instagram de ${s.name}`}
-        >
-          <IgIcon /> @{s.ig}
-        </a>
-      )}
     </div>
   );
 }
@@ -711,6 +734,7 @@ function SpeakerCard({ s }: { s: Speaker }) {
 export default function Page() {
   useReveal();
   useTracker();
+  const countdown = useCountdown(content.hero.countdown_target);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -828,6 +852,32 @@ export default function Page() {
               <span className="hero-date-sep" />
               <span className="hero-date-tag">{content.hero.date_tag}</span>
             </div>
+            {!countdown.done && (
+              <div className="hero-countdown">
+                <span className="hero-countdown-label">{content.hero.countdown_label}</span>
+                <div className="hero-countdown-units">
+                  <div className="hero-countdown-unit">
+                    <span className="hero-countdown-num">{String(countdown.d).padStart(2, "0")}</span>
+                    <span className="hero-countdown-tag">días</span>
+                  </div>
+                  <span className="hero-countdown-colon">:</span>
+                  <div className="hero-countdown-unit">
+                    <span className="hero-countdown-num">{String(countdown.h).padStart(2, "0")}</span>
+                    <span className="hero-countdown-tag">horas</span>
+                  </div>
+                  <span className="hero-countdown-colon">:</span>
+                  <div className="hero-countdown-unit">
+                    <span className="hero-countdown-num">{String(countdown.m).padStart(2, "0")}</span>
+                    <span className="hero-countdown-tag">min</span>
+                  </div>
+                  <span className="hero-countdown-colon">:</span>
+                  <div className="hero-countdown-unit">
+                    <span className="hero-countdown-num">{String(countdown.s).padStart(2, "0")}</span>
+                    <span className="hero-countdown-tag">seg</span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="hero-cta-group">
               <a href="#registro" className="btn-primary" data-track="hero_cta">
                 {content.hero.cta} <ArrowRight />
@@ -835,13 +885,36 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="hero-stats">
-            {content.stats.map((s, i) => (
-              <div key={i} className="stat-card">
-                <div className={`stat-number${i === 2 ? " text-red" : ""}`}>{s.number}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            ))}
+          {/* hero-stats hidden */}
+        </div>
+      </section>
+
+      {/* ─── HOST (Jorge) ────────────────────────────────── */}
+      <section className="credentials section" data-section="host">
+        <div className="credentials-inner container">
+          <div className="credentials-layout">
+            <div className="credentials-photo reveal">
+              <img
+                src={content.credentials.photo}
+                alt="Jorge Serratos"
+                className="credentials-portrait"
+              />
+            </div>
+            <div className="credentials-text reveal reveal-delay-1">
+              <div className="host-badge">{content.credentials.host_badge}</div>
+              <h2>{content.credentials.name_1} <span className="text-red">{content.credentials.name_em}</span></h2>
+              {content.credentials.bio.split("\n\n").map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+            <div className="credentials-stats">
+              {content.credentials.stats.map((s, i) => (
+                <div key={i} className={`cred-stat reveal reveal-delay-${i + 1}`}>
+                  <div className="cred-stat-number">{s.number}</div>
+                  <div className="cred-stat-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -952,13 +1025,6 @@ export default function Page() {
                 <SpeakerCard s={s} />
               </div>
             ))}
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={`mystery-${i}`} className={`speaker-card reveal reveal-delay-${(i % 4) + 1}`} style={{ opacity: 0.5 }}>
-                <div className="speaker-avatar" style={{ background: "linear-gradient(135deg,#1a1a1a,#333)", fontSize: 24 }}>?</div>
-                <div className="speaker-name" style={{ color: "var(--gray-400)" }}>{content.speakers.mystery_name}</div>
-                <div className="speaker-title">{content.speakers.mystery_title}</div>
-              </div>
-            ))}
           </div>
           <p className="speakers-note reveal">{content.speakers.note}</p>
         </div>
@@ -995,27 +1061,6 @@ export default function Page() {
               </div>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ─── CREDENTIALS ─────────────────────────────────── */}
-      <section className="credentials section" data-section="credentials">
-        <div className="credentials-inner container">
-          <div className="credentials-layout">
-            <div className="credentials-text reveal">
-              <div className="host-badge">{content.credentials.host_badge}</div>
-              <h2>{content.credentials.name_1} <span className="text-red">{content.credentials.name_em}</span></h2>
-              <p>{content.credentials.bio}</p>
-            </div>
-            <div className="credentials-stats">
-              {content.credentials.stats.map((s, i) => (
-                <div key={i} className={`cred-stat reveal reveal-delay-${i + 1}`}>
-                  <div className="cred-stat-number">{s.number}</div>
-                  <div className="cred-stat-label">{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 

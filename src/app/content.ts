@@ -73,6 +73,8 @@ export const content = {
     cta:        "Reserva tu lugar gratuito",
     price_strike: "",
     price_now:    "Acceso 100% GRATIS",
+    countdown_label: "Cierre de registros en:",
+    countdown_target: "2026-06-05T00:00:00-06:00",
   },
 
   // ─── STATS ────────────────────────────────────────────────────────────────
@@ -85,10 +87,10 @@ export const content = {
   // ─── PROBLEMA ─────────────────────────────────────────────────────────────
   problem: {
     label:    "La brecha real",
-    title_1:  "Ya sabes lo que debes hacer.",
-    title_em: "¿Por qué no está pasando?",
-    body_lead: "No es falta de motivación. No es falta de información. Tienes acceso a todo lo que necesitas para escalar. Y aun así, estás atorado.",
-    body:      "El problema no es la información — es que la información sin ejecución pesa. Cada día que pasa sin mover las palancas correctas, el costo crece. Y lo sabes. Duele porque lo sabes.",
+    title_1:  "El sistema con el que te enseñaron está diseñado para empleados,",
+    title_em: "no para dueños.",
+    body_lead: "No necesitas invertir un peso, no necesitas ser experto digital, y no tienes que estar disponible 24/7.",
+    body:      "Si intentaste escalar antes y no funcionó, no fallaste tú — fallaron los métodos que no estaban hechos para el tipo de empresario que eres.",
     bullets: [
       "Llevas +2 años con el mismo techo de facturación — aunque trabajas más horas que nunca",
       "Sabes que tu producto vale más caro, pero cada vez que piensas en subir el precio te agarra el miedo",
@@ -101,13 +103,13 @@ export const content = {
     callout_body:  "No otro curso. No otra motivación. Tres días en vivo — sin grabación, sin repetición — donde instalas mentalidad, velocidad y entorno al mismo tiempo.",
     journey: {
       eyebrow: "Así funciona el Bootcamp",
-      title:   "3 días · 3 enfoques · Un negocio que escala",
+      title:   "3 días de enfoque = Una vida y un negocio que escale",
       steps: [
-        { day: "Día 1", tag: "Mentalidad",  title: "Rompes el techo invisible",   body: "Descubres el patrón mental que bloquea tu crecimiento y lo cambias por la mentalidad del empresario que ya opera a otro nivel." },
-        { day: "Día 2", tag: "Velocidad",   title: "Activas las 3 palancas",       body: "Aprendes a cobrar más, atraer más clientes y generar ingresos recurrentes — las 3 palancas del crecimiento acelerado." },
-        { day: "Día 3", tag: "Entorno",     title: "Cambias tu círculo",           body: "Te conectas con speakers, mentores y miles de emprendedores que te dan el círculo que tu negocio necesita para el siguiente nivel." },
+        { day: "Día 1", tag: "Mentalidad",  title: "Rompe el techo invisible",     body: "Descubrirás el patrón mental que bloquea tu crecimiento y lo cambiarás por la mentalidad del empresario que opera a otro nivel." },
+        { day: "Día 2", tag: "Velocidad",   title: "Acelera tu crecimiento",        body: "Aprende a cobrar más, atraer más clientes y generar ingresos recurrentes. Las 3 palancas del crecimiento." },
+        { day: "Día 3", tag: "Entorno",     title: "Expande tu círculo cercano",    body: "Aprenderás a conectar con mentores y empresarios que te darán el círculo que tu negocio necesita para escalar." },
       ],
-      result: "Sales con un plan distinto al que entraste.",
+      result: "Saldrás con un plan estratégico para escalar a niveles que parecían imposibles.",
     },
   },
 
@@ -117,7 +119,7 @@ export const content = {
     title_1:  "Esto",
     title_em: "NO es",
     title_2:  "otro curso.",
-    intro:    "Lo que estás a punto de experimentar no se vende en ningún lado. No se repite. No queda grabado. Es un evento comprimido de 3 días donde aprendes mientras ejecutas — diseñado para emprendedores que ya están ocupados ganando dinero, no para estudiantes buscando motivación.",
+    intro:    "Esto no se vende en ningún lado. No se repite. No queda grabado. Son 3 días intensivos donde cada sesión termina con algo implementado — diseñado para emprendedores que ya están ocupados generando ingresos, no para estudiantes buscando motivación.",
     notHeader: "Lo que NO estás a punto de recibir",
     notItems: [
       { t: "No es un curso grabado",     d: "40 horas de video que nunca terminas. Que se acumulan en tu drive junto a los otros 8 que compraste." },
@@ -267,102 +269,68 @@ export const content = {
   // ─── SPEAKERS ─────────────────────────────────────────────────────────────
   speakers: {
     label:    "Speakers confirmados",
-    title_1:  "21 referentes del mundo hispano",
+    title_1:  "Los referentes del mundo hispano",
     title_em: "en 3 días",
     subtitle: "Negocios, ventas, marketing digital, mentalidad, finanzas y alto rendimiento. Todos en vivo.",
     mystery_name:  "Por revelar",
     mystery_title: "Próximo anuncio",
     note:     "La lista puede actualizarse. Seguimos los anuncios oficiales en redes.",
-    // IG handles verificados públicamente (abril 2026) — cuenta con más seguidores / verificada.
-    // Fotos: sube cada imagen a /public/speakers/<handle>.jpg y se cargan automáticamente.
     list: [
       { name: "Jorge Serratos",     role: "Host",     title: "CEO Grupo Serlo · Doctor en derecho · Podcast Sinergéticos #1 Negocios México · +11M seguidores",
         topic: "Cómo construir un movimiento, no solo un negocio",
-        pillar: "Entorno", featured: true, ig: "jorgeserratos", photo: "/speakers/jorgeserratos.jpg", initial: "J", bg: "linear-gradient(135deg,#00e040,#005a18)" },
+        pillar: "Entorno", featured: true, ig: "jorgeserratos", photo: "/speakers/jorgeserratos.png", initial: "J", bg: "linear-gradient(135deg,#00e040,#005a18)" },
 
       { name: "Manuel de León",     role: "Co-host",  title: "COO Sinergéticos · Experto en IA, tráfico y contenido digital",
         topic: "IA + tráfico + contenido: el stack técnico del crecimiento en 2026",
-        pillar: "Velocidad", featured: true, ig: "manueldeleonmjr", photo: "/speakers/manueldeleonmjr.jpg", initial: "M", bg: "linear-gradient(135deg,#4ade80,#00a030)" },
+        pillar: "Velocidad", featured: true, ig: "manueldeleonmjr", photo: "/speakers/manueldeleon.png", initial: "M", bg: "linear-gradient(135deg,#4ade80,#00a030)" },
 
-      { name: "Daniel Marcos",      title: "CEO Growth Institute · Referente en escalamiento empresarial · 115K seguidores en @daniel.marcos.escalar",
-        topic: "Scaling Up: el playbook para pasar de $100K a $10M anuales",
-        pillar: "Velocidad", ig: "daniel.marcos.escalar", photo: "/speakers/daniel.marcos.escalar.jpg", initial: "D", bg: "linear-gradient(135deg,#38bdf8,#0c4a6e)" },
-
-      { name: "Fernando Anzures",   title: "Fundador EXMA · Autor 'El Consumidor es el Medio' · Referente en consumer marketing LATAM",
-        topic: "El consumidor es el medio: vender sin vender en la era del algoritmo",
-        pillar: "Velocidad", ig: "fanzures", photo: "/speakers/fanzures.jpg", initial: "F", bg: "linear-gradient(135deg,#f97316,#7c2d12)" },
-
-      { name: "Claudia Lizaldi",    title: "Conductora MasterChef México · Autora 'La Decisión' · Más de 900K seguidores",
-        topic: "Reinvención después de los 40: construir una marca personal que paga",
-        pillar: "Mentalidad", ig: "claudializaldi", photo: "/speakers/claudializaldi.jpg", initial: "C", bg: "linear-gradient(135deg,#a855f7,#581c87)" },
-
-      { name: "Alejandro Kasuga",   title: "Empresario mexicano · Autor 'Kizukai, Kaizen aplicado a la cultura organizacional' · Ex director Yakult Puebla",
-        topic: "Kizukai: Kaizen aplicado a tu negocio — mejoras del 1% que lo transforman",
-        pillar: "Mentalidad", ig: "soyalejandrokasuga", photo: "/speakers/soyalejandrokasuga.jpg", initial: "A", bg: "linear-gradient(135deg,#fbbf24,#78350f)" },
-
-      { name: "Alejandro Saracho",  title: "Empresario e inversionista · Autor 'Reconfiguración Financiera' · 71K seguidores",
-        topic: "Reconfiguración financiera del empresario: dejar de vivir mes con mes",
-        pillar: "Velocidad", ig: "alejandrosaracholf_oficial", photo: "/speakers/alejandrosaracholf_oficial.jpg", initial: "A", bg: "linear-gradient(135deg,#22d3ee,#0e7490)" },
-
-      { name: "Coral Mujaes",       title: "Ex boxeadora profesional · Autora y coach · 4M seguidores",
-        topic: "Disciplina de campeona: el mindset deportivo aplicado a tu negocio",
-        pillar: "Mentalidad", ig: "coralmujaes", photo: "/speakers/coralmujaes.jpg", initial: "C", bg: "linear-gradient(135deg,#ec4899,#831843)" },
-
-      { name: "Spencer Hoffmann",   title: "Autor 'Los 15 milagros del amor' · CEO de 5 empresas · 3M seguidores",
-        topic: "La rutina que construye imperios: hábitos de alto rendimiento del fundador",
-        pillar: "Mentalidad", ig: "spencer.hoffmann", photo: "/speakers/spencer.hoffmann.jpg", initial: "S", bg: "linear-gradient(135deg,#84cc16,#365314)" },
-
-      { name: "Efrén Martínez",     title: "PhD en logoterapia · Autor de 25 libros · Coach de líderes · 1M seguidores en @efrenmartinezo",
+      { name: "Efrén Martínez",     title: "PhD en logoterapia · Autor de 25 libros · Coach de líderes · 1M seguidores",
         topic: "Hazte dueño de ti: romper las programaciones mentales que te sabotean",
-        pillar: "Mentalidad", ig: "efrenmartinezo", photo: "/speakers/efrenmartinezo.jpg", initial: "E", bg: "linear-gradient(135deg,#14b8a6,#134e4a)" },
+        pillar: "Mentalidad", ig: "efrenmartinezo", photo: "/speakers/efrenmartinez.jpg", initial: "E", bg: "linear-gradient(135deg,#14b8a6,#134e4a)" },
 
-      { name: "Salvador Alba",      title: "Empresario y speaker · Estrategia comercial y escalamiento",
+      { name: "Salvador Alva",      title: "Empresario y speaker · Estrategia comercial y escalamiento",
         topic: "Estrategia comercial: cerrar ventas de 6 cifras sin depender de ti",
-        pillar: "Velocidad", ig: "s.dealba", photo: "/speakers/s.dealba.jpg", initial: "S", bg: "linear-gradient(135deg,#6366f1,#312e81)" },
+        pillar: "Velocidad", ig: "s.dealba", photo: "/speakers/salvadoralva.jpg", initial: "S", bg: "linear-gradient(135deg,#6366f1,#312e81)" },
 
       { name: "Pavo Gómez",         title: "Fundador GoLaunch · La agencia de lanzamientos #1 en México · Host del podcast Épicamente",
         topic: "Anatomía de un lanzamiento rentable: storytelling que convierte en frío",
-        pillar: "Velocidad", ig: "pavogomezorea", photo: "/speakers/pavogomezorea.jpg", initial: "P", bg: "linear-gradient(135deg,#f43f5e,#881337)" },
-
-      { name: "Karla Barajas",      title: "Autora Best Seller Penguin México · Speaker · 670K seguidores",
-        topic: "Marca personal femenina: cobrar lo que vales sin pedir permiso",
-        pillar: "Mentalidad", ig: "karla_barajas", photo: "/speakers/karla_barajas.jpg", initial: "K", bg: "linear-gradient(135deg,#e879f9,#701a75)" },
-
-      { name: "Mike Munzvil",       title: "Fundador del ecosistema MASTER · 909K seguidores · Comunidad de +2M emprendedores",
-        topic: "Data-driven selling: leer tu negocio con números para vender 10×",
-        pillar: "Velocidad", ig: "mikemunzvil", photo: "/speakers/mikemunzvil.jpg", initial: "M", bg: "linear-gradient(135deg,#0ea5e9,#082f49)" },
-
-      { name: "Dr. Roch",           title: "Neurocientífico del comportamiento humano · Empresario y speaker",
-        topic: "Neurociencia del emprendedor: decisiones, hábitos y alto rendimiento",
-        pillar: "Mentalidad", ig: "dr_roch_", photo: "/speakers/dr_roch_.jpg", initial: "R", bg: "linear-gradient(135deg,#10b981,#064e3b)" },
-
-      { name: "Tatiana Arias",      title: "Primera mujer hispana con un lanzamiento de 7 cifras en internet · Creadora del Movimiento RED · 2M seguidores",
-        topic: "Mujeres que facturan: mindset, pricing y lanzamientos que sí cierran",
-        pillar: "Velocidad", ig: "tatiarias_", photo: "/speakers/tatiarias_.jpg", initial: "T", bg: "linear-gradient(135deg,#eab308,#713f12)" },
+        pillar: "Velocidad", ig: "pavogomezorea", photo: "/speakers/pavogomez.jpg", initial: "P", bg: "linear-gradient(135deg,#f43f5e,#881337)" },
 
       { name: "Luis Fallas",        title: "CEO Centro de Superación Personal · +25 años transformando vidas",
         topic: "Potencial máximo: cómo el desarrollo personal desbloquea ingresos reales",
-        pillar: "Mentalidad", ig: "luis_fallas", photo: "/speakers/luis_fallas.jpg", initial: "L", bg: "linear-gradient(135deg,#8b5cf6,#4c1d95)" },
-
-      { name: "Valentina Ortiz",    title: "Mentora de mujeres · Tricampeona de calistenia · Empresaria · 3M seguidores",
-        topic: "Congruencia ejecutiva: alinear tu negocio, tu cuerpo y tu propósito",
-        pillar: "Entorno", ig: "valentinaortizf", photo: "/speakers/valentinaortizf.jpg", initial: "V", bg: "linear-gradient(135deg,#f472b6,#9d174d)" },
-
-      { name: "Javier Rodríguez",   title: "Mentor, creador y speaker · 2M seguidores · Contenido de alto impacto",
-        topic: "Crecer con contenido: el sistema para vender en redes sin quemarte",
-        pillar: "Velocidad", ig: "javireelbe", photo: "/speakers/javireelbe.jpg", initial: "J", bg: "linear-gradient(135deg,#06b6d4,#164e63)" },
-
-      { name: "Titto Gálvez",       title: "Mentor de emprendedores · CEO Libersity Academia · 855K seguidores",
-        topic: "Que tu negocio funcione sin ti: los 6 pilares del Método Freedom",
-        pillar: "Velocidad", ig: "tittogalvez", photo: "/speakers/tittogalvez.jpg", initial: "T", bg: "linear-gradient(135deg,#fb923c,#7c2d12)" },
-
-      { name: "Brando Angulo",      title: "CEO Brada Grupo Inmobiliario · Fundador BrickUp Academy · Joven Emprendedor Inmobiliario",
-        topic: "Flipping y bienes raíces para emprendedores: de cero a portafolio",
-        pillar: "Velocidad", ig: "brandoangulomx", photo: "/speakers/brandoangulomx.jpg", initial: "B", bg: "linear-gradient(135deg,#34d399,#065f46)" },
+        pillar: "Mentalidad", ig: "luis_fallas", photo: "/speakers/luisfallas.jpg", initial: "L", bg: "linear-gradient(135deg,#8b5cf6,#4c1d95)" },
 
       { name: "Alejandro Cardona",  title: "Economista · Fundador Seminario Creando Riqueza · 517K seguidores",
         topic: "Crear riqueza con inversiones: el emprendedor que también es inversionista",
-        pillar: "Velocidad", ig: "alejandrocardonascr", photo: "/speakers/alejandrocardonascr.jpg", initial: "A", bg: "linear-gradient(135deg,#fde047,#a16207)" },
+        pillar: "Velocidad", ig: "alejandrocardonascr", photo: "/speakers/alejandrocardona.png", initial: "A", bg: "linear-gradient(135deg,#fde047,#a16207)" },
+
+      { name: "César Sánchez",      title: "Emprendedor",
+        topic: "Emprendimiento y negocios",
+        initial: "C", bg: "linear-gradient(135deg,#f97316,#7c2d12)", photo: "/speakers/cesarsanchez.jpg" },
+
+      { name: "Daniel Garcia",      title: "Especialista en relaciones internacionales",
+        topic: "Relaciones internacionales y negocios globales",
+        initial: "D", bg: "linear-gradient(135deg,#38bdf8,#0c4a6e)", photo: "/speakers/danielgarcia.jpg" },
+
+      { name: "Fer León",           title: "Fundadora Ojo de Miel · Podcast Emprende con Fer León",
+        topic: "Cómo escalar un negocio físico y construir una marca con propósito",
+        pillar: "Velocidad", ig: "ferleonmx",
+        initial: "F", bg: "linear-gradient(135deg,#4ade80,#065f46)", photo: "/speakers/ferleon.jpg" },
+
+      { name: "Memo Serrano",       title: "Business & Mindset Mentor · Proctor Gallagher Institute · Autor bestseller",
+        topic: "Cómo reprogramar tu mentalidad financiera para escalar sin límites",
+        pillar: "Mentalidad", ig: "memo_serrano_d",
+        initial: "M", bg: "linear-gradient(135deg,#a855f7,#581c87)", photo: "/speakers/memoserrano.jpg" },
+
+      { name: "Regina Carrot",      title: "+14M seguidores · TEDx Speaker · Fundadora Speaker Magnética · Forbes · Ex Pepsico",
+        topic: "Cómo construir una audiencia millonaria y monetizar tu mensaje",
+        pillar: "Velocidad", ig: "reginacarrot",
+        initial: "R", bg: "linear-gradient(135deg,#ec4899,#831843)", photo: "/speakers/reginacarrot.jpg" },
+
+      { name: "Susi Vereecken",     title: "Directora Maxwell Leadership® LATAM · Coach internacional · Speaker",
+        topic: "Liderazgo que escala: cómo desarrollar el equipo y la cultura que tu negocio necesita",
+        pillar: "Entorno", ig: "susivv",
+        initial: "S", bg: "linear-gradient(135deg,#eab308,#713f12)", photo: "/speakers/susivereecken.jpg" },
     ] as Speaker[],
   },
 
@@ -387,7 +355,8 @@ export const content = {
     host_badge: "Host del Bootcamp",
     name_1:     "Jorge",
     name_em:    "Serratos",
-    bio:        "Doctor en derecho, empresario y CEO de Grupo Serlo — un conglomerado de 6 empresas que incluye Sinertegia, Sinergia Academy, Stario Capital y WAS Editorial. Host del podcast Sinergéticos #1 de negocios en México. Lleva más de 11 millones de seguidores con una sola idea: que \"1+1=3\". No viene al Bootcamp a motivarte — viene a mostrarte cómo construir el sistema.",
+    photo:      "/speakers/jorgeserratos.png",
+    bio:        "Hace 4 años era un abogado con un negocio exitoso pero topado: ingresos atados 100% a su presencia, sin margen para crecer. Llegó al límite y tomó la decisión de escalar.\n\nHoy es Doctor en Derecho, CEO de Grupo Serlo —6 empresas— y host de Sinergéticos, el podcast de negocios #1 en México. Su filosofía: \"1+1=3\".",
     stats: [
       { number: "+11M",      label: "seguidores en todas sus plataformas" },
       { number: "+20,000",   label: "emprendedores que ya convirtieron su conocimiento en un negocio digital rentable" },
