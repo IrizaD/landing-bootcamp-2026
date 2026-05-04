@@ -580,11 +580,11 @@ function RoiCalculator() {
                 <circle cx="160" cy="200" r="12" fill="url(#hub-grad)" style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9))' }} />
               </svg>
 
-              <div className="tacho-readout">
-                <div className="tacho-readout-label">Multiplicador anual</div>
-                <div className="tacho-readout-value">{multiplier.toFixed(2)}×</div>
-                <div className="tacho-readout-sub">vs tu facturación actual</div>
-              </div>
+            </div>
+            <div className="tacho-readout">
+              <div className="tacho-readout-label">Multiplicador anual</div>
+              <div className="tacho-readout-value">{multiplier.toFixed(2)}×</div>
+              <div className="tacho-readout-sub">vs tu facturación actual</div>
             </div>
 
             {/* ─── Controles tipo cockpit ─── */}
