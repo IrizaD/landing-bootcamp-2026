@@ -333,28 +333,20 @@ function PrizesRoulette() {
         </div>
 
         <div className="roulette-wrap reveal reveal-delay-2">
-          <div className="roulette-indicator" aria-hidden="true">▼</div>
-          <div className="roulette-wheel">
-            {prizes.map((p, i) => {
-              const angle = (360 / prizes.length) * i;
-              const isActive = highlight === i;
-              return (
-                <div
-                  key={i}
-                  className={`roulette-slot ${isActive ? "active" : ""}`}
-                  style={{ "--slot-angle": `${angle}deg` } as React.CSSProperties}
-                >
-                  <div className="roulette-slot-inner">
-                    <div className="roulette-slot-icon" aria-hidden="true">{p.icon}</div>
-                    <div className="roulette-slot-title">{p.title}</div>
-                  </div>
+          {/* Prize display — orb + cards */}
+          <div className="prize-display">
+            <div className="prize-orb">
+              <div className="prize-orb-label">Valor total</div>
+              <div className="prize-orb-amount">+$10,000</div>
+              <div className="prize-orb-currency">USD</div>
+            </div>
+            <div className="prize-cards">
+              {prizes.map((p, i) => (
+                <div key={i} className={`prize-card ${highlight === i ? "active" : ""}`}>
+                  <div className="prize-card-icon" aria-hidden="true">{p.icon}</div>
+                  <div className="prize-card-title">{p.title}</div>
                 </div>
-              );
-            })}
-            <div className="roulette-hub">
-              <div className="roulette-hub-label">Valor total</div>
-              <div className="roulette-hub-amount">+$10,000</div>
-              <div className="roulette-hub-currency">USD</div>
+              ))}
             </div>
           </div>
 

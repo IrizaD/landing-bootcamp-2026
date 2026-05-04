@@ -2463,130 +2463,81 @@ h2.section-title {
   margin: 0 auto;
   position: relative;
 }
-.roulette-indicator {
-  position: absolute;
-  top: -4px; left: calc(60% / 2);
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(212,168,67,0.8);
-  z-index: 3;
-  animation: roulette-bounce 1.5s ease-in-out infinite;
+/* Prize display — orb + cards */
+.prize-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
 }
-@keyframes roulette-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(4px); }
-}
-.roulette-wheel {
-  position: relative;
-  width: min(480px, 100%);
-  aspect-ratio: 1/1;
-  margin: 0 auto;
+.prize-orb {
+  width: 160px; height: 160px;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at center, rgba(212,168,67,0.18), rgba(0,0,0,0.6) 70%),
-    conic-gradient(
-      from 0deg,
-      rgba(212,168,67,0.08) 0deg   60deg,
-      rgba(212,168,67,0.16) 60deg  120deg,
-      rgba(212,168,67,0.08) 120deg 180deg,
-      rgba(212,168,67,0.16) 180deg 240deg,
-      rgba(212,168,67,0.08) 240deg 300deg,
-      rgba(212,168,67,0.16) 300deg 360deg
-    );
-  border: 2px solid rgba(212,168,67,0.3);
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.6),
-    0 0 40px rgba(212,168,67,0.25),
-    inset 0 0 32px rgba(0,0,0,0.6);
-  animation: roulette-spin 44s linear infinite;
-  transform-style: preserve-3d;
-}
-@keyframes roulette-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-.roulette-slot {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 120px;
-  transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-50% - 40px));
-  transform-origin: center;
-}
-.roulette-slot-inner {
-  transform: rotate(calc(-1 * var(--slot-angle)));
-  text-align: center;
-  padding: 10px 8px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
-  border: 1px solid rgba(212,168,67,0.25);
-  border-radius: 14px;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
-  /* Contra-rotación del spin del padre para mantener texto estable */
-  animation: roulette-counter-spin 44s linear infinite;
-}
-@keyframes roulette-counter-spin {
-  from { transform: rotate(calc(-1 * var(--slot-angle))); }
-  to   { transform: rotate(calc(-1 * var(--slot-angle) - 360deg)); }
-}
-.roulette-slot.active .roulette-slot-inner {
-  border-color: var(--gold);
-  box-shadow: 0 0 24px rgba(212,168,67,0.6);
-  background: linear-gradient(180deg, rgba(212,168,67,0.3), rgba(0,0,0,0.5));
-}
-.roulette-slot-icon { font-size: 26px; margin-bottom: 4px; }
-.roulette-slot-title {
-  font-family: var(--font-head);
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--white);
-  letter-spacing: 0.06em;
-  line-height: 1.2;
-}
-.roulette-hub {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 150px; height: 150px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fbbf24, #92400e 70%);
-  border: 3px solid rgba(212,168,67,0.6);
+  background: radial-gradient(circle at 32% 28%, #fcd34d, #b45309 65%, #78350f);
+  border: 3px solid rgba(212,168,67,0.55);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #000;
   box-shadow:
-    inset 0 2px 8px rgba(255,255,255,0.3),
-    0 0 32px rgba(212,168,67,0.5);
-  animation: roulette-hub-counter 44s linear infinite;
+    inset 0 3px 10px rgba(255,255,255,0.25),
+    0 0 48px rgba(212,168,67,0.35),
+    0 8px 32px rgba(0,0,0,0.5);
 }
-@keyframes roulette-hub-counter {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(-360deg); }
-}
-.roulette-hub-label {
+.prize-orb-label {
   font-family: var(--font-head);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.7);
+  color: rgba(0,0,0,0.65);
+  margin-bottom: 2px;
 }
-.roulette-hub-amount {
+.prize-orb-amount {
   font-family: var(--font-head);
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
   letter-spacing: -0.02em;
   color: #000;
-  margin: 2px 0;
+  line-height: 1;
 }
-.roulette-hub-currency {
+.prize-orb-currency {
   font-family: var(--font-head);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.22em;
-  color: rgba(0,0,0,0.7);
+  letter-spacing: 0.18em;
+  color: rgba(0,0,0,0.65);
+  margin-top: 2px;
+}
+.prize-cards {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+.prize-card {
+  flex: 1;
+  padding: 20px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,168,67,0.14);
+  border-radius: 16px;
+  text-align: center;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, background 0.4s ease;
+}
+.prize-card.active {
+  background: linear-gradient(160deg, rgba(212,168,67,0.18), rgba(0,0,0,0.35));
+  border-color: var(--gold);
+  box-shadow: 0 0 28px rgba(212,168,67,0.35), 0 4px 20px rgba(0,0,0,0.4);
+  transform: translateY(-5px);
+}
+.prize-card-icon { font-size: 34px; margin-bottom: 10px; display: block; }
+.prize-card-title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.03em;
+  line-height: 1.3;
 }
 
 .roulette-legend {
@@ -3026,20 +2977,10 @@ h2.section-title {
   .readout-cell-value         { font-size: 16px; }
   .readout-cell-value.big     { font-size: 22px; }
 
-  /* Prizes — roulette compacta */
+  /* Prizes */
   .prizes-header              { margin-bottom: 36px; }
-  .roulette-wheel {
-    width: min(320px, 92%);
-  }
-  .roulette-slot {
-    width: 82px;
-    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-50% - 18px));
-  }
-  .roulette-slot-icon         { font-size: 20px; margin-bottom: 2px; }
-  .roulette-slot-title        { font-size: 9px; letter-spacing: 0.04em; }
-  .roulette-hub               { width: 110px; height: 110px; border-width: 2px; }
-  .roulette-hub-amount        { font-size: 20px; }
-  .roulette-hub-label, .roulette-hub-currency { font-size: 8px; }
+  .prize-orb                  { width: 130px; height: 130px; }
+  .prize-orb-amount           { font-size: 22px; }
   .roulette-legend            { padding: 18px; border-radius: 16px; }
   .roulette-legend-icon       { font-size: 28px; }
   .roulette-legend-title      { font-size: 15px; }
@@ -3108,13 +3049,10 @@ h2.section-title {
   .tacho                      { max-width: 280px; }
   .tacho-readout-value        { font-size: 28px; }
 
-  /* Roulette — wheel aún más compacta */
-  .roulette-wheel             { width: min(280px, 90%); }
-  .roulette-slot              { width: 72px; transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-50% - 12px)); }
-  .roulette-slot-icon         { font-size: 18px; }
-  .roulette-slot-title        { font-size: 8.5px; }
-  .roulette-hub               { width: 96px; height: 96px; }
-  .roulette-hub-amount        { font-size: 17px; }
+  .prize-orb                  { width: 110px; height: 110px; }
+  .prize-orb-amount           { font-size: 18px; }
+  .prize-card-icon            { font-size: 26px; }
+  .prize-card-title           { font-size: 11px; }
 
   /* Speakers — 1 columna en viewports muy pequeños */
   .speakers-grid              { grid-template-columns: repeat(2, 1fr); max-width: 400px; margin: 44px auto 0; }
@@ -3126,18 +3064,8 @@ h2.section-title {
   .detail-item                { padding: 24px 18px; }
 }
 
-/* ─── PERFORMANCE: apagar spins en mobile ─────────────────── */
+/* ─── PERFORMANCE: apagar animaciones en mobile ───────────── */
 @media (max-width: 900px) {
-  /* La ruleta es un adorno — en mobile agota CPU sin aportar */
-  .roulette-wheel,
-  .roulette-slot-inner,
-  .roulette-hub {
-    animation: none !important;
-    transform-style: flat;
-  }
-  .roulette-hub {
-    transform: translate(-50%, -50%);
-  }
   /* Partículas del fondo de pilares — costosas en mobile */
   .pillars-particle { display: none; }
   /* Reducir will-change que mantiene capas compuestas activas */
@@ -3145,16 +3073,10 @@ h2.section-title {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roulette-wheel,
-  .roulette-slot-inner,
-  .roulette-hub {
-    animation: none !important;
-  }
   .whatis-bridge-arrow,
   .hero-live-dot,
   .prizes-live-pulse,
-  .roulette-legend-eyebrow::before,
-  .roulette-indicator {
+  .roulette-legend-eyebrow::before {
     animation: none !important;
   }
 }
