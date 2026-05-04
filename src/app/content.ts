@@ -356,7 +356,7 @@ export const content = {
     name_1:     "Jorge",
     name_em:    "Serratos",
     photo:      "/speakers/jorgeserratos.png",
-    bio:        "Hace 4 años era un abogado con un negocio exitoso pero topado: ingresos atados 100% a su presencia, sin margen para crecer. Llegó al límite y tomó la decisión de escalar.\n\nHoy es Doctor en Derecho, CEO de Grupo Serlo —6 empresas— y host de Sinergéticos, el podcast de negocios #1 en México. Su filosofía: \"1+1=3\".",
+    bio:        "Hace 4 años era un abogado con un negocio exitoso pero topado: ingresos atados 100% a su presencia, sin margen para crecer. Llegó al límite y tomó la decisión de escalar.\n\nEscaló. Hoy dirige Grupo Serlo —6 empresas— y es el host de Sinergéticos, el podcast de negocios #1 en México con +11M de seguidores. Su filosofía: \"1+1=3\".",
     stats: [
       { number: "+11M",      label: "seguidores en todas sus plataformas" },
       { number: "+20,000",   label: "emprendedores que ya convirtieron su conocimiento en un negocio digital rentable" },
