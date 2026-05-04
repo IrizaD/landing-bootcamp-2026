@@ -568,17 +568,13 @@ function RoiCalculator() {
                     </g>
                   );
                 })}
-                {/* Needle — drawn in SVG so it clips to viewBox naturally */}
-                <line
-                  x1="160" y1="200" x2="160" y2="78"
-                  stroke="#ef4444" strokeWidth="4" strokeLinecap="round"
+                {/* Needle — rect with fill-box so transform-origin 50%/100% = pivot at (160,200) */}
+                <rect
+                  x="158.5" y="78" width="3" height="122" rx="1.5"
+                  fill="#ef4444"
                   filter="url(#tacho-glow)"
-                  style={{
-                    transformBox: 'view-box' as never,
-                    transformOrigin: '50% 83.33%',
-                    transform: `rotate(${needle}deg)`,
-                    transition: 'transform 0.9s cubic-bezier(0.22,1,0.36,1)',
-                  }}
+                  className="tacho-needle-svg"
+                  style={{ transform: `rotate(${needle}deg)` }}
                 />
                 {/* Hub dot */}
                 <circle cx="160" cy="200" r="12" fill="url(#hub-grad)" style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9))' }} />

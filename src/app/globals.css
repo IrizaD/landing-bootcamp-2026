@@ -2191,12 +2191,18 @@ h2.section-title {
   aspect-ratio: 320 / 260;
 }
 .tacho-svg { width: 100%; height: 100%; display: block; }
+.tacho-needle-svg {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 0.9s cubic-bezier(0.22,1,0.36,1);
+}
 .tacho-readout {
   position: absolute;
-  bottom: 8%; left: 50%;
+  bottom: 2%; left: 50%;
   transform: translateX(-50%);
   text-align: center;
   pointer-events: none;
+  z-index: 2;
 }
 .tacho-readout-label {
   font-family: var(--font-head);
